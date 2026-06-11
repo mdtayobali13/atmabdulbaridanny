@@ -21,6 +21,8 @@ class AppText extends ConsumerStatefulWidget {
     this.decoration,
     this.isDynamic = false,
     this.decorationColor,
+    this.fontFamily,
+    this.style,
   });
   final String text;
   final double? fontSize;
@@ -34,6 +36,8 @@ class AppText extends ConsumerStatefulWidget {
   final TextDecoration? decoration;
   final Color? decorationColor;
   final bool isDynamic;
+  final String? fontFamily;
+  final TextStyle? style;
 
   @override
   ConsumerState<AppText> createState() => _AppTextState();
@@ -65,15 +69,17 @@ class _AppTextState extends ConsumerState<AppText> {
   @override
   Widget build(BuildContext context) {
     final selectedLanguage = ref.watch(languageProvider);
-    var style = Theme.of(context).textTheme.displaySmall?.copyWith(
-      height: widget.height,
-      fontSize: widget.fontSize,
-      color: widget.color ?? AppColors.instance.black500,
-      fontWeight: widget.fontWeight,
-      fontFamily: AppConstant.instance.fontFamilyPoppins,
-      decoration: widget.decoration,
-      decorationColor: widget.decorationColor,
-    );
+    var style =
+        widget.style?.copyWith(fontFamily: widget.fontFamily ?? AppConstant.instance.fontFamilyPoppins) ??
+        Theme.of(context).textTheme.displaySmall?.copyWith(
+          height: widget.height,
+          fontSize: widget.fontSize,
+          color: widget.color ?? AppColors.instance.black500,
+          fontWeight: widget.fontWeight,
+          fontFamily: widget.fontFamily ?? AppConstant.instance.fontFamilyPoppins,
+          decoration: widget.decoration,
+          decorationColor: widget.decorationColor,
+        );
 
     if (!widget.isDynamic) {
       return Text(
@@ -102,7 +108,14 @@ class _AppTextState extends ConsumerState<AppText> {
         }
         final txt = snapshot.data ?? widget.text;
 
-        return Text(txt, maxLines: widget.maxLines, overflow: widget.overflow, textAlign: widget.textAlign, style: style, textScaler: TextScaler.linear(widget.textScaleFactor));
+        return Text(
+          txt,
+          maxLines: widget.maxLines,
+          overflow: widget.overflow,
+          textAlign: widget.textAlign,
+          style: style,
+          textScaler: TextScaler.linear(widget.textScaleFactor),
+        );
       },
     );
   }

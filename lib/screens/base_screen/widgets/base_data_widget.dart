@@ -23,7 +23,7 @@ class BaseDataWidget extends StatelessWidget {
 
         child: AppHtmlWidget(
           html: data,
-          textStyle: TextStyle(fontFamily: AppConstant.instance.font, height: 1.5, color: AppColors.instance.dark600),
+          textStyle: TextStyle(fontFamily: AppConstant.instance.fontFamilyPoppins, height: 1.5, color: AppColors.instance.dark600),
         ),
       ),
     );
