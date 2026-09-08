@@ -1,39 +1,175 @@
 import 'package:flutter/cupertino.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod_template/constant/app_colors.dart';
 import 'package:flutter_riverpod_template/screens/app_navigation/widgets/nav_bar_item.dart';
 
-class CustomBottomNavBar extends StatelessWidget {
+class CustomBottomNavBar extends StatefulWidget {
   final int currentIndex;
   final Function(int) onTap;
 
   const CustomBottomNavBar({super.key, required this.currentIndex, required this.onTap});
 
   @override
+  State<CustomBottomNavBar> createState() => _CustomBottomNavBarState();
+}
+
+class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
+  int? _openedMenuIndex;
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.instance.black600,
+        color: AppColors.instance.primaryGreen,
         border: Border(top: BorderSide(color: Colors.white.withValues(alpha: 0.05), width: 1)),
       ),
       child: SafeArea(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            NavBarItem(isSelected: currentIndex == 0, icon: CupertinoIcons.house, filledIcon: CupertinoIcons.house_fill, onTap: () => onTap(0)),
-            NavBarItem(isSelected: currentIndex == 1, icon: CupertinoIcons.heart, filledIcon: CupertinoIcons.heart_fill, onTap: () => onTap(1)),
-            NavBarItem(isSelected: currentIndex == 2, icon: CupertinoIcons.globe, filledIcon: CupertinoIcons.globe, onTap: () => onTap(2)),
             NavBarItem(
-              isSelected: currentIndex == 3,
-              icon: CupertinoIcons.chat_bubble_2,
-              filledIcon: CupertinoIcons.chat_bubble_2_fill,
-              onTap: () => onTap(3),
+              isSelected: widget.currentIndex == 0,
+              icon: CupertinoIcons.house,
+              filledIcon: CupertinoIcons.house_fill,
+              onTap: () => widget.onTap(0),
             ),
-            NavBarItem(isSelected: currentIndex == 4, icon: CupertinoIcons.person, filledIcon: CupertinoIcons.person_fill, onTap: () => onTap(4)),
+            NavBarItem(
+              isSelected: widget.currentIndex == 1,
+              icon: CupertinoIcons.news,
+              filledIcon: CupertinoIcons.news_solid,
+              onTap: () => widget.onTap(1),
+            ),
+            NavBarItem(
+              isSelected: widget.currentIndex == 2,
+              icon: CupertinoIcons.doc_text,
+              filledIcon: CupertinoIcons.doc_text_fill,
+              onTap: () => widget.onTap(2),
+            ),
+            Builder(
+              builder: (context) {
+                return NavBarItem(
+                  isSelected: widget.currentIndex == 3 || widget.currentIndex == 4 || _openedMenuIndex == 3,
+                  icon: CupertinoIcons.photo_on_rectangle,
+                  filledIcon: CupertinoIcons.photo_on_rectangle,
+                  onTap: () {
+                    setState(() {
+                      _openedMenuIndex = 3;
+                    });
+                    final RenderBox button = context.findRenderObject() as RenderBox;
+                    final RenderBox overlay = Navigator.of(context).overlay!.context.findRenderObject() as RenderBox;
+                    final RelativeRect position = RelativeRect.fromRect(
+                      Rect.fromPoints(
+                        button.localToGlobal(const Offset(0, -120), ancestor: overlay),
+                        button.localToGlobal(button.size.bottomRight(Offset.zero), ancestor: overlay),
+                      ),
+                      Offset.zero & overlay.size,
+                    );
+                    showMenu(
+                      context: context,
+                      position: position,
+                      color: AppColors.instance.primaryGreen,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      items: [
+                        const PopupMenuItem(
+                          value: 3,
+                          child: Text("Photo Gallery", style: TextStyle(color: Colors.white)),
+                        ),
+                        const PopupMenuItem(
+                          value: 4,
+                          child: Text("Video Gallery", style: TextStyle(color: Colors.white)),
+                        ),
+                      ],
+                    ).then((value) {
+                      setState(() {
+                        _openedMenuIndex = null;
+                      });
+                      if (value != null) {
+                        widget.onTap(value);
+                      }
+                    });
+                  },
+                );
+              },
+            ),
+            Builder(
+              builder: (context) {
+                final currentRoute = GoRouterState.of(context).uri.toString();
+                final isSecondaryScreen = currentRoute.contains('kalmakanda_upazila_screen') ||
+                    currentRoute.contains('durgapur_upazila_screen') ||
+                    currentRoute.contains('others_screen') ||
+                    currentRoute.contains('print_media_screen') ||
+                    currentRoute.contains('electronic_media_screen') ||
+                    currentRoute.contains('contact_screen') ||
+                    currentRoute.contains('appointment_screen');
+                    
+                final isSelected = (widget.currentIndex == 5 && !isSecondaryScreen) || _openedMenuIndex == 5;
+
+                return NavBarItem(
+                  isSelected: isSelected,
+                  icon: CupertinoIcons.person,
+                  filledIcon: CupertinoIcons.person_solid,
+                  onTap: () {
+                    setState(() {
+                      _openedMenuIndex = 5;
+                    });
+                    final RenderBox button = context.findRenderObject() as RenderBox;
+                    final RenderBox overlay = Navigator.of(context).overlay!.context.findRenderObject() as RenderBox;
+                    final RelativeRect position = RelativeRect.fromRect(
+                      Rect.fromPoints(
+                        button.localToGlobal(const Offset(0, -265), ancestor: overlay),
+                        button.localToGlobal(button.size.bottomRight(Offset.zero), ancestor: overlay),
+                      ),
+                      Offset.zero & overlay.size,
+                    );
+                    showMenu(
+                      context: context,
+                      position: position,
+                      color: AppColors.instance.primaryGreen,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      items: <PopupMenuEntry<String>>[
+                        _buildPopupMenuItem("About Me", "About Me"),
+                        _buildPopupMenuItem("Biography", "Biography"),
+                        _buildPopupMenuItem("History", "History of Life and Struggle"),
+                        _buildPopupMenuItem("Achievement", "Achievment"),
+                        _buildPopupMenuItem("Journey", "Journey"),
+                      ],
+                    ).then((value) {
+                      setState(() {
+                        _openedMenuIndex = null;
+                      });
+                      if (value != null) {
+                        if (value == "About Me") {
+                          widget.onTap(5); // Existing index
+                        } else if (value == "Biography") {
+                          context.go('/biography_screen');
+                        } else if (value == "History") {
+                          context.go('/history_of_life_screen');
+                        } else if (value == "Achievement") {
+                          context.go('/achievement_screen');
+                        } else if (value == "Journey") {
+                          context.go('/journey_screen');
+                        } else {
+                          widget.onTap(5); // Fallback for unimplemented
+                        }
+                      }
+                    });
+                  },
+                );
+              },
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  PopupMenuItem<String> _buildPopupMenuItem(String value, String text) {
+    return PopupMenuItem<String>(
+      value: value,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Text(text, style: const TextStyle(color: Colors.white)),
     );
   }
 }

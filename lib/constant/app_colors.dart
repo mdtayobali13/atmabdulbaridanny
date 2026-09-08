@@ -118,4 +118,9 @@ class AppColors {
   final Color orange700 = Color(0xffb05943);
   final Color orange800 = Color(0xff884534);
   final Color orange900 = Color(0xff683527);
+
+  //////////////// custom theme colors
+  final Color primaryGreen = const Color(0xFF0b3d2e);
+  final Color lightGreen = const Color(0xFF288560);
+  final Color goldenColor = const Color(0xFFd4af37);
 }

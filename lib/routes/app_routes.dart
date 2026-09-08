@@ -6,6 +6,7 @@ import 'package:flutter_riverpod_template/error_handling_screen/no_internet_scre
 import 'package:flutter_riverpod_template/error_handling_screen/not_found_screen/not_found_screen.dart';
 import 'package:flutter_riverpod_template/routes/app_routes_key.dart';
 import 'package:flutter_riverpod_template/routes/internet_check_provider.dart';
+import 'package:flutter_riverpod_template/screens/achievement_screen/achievement_screen.dart';
 import 'package:flutter_riverpod_template/screens/app_navigation/app_navigation_screen.dart';
 import 'package:flutter_riverpod_template/screens/auth_screen/forgot_screen/forgot_screen.dart';
 import 'package:flutter_riverpod_template/screens/auth_screen/on_board_screen/on_board_screen.dart';
@@ -13,11 +14,25 @@ import 'package:flutter_riverpod_template/screens/auth_screen/sign_in_screen/sig
 import 'package:flutter_riverpod_template/screens/auth_screen/sign_up_screen/sign_up_screen.dart';
 import 'package:flutter_riverpod_template/screens/auth_screen/sign_up_verify_screen/sign_up_verify_screen.dart';
 import 'package:flutter_riverpod_template/screens/base_screen/about_us_screen/about_us_screen.dart';
+import 'package:flutter_riverpod_template/screens/biography_screen/biography_screen.dart';
+import 'package:flutter_riverpod_template/screens/electronic_media_screen/electronic_media_screen.dart';
+import 'package:flutter_riverpod_template/screens/history_of_life_screen/history_of_life_screen.dart';
+import 'package:flutter_riverpod_template/screens/journey_screen/journey_screen.dart';
+import 'package:flutter_riverpod_template/screens/development_works_screen/kalmakanda_upazila_screen.dart';
+import 'package:flutter_riverpod_template/screens/development_works_screen/durgapur_upazila_screen.dart';
+import 'package:flutter_riverpod_template/screens/development_works_screen/others_screen.dart';
+import 'package:flutter_riverpod_template/screens/print_media_screen/print_media_screen.dart';
+import 'package:flutter_riverpod_template/screens/complain_screen/complain_screen.dart';
 import 'package:flutter_riverpod_template/screens/base_screen/faq_screen/faq_screen.dart';
 import 'package:flutter_riverpod_template/screens/base_screen/privacy_policy_screen/privacy_policy_screen.dart';
 import 'package:flutter_riverpod_template/screens/base_screen/terms_and_conditions_screen/terms_and_conditions_screen.dart';
 import 'package:flutter_riverpod_template/screens/home_screen/home_screen.dart';
-import 'package:flutter_riverpod_template/screens/profile_screen/profile_screen.dart';
+import 'package:flutter_riverpod_template/screens/news_screen/news_screen.dart';
+import 'package:flutter_riverpod_template/screens/photo_gallery_screen/photo_gallery_screen.dart';
+import 'package:flutter_riverpod_template/screens/video_gallery_screen/video_gallery_screen.dart';
+import 'package:flutter_riverpod_template/screens/blog_screen/blog_screen.dart';
+import 'package:flutter_riverpod_template/screens/contact_screen/contact_screen.dart';
+import 'package:flutter_riverpod_template/screens/appointment_screen/appointment_screen.dart';
 import 'package:flutter_riverpod_template/screens/splash_screen/splash_screen.dart';
 import 'package:flutter_riverpod_template/utils/app_log.dart';
 import 'package:go_router/go_router.dart';
@@ -37,7 +52,11 @@ class AppRoutes {
     initialLocation: AppRoutesKey.instance.initial,
     routes: [
       /// initial routes
-      GoRoute(path: AppRoutesKey.instance.initial, name: AppRoutesKey.instance.splash, builder: (context, state) => SplashScreen()),
+      GoRoute(
+        path: AppRoutesKey.instance.initial,
+        name: AppRoutesKey.instance.splash,
+        builder: (context, state) => SplashScreen(),
+      ),
       GoRoute(
         path: "/${AppRoutesKey.instance.noInternetScreen}",
         name: AppRoutesKey.instance.noInternetScreen,
@@ -48,10 +67,17 @@ class AppRoutes {
         name: AppRoutesKey.instance.notFoundScreen,
         builder: (context, state) => NotFoundScreen(),
       ),
-      GoRoute(path: "/${AppRoutesKey.instance.errorScreen}", name: AppRoutesKey.instance.errorScreen, builder: (context, state) => ErrorScreen()),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.errorScreen}",
+        name: AppRoutesKey.instance.errorScreen,
+        builder: (context, state) => ErrorScreen(),
+      ),
       ////// base routes
-      GoRoute(path: "/${AppRoutesKey.instance.aboutScreen}", name: AppRoutesKey.instance.aboutScreen, builder: (context, state) => AboutUsScreen()),
-      GoRoute(path: "/${AppRoutesKey.instance.faqsScreen}", name: AppRoutesKey.instance.faqsScreen, builder: (context, state) => FaqScreen()),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.faqsScreen}",
+        name: AppRoutesKey.instance.faqsScreen,
+        builder: (context, state) => FaqScreen(),
+      ),
       GoRoute(
         path: "/${AppRoutesKey.instance.privacyPolicyScreen}",
         name: AppRoutesKey.instance.privacyPolicyScreen,
@@ -64,8 +90,16 @@ class AppRoutes {
       ),
 
       ////// auth routes
-      GoRoute(path: "/${AppRoutesKey.instance.signInScreen}", name: AppRoutesKey.instance.signInScreen, builder: (context, state) => SignInScreen()),
-      GoRoute(path: "/${AppRoutesKey.instance.signUpScreen}", name: AppRoutesKey.instance.signUpScreen, builder: (context, state) => SignUpScreen()),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.signInScreen}",
+        name: AppRoutesKey.instance.signInScreen,
+        builder: (context, state) => SignInScreen(),
+      ),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.signUpScreen}",
+        name: AppRoutesKey.instance.signUpScreen,
+        builder: (context, state) => SignUpScreen(),
+      ),
       GoRoute(
         path: "/${AppRoutesKey.instance.signUpVerifyScreen}",
         name: AppRoutesKey.instance.signUpVerifyScreen,
@@ -77,7 +111,11 @@ class AppRoutes {
         builder: (context, state) => OnBoardScreen(),
       ),
 
-      GoRoute(path: "/${AppRoutesKey.instance.forgotScreen}", name: AppRoutesKey.instance.forgotScreen, builder: (context, state) => ForgotScreen()),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.forgotScreen}",
+        name: AppRoutesKey.instance.forgotScreen,
+        builder: (context, state) => ForgotScreen(),
+      ),
 
       /////// main route screen
       StatefulShellRoute.indexedStack(
@@ -96,16 +134,101 @@ class AppRoutes {
           ),
           StatefulShellBranch(
             routes: [
+              GoRoute(path: "/news_screen", name: "newsScreen", builder: (context, state) => const NewsScreen()),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(path: "/blog_screen", name: "blogScreen", builder: (context, state) => const BlogScreen()),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
               GoRoute(
-                path: "/${AppRoutesKey.instance.profileScreen}",
-                name: AppRoutesKey.instance.profileScreen,
-                builder: (context, state) => ProfileScreen(),
+                path: "/photo_gallery_screen",
+                name: "photoGalleryScreen",
+                builder: (context, state) => const PhotoGalleryScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: "/video_gallery_screen",
+                name: "videoGalleryScreen",
+                builder: (context, state) => const VideoGalleryScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: "/${AppRoutesKey.instance.aboutScreen}",
+                name: AppRoutesKey.instance.aboutScreen,
+                builder: (context, state) => const AboutUsScreen(),
+              ),
+              GoRoute(
+                path: "/biography_screen",
+                name: "biographyScreen",
+                builder: (context, state) => const BiographyScreen(),
+              ),
+              GoRoute(
+                path: "/history_of_life_screen",
+                name: "historyOfLifeScreen",
+                builder: (context, state) => const HistoryOfLifeScreen(),
+              ),
+              GoRoute(
+                path: "/achievement_screen",
+                name: "achievementScreen",
+                builder: (context, state) => const AchievementScreen(),
+              ),
+              GoRoute(
+                path: "/journey_screen",
+                name: "journeyScreen",
+                builder: (context, state) => const JourneyScreen(),
+              ),
+              GoRoute(
+                path: "/kalmakanda_upazila_screen",
+                name: "kalmakandaUpazilaScreen",
+                builder: (context, state) => const KalmakandaUpazilaScreen(),
+              ),
+              GoRoute(
+                path: "/durgapur_upazila_screen",
+                name: "durgapurUpazilaScreen",
+                builder: (context, state) => const DurgapurUpazilaScreen(),
+              ),
+              GoRoute(path: "/others_screen", name: "othersScreen", builder: (context, state) => const OthersScreen()),
+              GoRoute(
+                path: "/print_media_screen",
+                name: "printMediaScreen",
+                builder: (context, state) => const PrintMediaScreen(),
+              ),
+              GoRoute(
+                path: "/electronic_media_screen",
+                name: "electronicMediaScreen",
+                builder: (context, state) => const ElectronicMediaScreen(),
+              ),
+              GoRoute(
+                path: "/contact_screen",
+                name: "contactScreen",
+                builder: (context, state) => const ContactScreen(),
               ),
             ],
           ),
         ],
       ),
+
       /////// other screen
+      GoRoute(
+        path: "/appointment_screen",
+        name: "appointmentScreen",
+        builder: (context, state) => const AppointmentScreen(),
+      ),
+      GoRoute(
+        path: "/complain_screen",
+        name: "complainScreen",
+        builder: (context, state) => const ComplainScreen(),
+      ),
     ],
     errorBuilder: (context, state) {
       return NotFoundScreen();
@@ -157,7 +280,13 @@ class AppRoutes {
     String? fragment,
   }) {
     try {
-      router.goNamed(value, pathParameters: pathParameters, extra: extra, fragment: fragment, queryParameters: queryParameters);
+      router.goNamed(
+        value,
+        pathParameters: pathParameters,
+        extra: extra,
+        fragment: fragment,
+        queryParameters: queryParameters,
+      );
     } catch (e) {
       errorLog("goNamed", e);
     }
@@ -225,7 +354,12 @@ class AppRoutes {
     Object? extra,
   }) {
     try {
-      router.pushReplacementNamed(value, pathParameters: pathParameters, extra: extra, queryParameters: queryParameters);
+      router.pushReplacementNamed(
+        value,
+        pathParameters: pathParameters,
+        extra: extra,
+        queryParameters: queryParameters,
+      );
     } catch (e) {
       errorLog("pushReplacementNamed", e);
     }
