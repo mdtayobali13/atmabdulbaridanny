@@ -3,6 +3,8 @@ import 'package:flutter_riverpod_template/routes/app_routes.dart';
 import 'package:flutter_riverpod_template/routes/app_routes_key.dart';
 import 'package:flutter_riverpod_template/constant/app_colors.dart';
 
+import 'package:flutter_riverpod_template/services/storage/storage_services.dart';
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -14,11 +16,23 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 2), () {
-      if (mounted) {
+    _navigateToNext();
+  }
+
+  Future<void> _navigateToNext() async {
+    await Future.delayed(const Duration(seconds: 2));
+    if (!mounted) return;
+
+    try {
+      final token = await StorageServices.instance.getToken();
+      if (token.isNotEmpty) {
         AppRoutes.instance.goNamed(AppRoutesKey.instance.homeScreen);
+      } else {
+        AppRoutes.instance.goNamed(AppRoutesKey.instance.signInScreen);
       }
-    });
+    } catch (_) {
+      AppRoutes.instance.goNamed(AppRoutesKey.instance.signInScreen);
+    }
   }
 
   @override

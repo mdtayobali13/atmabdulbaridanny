@@ -1,25 +1,26 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_riverpod_template/services/repository/auth_repository.dart';
 import 'package:flutter_riverpod_template/utils/app_log.dart';
 
 final signInProvider = StateNotifierProvider<_SignInProvider, bool>((ref) {
-  return _SignInProvider(ref);
+  return _SignInProvider();
 });
 
 class _SignInProvider extends StateNotifier<bool> {
-  _SignInProvider(this._ref) : super(false);
-  final Ref _ref;
+  _SignInProvider() : super(false);
 
-  Future signIn(String email, String password) async {
+  Future<bool> signIn(String email, String password) async {
     try {
       state = true;
-      // final response = await AuthRepository.instance.login(email: email, password: password);
-      // _ref.invalidate(customerProfileProvider);
-      // _ref.invalidate(vendorStoreProvider);
-      // _ref.invalidate(vendorOrderNotifierProvider);
-      // _ref.invalidate(vendorDashboard);
+      final response = await AuthRepository.instance.login(
+        email: email,
+        password: password,
+        fcmToken: "",
+        deviceId: "",
+      );
       state = false;
-      // return response;
+      return response;
     } catch (e) {
       errorLog("Login", e);
       state = false;

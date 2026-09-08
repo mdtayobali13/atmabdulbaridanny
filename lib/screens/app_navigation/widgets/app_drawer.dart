@@ -1,6 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod_template/constant/app_colors.dart';
+import 'package:flutter_riverpod_template/routes/app_routes.dart';
+import 'package:flutter_riverpod_template/routes/app_routes_key.dart';
+import 'package:flutter_riverpod_template/services/repository/auth_repository.dart';
+import 'package:flutter_riverpod_template/services/storage/storage_services.dart';
+import 'package:flutter_riverpod_template/utils/app_snack_bar.dart';
 import 'package:go_router/go_router.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -154,6 +159,7 @@ class AppDrawer extends StatelessWidget {
                   title: "Terms and Conditions",
                   onTap: () {
                     Navigator.pop(context);
+                    context.go('/${AppRoutesKey.instance.termsAndConditionsScreen}');
                   },
                 ),
                 _buildDrawerItem(
@@ -162,6 +168,7 @@ class AppDrawer extends StatelessWidget {
                   title: "Privacy Policy",
                   onTap: () {
                     Navigator.pop(context);
+                    context.go('/${AppRoutesKey.instance.privacyPolicyScreen}');
                   },
                 ),
                 _buildDrawerItem(
@@ -170,7 +177,60 @@ class AppDrawer extends StatelessWidget {
                   title: "FAQ",
                   onTap: () {
                     Navigator.pop(context);
+                    context.go('/${AppRoutesKey.instance.faqsScreen}');
                   },
+                ),
+              ],
+            ),
+          ),
+
+          const Divider(height: 1),
+
+          // Action Buttons: Delete Account & Logout
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: () => _showDeleteAccountDialog(context),
+                    icon: Icon(Icons.delete_outline_rounded, size: 17, color: Colors.red.shade700),
+                    label: Text(
+                      "Delete Account",
+                      style: TextStyle(
+                        color: Colors.red.shade700,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 11),
+                      side: BorderSide(color: Colors.red.shade300),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      backgroundColor: Colors.red.shade50.withValues(alpha: 0.4),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: () => _showLogoutDialog(context),
+                    icon: const Icon(Icons.logout_rounded, size: 17, color: Colors.white),
+                    label: const Text(
+                      "Logout",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 11),
+                      backgroundColor: Colors.red.shade700,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      elevation: 0,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -178,10 +238,226 @@ class AppDrawer extends StatelessWidget {
 
           // App Version
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 24.0),
+            padding: const EdgeInsets.only(bottom: 16.0),
             child: Text("Version 1.0.0", style: TextStyle(color: Colors.grey[500], fontSize: 12)),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.red.shade50,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(Icons.logout_rounded, color: Colors.red.shade700, size: 22),
+            ),
+            const SizedBox(width: 12),
+            const Text(
+              "Logout",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF111518)),
+            ),
+          ],
+        ),
+        content: const Text(
+          "Are you sure you want to logout from your account?",
+          style: TextStyle(fontSize: 14, color: Color(0xFF333333)),
+        ),
+        actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text(
+              "Cancel",
+              style: TextStyle(color: Colors.grey.shade700, fontWeight: FontWeight.w600),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              Navigator.pop(dialogContext);
+              Navigator.pop(context);
+              await StorageServices.instance.logout();
+              AppRoutes.instance.go(AppRoutesKey.instance.signInScreen);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red.shade700,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              elevation: 0,
+            ),
+            child: const Text("Logout"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showDeleteAccountDialog(BuildContext context) {
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
+    bool obscurePassword = true;
+
+    // Load saved email if available
+    StorageServices.instance.getLogDedData().then((data) {
+      if (data.containsKey("email") && data["email"] != null) {
+        emailController.text = data["email"].toString();
+      }
+    });
+
+    showDialog(
+      context: context,
+      builder: (dialogContext) => StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            surfaceTintColor: Colors.transparent,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            title: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.red.shade50,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(Icons.warning_amber_rounded, color: Colors.red.shade700, size: 22),
+                ),
+                const SizedBox(width: 12),
+                const Text(
+                  "Delete Account",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF111518)),
+                ),
+              ],
+            ),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Please enter your email and password to permanently delete your account. This action cannot be undone.",
+                    style: TextStyle(fontSize: 13, color: Colors.grey.shade700, height: 1.4),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    "Email Address",
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF222222)),
+                  ),
+                  const SizedBox(height: 6),
+                  TextField(
+                    controller: emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    style: const TextStyle(fontSize: 14, color: Color(0xFF111518)),
+                    decoration: InputDecoration(
+                      hintText: "Enter your email",
+                      hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 13),
+                      prefixIcon: Icon(Icons.alternate_email_rounded, color: Colors.grey.shade600, size: 18),
+                      filled: true,
+                      fillColor: const Color(0xFFF9FAFB),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(color: AppColors.instance.primaryGreen, width: 1.5),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  const Text(
+                    "Password",
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF222222)),
+                  ),
+                  const SizedBox(height: 6),
+                  TextField(
+                    controller: passwordController,
+                    obscureText: obscurePassword,
+                    style: const TextStyle(fontSize: 14, color: Color(0xFF111518)),
+                    decoration: InputDecoration(
+                      hintText: "Enter your password",
+                      hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 13),
+                      prefixIcon: Icon(Icons.lock_outline_rounded, color: Colors.grey.shade600, size: 18),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                          color: Colors.grey.shade600,
+                          size: 18,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            obscurePassword = !obscurePassword;
+                          });
+                        },
+                      ),
+                      filled: true,
+                      fillColor: const Color(0xFFF9FAFB),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(color: AppColors.instance.primaryGreen, width: 1.5),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialogContext),
+                child: Text(
+                  "Cancel",
+                  style: TextStyle(color: Colors.grey.shade700, fontWeight: FontWeight.w600),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  final password = passwordController.text.trim();
+                  Navigator.pop(dialogContext);
+                  Navigator.pop(context);
+                  try {
+                    await AuthRepository.instance.accountDelete(password: password);
+                  } catch (_) {}
+                  await StorageServices.instance.logout();
+                  AppRoutes.instance.go(AppRoutesKey.instance.signInScreen);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red.shade700,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  elevation: 0,
+                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                ),
+                child: const Text("Delete"),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -191,14 +467,17 @@ class AppDrawer extends StatelessWidget {
     required IconData icon,
     required String title,
     required VoidCallback onTap,
+    Color? titleColor,
+    Color? iconColor,
+    Widget? trailing,
   }) {
     return ListTile(
-      leading: Icon(icon, color: AppColors.instance.primaryGreen, size: 24),
+      leading: Icon(icon, color: iconColor ?? AppColors.instance.primaryGreen, size: 24),
       title: Text(
         title,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black87),
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: titleColor ?? Colors.black87),
       ),
-      trailing: Icon(Icons.arrow_forward_ios, size: 14, color: Colors.grey[400]),
+      trailing: trailing ?? Icon(Icons.arrow_forward_ios, size: 14, color: Colors.grey[400]),
       contentPadding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 4.0),
       onTap: onTap,
     );
@@ -240,7 +519,7 @@ class AppDrawer extends StatelessWidget {
 }
 
 class _LanguageToggle extends StatefulWidget {
-  const _LanguageToggle({super.key});
+  const _LanguageToggle();
 
   @override
   State<_LanguageToggle> createState() => _LanguageToggleState();
