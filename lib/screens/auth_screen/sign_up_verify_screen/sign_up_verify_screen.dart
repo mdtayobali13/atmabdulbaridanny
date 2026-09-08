@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_template/constant/app_colors.dart';
-import 'package:flutter_riverpod_template/screens/auth_screen/sign_up_screen/provider/sign_up_provider.dart';
 import 'package:flutter_riverpod_template/screens/auth_screen/sign_up_verify_screen/provider/otp_verify_provider.dart';
 import 'package:flutter_riverpod_template/utils/app_log.dart';
 import 'package:flutter_riverpod_template/utils/app_size.dart';
@@ -125,17 +124,8 @@ class _SignUpVerifyScreenState extends ConsumerState<SignUpVerifyScreen> {
                             if (formKey.currentState!.validate()) {
                               final isSuccess = await ref.read(otpVerifyProvider.notifier).verifyOtp(otpController.text.trim());
                               if (isSuccess) {
-                                AppSnackBar.instance.success("Verified successfully!");
-                                final provider = ref.read(signUpProvider);
-                                if (provider.isCustomer) {
-                                  AppRoutes.instance.go(AppRoutesKey.instance.signInScreen);
-                                } else {
-                                  // AppRoutes.instance.go(
-                                  //   AppRoutesKey
-                                  //       .instance
-                                  //       .verificationInProgressScreen,
-                                  // );
-                                }
+                                AppSnackBar.instance.success("Verified successfully! Please sign in.");
+                                AppRoutes.instance.go(AppRoutesKey.instance.signInScreen);
                               } else {
                                 AppSnackBar.instance.error("Invalid OTP");
                               }

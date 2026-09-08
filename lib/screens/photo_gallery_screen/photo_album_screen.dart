@@ -5,17 +5,22 @@ import 'package:flutter_riverpod_template/screens/home_screen/widgets/custom_foo
 
 class PhotoAlbumScreen extends StatelessWidget {
   final String albumTitle;
+  final List<String> imageUrls;
 
-  const PhotoAlbumScreen({super.key, required this.albumTitle});
+  const PhotoAlbumScreen({
+    super.key,
+    required this.albumTitle,
+    this.imageUrls = const [],
+  });
 
-  void _showImageDialog(BuildContext context, int initialIndex, List<Map<String, String>> photos) {
+  void _showImageDialog(BuildContext context, int initialIndex, List<String> photos) {
     showDialog(
       context: context,
-      barrierColor: Colors.black.withValues(alpha: 0.95), // Dark background like the website
+      barrierColor: Colors.black.withValues(alpha: 0.95),
       builder: (BuildContext context) {
         return Dialog(
           backgroundColor: Colors.transparent,
-          insetPadding: EdgeInsets.zero, // Full screen
+          insetPadding: EdgeInsets.zero,
           child: Stack(
             alignment: Alignment.center,
             children: [
@@ -28,11 +33,11 @@ class PhotoAlbumScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return InteractiveViewer(
                       child: CachedNetworkImage(
-                        imageUrl: photos[index]["imageUrl"]!,
+                        imageUrl: photos[index],
                         fit: BoxFit.contain,
                         placeholder: (context, url) =>
                             const Center(child: CircularProgressIndicator(color: Colors.white)),
-                        errorWidget: (context, url, error) => const Icon(Icons.error, color: Colors.white),
+                        errorWidget: (context, url, error) => const Icon(Icons.broken_image, color: Colors.white, size: 50),
                       ),
                     );
                   },
@@ -56,11 +61,7 @@ class PhotoAlbumScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final primaryGreen = AppColors.instance.primaryGreen;
-
-    final List<Map<String, String>> photos = [
-      {"title": albumTitle, "imageUrl": "https://picsum.photos/seed/a1/300/300"},
-      {"title": albumTitle, "imageUrl": "https://picsum.photos/seed/a2/300/300"},
-    ];
+    final photos = imageUrls.isNotEmpty ? imageUrls : <String>[];
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -77,105 +78,66 @@ class PhotoAlbumScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Top Green Banner
+            // Banner
             Container(
               width: double.infinity,
               color: primaryGreen,
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
               child: Column(
                 children: [
                   Text(
                     albumTitle,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold, height: 1.3),
+                    style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 4),
                   const Text(
-                    "See photos taken at various programs, offices, events, and important moments.",
+                    "High-resolution photos from official activities and public gatherings.",
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white70, fontSize: 12),
+                    style: TextStyle(color: Colors.white70, fontSize: 13),
                   ),
                 ],
               ),
             ),
 
-            // Grid content
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: GridView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 16,
-                  childAspectRatio: 0.75, // Aspect ratio to fit image, title, and button
-                ),
-                itemCount: photos.length,
-                itemBuilder: (context, index) {
-                  final photo = photos[index];
-                  return GestureDetector(
-                    onTap: () => _showImageDialog(context, index, photos),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
+            if (photos.isEmpty)
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 48),
+                child: Center(child: Text("No photos uploaded to this album yet.")),
+              )
+            else
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: GridView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 16,
+                    childAspectRatio: 1.0,
+                  ),
+                  itemCount: photos.length,
+                  itemBuilder: (context, index) {
+                    final photoUrl = photos[index];
+                    return GestureDetector(
+                      onTap: () => _showImageDialog(context, index, photos),
+                      child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
-                        boxShadow: [
-                          BoxShadow(color: Colors.grey.withValues(alpha: 0.2), blurRadius: 4, spreadRadius: 1),
-                        ],
+                        child: CachedNetworkImage(
+                          imageUrl: photoUrl,
+                          width: double.infinity,
+                          height: double.infinity,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) =>
+                              const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+                          errorWidget: (context, url, error) => const Icon(Icons.broken_image),
+                        ),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
-                              child: CachedNetworkImage(
-                                imageUrl: photo["imageUrl"]!,
-                                width: double.infinity,
-                                fit: BoxFit.cover,
-                                placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
-                                errorWidget: (context, url, error) => const Icon(Icons.error),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  photo["title"]!,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                const SizedBox(height: 8),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue.withValues(alpha: 0.1),
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                  child: const Text(
-                                    "View Photo",
-                                    style: TextStyle(color: Colors.blue, fontSize: 10, fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
-            ),
 
             const CustomFooter(),
           ],

@@ -1,39 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_template/constant/app_colors.dart';
 import 'package:flutter_riverpod_template/screens/home_screen/widgets/news_item.dart';
 import 'package:flutter_riverpod_template/screens/home_screen/widgets/custom_footer.dart';
+import 'package:flutter_riverpod_template/screens/news_detail_screen/news_detail_screen.dart';
+import 'package:flutter_riverpod_template/services/providers/api_providers.dart';
+import 'package:flutter_riverpod_template/services/repository/home_repository.dart';
 
-
-class PrintMediaScreen extends StatelessWidget {
+class PrintMediaScreen extends ConsumerStatefulWidget {
   const PrintMediaScreen({super.key});
+
+  @override
+  ConsumerState<PrintMediaScreen> createState() => _PrintMediaScreenState();
+}
+
+class _PrintMediaScreenState extends ConsumerState<PrintMediaScreen> {
+  Map<String, dynamic>? _visitStats;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadStats();
+  }
+
+  Future<void> _loadStats() async {
+    final stats = await HomeRepository.instance.recordVisit('/print-media');
+    if (mounted && stats != null) {
+      setState(() => _visitStats = stats);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final primaryGreen = AppColors.instance.primaryGreen;
-    
-    // Sample data to mimic the screenshot
-    final List<Map<String, String>> newsList = [
-      {
-        "title": "I will not commit corruption myself, nor will I let anyone do so: Deputy...",
-        "time": "26 April 2024",
-        "imageUrl": "https://picsum.photos/seed/pm1/300/200"
-      },
-      {
-        "title": "Teachers are not leaders of any party: Deputy Speaker",
-        "time": "26 April 2024",
-        "imageUrl": "https://picsum.photos/seed/pm2/300/200"
-      },
-      {
-        "title": "Question arises whether to hold elections in the future, Deputy...",
-        "time": "26 April 2024",
-        "imageUrl": "https://picsum.photos/seed/pm3/300/200"
-      },
-      {
-        "title": "Kayser Kamal arranges clean water for farmers in Haor",
-        "time": "26 April 2024",
-        "imageUrl": "https://picsum.photos/seed/pm4/300/200"
-      },
-    ];
+    final newsAsync = ref.watch(newsListProvider);
+
+    final todayVisits = _visitStats?['today_visits']?.toString() ?? '7';
+    final totalVisits = _visitStats?['total_visits']?.toString() ?? '113';
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -44,10 +47,9 @@ class PrintMediaScreen extends StatelessWidget {
             Container(
               width: double.infinity,
               color: primaryGreen,
-              padding: const EdgeInsets.only(top: 16.0, bottom: 16.0, left: 16.0, right: 16.0),
+              padding: const EdgeInsets.only(top: 36.0, bottom: 20.0, left: 16.0, right: 16.0),
               child: Column(
                 children: [
-
                   const Text(
                     "Print Media",
                     style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
@@ -63,9 +65,9 @@ class PrintMediaScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _buildStatBox("Today Visitor", "7"),
+                      _buildStatBox("Today Visitor", todayVisits),
                       const SizedBox(width: 16),
-                      _buildStatBox("Total Visitor", "113"),
+                      _buildStatBox("Total Visitor", totalVisits),
                     ],
                   ),
                 ],
@@ -73,27 +75,68 @@ class PrintMediaScreen extends StatelessWidget {
             ),
 
             // 2. Main Content Grid
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                  childAspectRatio: 0.75,
-                ),
-                itemCount: newsList.length,
-                itemBuilder: (context, index) {
-                  final news = newsList[index];
-                  return NewsItem(
-                    title: news["title"]!,
-                    time: news["time"]!,
-                    imageUrl: news["imageUrl"]!,
-                    sourceScreenName: "Print Media",
+            newsAsync.when(
+              data: (newsList) {
+                if (newsList.isEmpty) {
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 48),
+                    child: Center(child: Text("No print media articles available at this moment")),
                   );
-                },
+                }
+
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      childAspectRatio: 0.78,
+                    ),
+                    itemCount: newsList.length,
+                    itemBuilder: (context, index) {
+                      final item = newsList[index];
+                      final title = item.localizedTitle(false);
+                      final time = item.createdAt != null && item.createdAt!.length >= 10
+                          ? item.createdAt!.substring(0, 10)
+                          : '';
+                      final imgUrl = item.fullImageUrl;
+                      final content = item.localizedContent(false);
+
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context, rootNavigator: true).push(
+                            MaterialPageRoute(
+                              builder: (context) => NewsDetailScreen(
+                                title: title,
+                                time: time,
+                                imageUrl: imgUrl,
+                                description: content.isNotEmpty ? content : "No additional details provided.",
+                                sourceScreenName: "Print Media",
+                              ),
+                            ),
+                          );
+                        },
+                        child: NewsItem(
+                          title: title,
+                          time: time,
+                          imageUrl: imgUrl,
+                          sourceScreenName: "Print Media",
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+              loading: () => const Padding(
+                padding: EdgeInsets.symmetric(vertical: 60),
+                child: Center(child: CircularProgressIndicator()),
+              ),
+              error: (err, stack) => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 40),
+                child: Center(child: Text("Failed to load news: $err")),
               ),
             ),
 
@@ -108,7 +151,10 @@ class PrintMediaScreen extends StatelessWidget {
   Widget _buildStatBox(String title, String count) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-      decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(8)),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(8),
+      ),
       child: Column(
         children: [
           Text(title, style: const TextStyle(color: Colors.white70, fontSize: 12)),

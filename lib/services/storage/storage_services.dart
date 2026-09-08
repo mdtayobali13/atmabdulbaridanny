@@ -82,6 +82,55 @@ class StorageServices {
     await _secure.write(key: StorageKey.instance.appUserRollData, value: value);
   }
 
+  //////////// user data store
+  Future<void> setUserData(Map<String, dynamic> data) async {
+    try {
+      await _secure.write(key: StorageKey.instance.user, value: jsonEncode(data));
+    } catch (e) {
+      errorLog("setUserData", e);
+    }
+  }
+
+  Future<Map<String, dynamic>> getUserData() async {
+    try {
+      final raw = await _secure.read(key: StorageKey.instance.user);
+      if (raw == null || raw.isEmpty) return {};
+      return Map<String, dynamic>.from(jsonDecode(raw) as Map);
+    } catch (e) {
+      errorLog("getUserData", e);
+      return {};
+    }
+  }
+
+  //////////// permissions store
+  Future<void> setPermissions(List<String> list) async {
+    try {
+      await _secure.write(key: StorageKey.instance.permissions, value: jsonEncode(list));
+    } catch (e) {
+      errorLog("setPermissions", e);
+    }
+  }
+
+  Future<List<String>> getPermissions() async {
+    try {
+      final raw = await _secure.read(key: StorageKey.instance.permissions);
+      if (raw == null || raw.isEmpty) return [];
+      final list = jsonDecode(raw);
+      if (list is List) {
+        return list.map((e) => e.toString()).toList();
+      }
+      return [];
+    } catch (e) {
+      errorLog("getPermissions", e);
+      return [];
+    }
+  }
+
+  Future<bool> hasPermission(String permission) async {
+    final permissions = await getPermissions();
+    return permissions.contains(permission);
+  }
+
   /// Logout (clear all data)
   Future<void> logout() async {
     try {

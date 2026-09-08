@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod_template/constant/app_colors.dart';
-import 'package:flutter_riverpod_template/screens/home_screen/widgets/custom_text_field.dart';
+import 'package:flutter_riverpod_template/screens/complain_screen/complain_screen.dart';
 
 class ComplaintForm extends StatelessWidget {
   const ComplaintForm({super.key});
@@ -8,7 +8,6 @@ class ComplaintForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final lightGreen = AppColors.instance.lightGreen;
-    final primaryGreen = AppColors.instance.primaryGreen;
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -16,66 +15,47 @@ class ComplaintForm extends StatelessWidget {
       decoration: BoxDecoration(
         color: lightGreen,
         borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Column(
         children: [
+          const Icon(Icons.rate_review_outlined, color: Colors.white, size: 36),
+          const SizedBox(height: 8),
           const Text(
-            "Submit Complaint",
+            "Submit Citizen Complaint",
             style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 5),
+          const SizedBox(height: 6),
           const Text(
-            "Please fill out the form below",
-            style: TextStyle(color: Colors.white70, fontSize: 14),
+            "Have an issue, feedback, or grievance in your locality? Submit it directly to Barrister Kayser Kamal's office.",
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white70, fontSize: 13, height: 1.4),
           ),
-          const SizedBox(height: 20),
-          const CustomTextField(hint: "Name *"),
-          const SizedBox(height: 12),
-          const CustomTextField(hint: "Mobile No *"),
-          const SizedBox(height: 12),
-          const CustomTextField(hint: "Email"),
-          const SizedBox(height: 12),
-          const CustomTextField(hint: "Subject *"),
-          const SizedBox(height: 12),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
+          const SizedBox(height: 18),
+          ElevatedButton.icon(
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).push(
+                MaterialPageRoute(builder: (context) => const ComplainScreen()),
+              );
+            },
+            icon: const Icon(Icons.edit_note, color: Color(0xFF0C4B33)),
+            label: const Text(
+              "Open Complaint Form",
+              style: TextStyle(color: Color(0xFF0C4B33), fontWeight: FontWeight.bold, fontSize: 15),
             ),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
-                isExpanded: true,
-                hint: const Text("Select Branch"),
-                items: ["Dhaka", "Sylhet", "Chittagong"].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (_) {},
-              ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+              elevation: 2,
             ),
           ),
-          const SizedBox(height: 12),
-          const CustomTextField(hint: "Your comments (if any)", maxLines: 3),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                child: const Text("Cancel", style: TextStyle(color: Colors.white)),
-              ),
-              const SizedBox(width: 20),
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(backgroundColor: primaryGreen),
-                child: const Text("Submit", style: TextStyle(color: Colors.white)),
-              ),
-            ],
-          )
         ],
       ),
     );

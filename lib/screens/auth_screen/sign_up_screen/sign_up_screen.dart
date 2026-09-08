@@ -1,19 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod_template/constant/app_asserts_image_path.dart';
 import 'package:flutter_riverpod_template/constant/app_colors.dart';
 import 'package:flutter_riverpod_template/routes/app_routes.dart';
+import 'package:flutter_riverpod_template/routes/app_routes_key.dart';
 import 'package:flutter_riverpod_template/screens/auth_screen/sign_up_screen/provider/sign_up_provider.dart';
-import 'package:flutter_riverpod_template/utils/app_log.dart';
-import 'package:flutter_riverpod_template/utils/app_size.dart';
 import 'package:flutter_riverpod_template/utils/gap.dart';
-import 'package:flutter_riverpod_template/widgets/app_image/app_image.dart';
-import 'package:flutter_riverpod_template/widgets/buttons/app_button.dart';
-import 'package:flutter_riverpod_template/widgets/image_userPick/image_user_pick.dart';
-import 'package:flutter_riverpod_template/widgets/inputs/app_input_widget_tow.dart';
-import 'package:flutter_riverpod_template/widgets/texts/app_text.dart';
-import '../../../routes/app_routes_key.dart';
-import '../../../widgets/inputs/app_input_widget.dart';
+import 'package:flutter_riverpod_template/utils/app_snack_bar.dart';
 
 class SignUpScreen extends ConsumerStatefulWidget {
   const SignUpScreen({super.key});
@@ -23,519 +15,217 @@ class SignUpScreen extends ConsumerStatefulWidget {
 }
 
 class _SignUpScreenState extends ConsumerState<SignUpScreen> {
-  late GlobalKey<FormState> formKey;
-  late TextEditingController nameTextEditingController;
-  late TextEditingController emailTextEditingController;
-  late TextEditingController phoneNumberTextEditingController;
-  late TextEditingController passwordTextEditingController;
-  late TextEditingController confirmPasswordTextEditingController;
-  late TextEditingController storeNameTextEditingController;
-  late TextEditingController storeBioTextEditingController;
-  late TextEditingController storeAddressTextEditingController;
-  late TextEditingController storeImageController;
+  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
-  late TextEditingController fontImageController;
-  late TextEditingController backImageController;
-
-  void onAppInitial() {
-    try {
-      nameTextEditingController = TextEditingController();
-      emailTextEditingController = TextEditingController();
-      phoneNumberTextEditingController = TextEditingController();
-      passwordTextEditingController = TextEditingController();
-      confirmPasswordTextEditingController = TextEditingController();
-      storeNameTextEditingController = TextEditingController();
-      storeBioTextEditingController = TextEditingController();
-      storeAddressTextEditingController = TextEditingController();
-      fontImageController = TextEditingController();
-      backImageController = TextEditingController();
-      storeImageController = TextEditingController();
-      var provider = ref.read(signUpProvider);
-      nameTextEditingController.text = provider.name;
-      emailTextEditingController.text = provider.email;
-      phoneNumberTextEditingController.text = provider.phoneNumber;
-      passwordTextEditingController.text = provider.password;
-      confirmPasswordTextEditingController.text = provider.confirmPassword;
-      fontImageController.text = provider.idCardFrontendPart;
-      backImageController.text = provider.idCardBackendPart;
-      storeNameTextEditingController.text = provider.storeName;
-      storeBioTextEditingController.text = provider.storeBio;
-      storeAddressTextEditingController.text = provider.storeAddress;
-      storeImageController.text = provider.storePhoto;
-      formKey = GlobalKey<FormState>();
-    } catch (e) {
-      errorLog("onAppInitial", e);
-    }
-  }
-
-  void onAppClose() {
-    try {
-      nameTextEditingController.dispose();
-      emailTextEditingController.dispose();
-      phoneNumberTextEditingController.dispose();
-      passwordTextEditingController.dispose();
-      confirmPasswordTextEditingController.dispose();
-      fontImageController.dispose();
-      backImageController.dispose();
-      storeAddressTextEditingController.dispose();
-      storeBioTextEditingController.dispose();
-      storeNameTextEditingController.dispose();
-      storeImageController.dispose();
-    } catch (e) {
-      errorLog("onAppClose", e);
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    onAppInitial();
-  }
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
 
   @override
   void dispose() {
-    onAppClose();
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _handleSignUp() async {
+    FocusScope.of(context).unfocus();
+
+    if (!_formKey.currentState!.validate()) return;
+
+    if (_passwordController.text != _confirmPasswordController.text) {
+      AppSnackBar.instance.error("Passwords do not match");
+      return;
+    }
+
+    ref.read(signUpProvider.notifier).stateUpdate(
+      name: _nameController.text.trim(),
+      email: _emailController.text.trim(),
+      password: _passwordController.text.trim(),
+      confirmPassword: _confirmPasswordController.text.trim(),
+    );
+
+    final success = await ref.read(signUpProvider.notifier).register(formKey: _formKey);
+
+    if (!mounted) return;
+
+    if (success) {
+      AppSnackBar.instance.success("Registration successful!");
+      AppRoutes.instance.go(AppRoutesKey.instance.homeScreen);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(signUpProvider);
+    final primaryGreen = AppColors.instance.primaryGreen;
+
     return Scaffold(
+      backgroundColor: const Color(0xFFF6F8F7),
       body: SafeArea(
-        child: SizedBox(
-          width: AppSize.size.width,
+        child: Center(
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: AppSize.width(value: 20)),
-            child: Form(
-              key: formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: AppSize.size.width * 0.8,
-                    height: AppSize.size.height * 0.14,
-                    child: Center(
-                      child: AppImage(width: AppSize.size.width * 0.8, path: AppAssertsImagePath.instance.logo),
-                    ),
-                  ),
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 480),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Gap(height: 10),
 
-                  SizedBox(
-                    width: AppSize.size.width * 0.8,
-                    child: AppText(
-                      text: "Welcome back! Create your account.",
+                    // Header
+                    Center(
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: primaryGreen.withValues(alpha: 0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(Icons.person_add_outlined, size: 48, color: primaryGreen),
+                      ),
+                    ),
+                    const Gap(height: 16),
+                    Text(
+                      "Create Account",
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.grey[900]),
                       textAlign: TextAlign.center,
-
-                      fontWeight: FontWeight.w500,
-                      height: 1.5,
-                      fontSize: AppSize.width(value: 18),
                     ),
-                  ),
-                  Gap(height: 20),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: AppText(
-                      text: "Sign up as",
-                      textAlign: TextAlign.start,
-
-                      fontWeight: FontWeight.w700,
-                      height: 1.5,
-                      fontSize: AppSize.width(value: 18),
+                    const Gap(height: 6),
+                    Text(
+                      "Join the platform to connect with Barrister Kayser Kamal's office",
+                      style: TextStyle(fontSize: 13, color: Colors.grey[600]),
+                      textAlign: TextAlign.center,
                     ),
-                  ),
-                  Gap(height: 20),
-                  Consumer(
-                    builder: (context, ref, child) {
-                      final isCustomer = ref.watch(signUpProvider.select((p) => p.isCustomer));
-                      return Row(
-                        children: [
-                          Expanded(
-                            child: InkWell(
-                              onTap: () async {
-                                ref.read(signUpProvider.notifier).stateUpdate(isCustomer: true);
-                              },
-                              overlayColor: WidgetStatePropertyAll(Colors.transparent),
-                              child: AnimatedContainer(
-                                duration: Durations.long1,
-                                padding: EdgeInsets.all(AppSize.width(value: 10)),
-                                decoration: BoxDecoration(
-                                  color: isCustomer ? AppColors.instance.success : AppColors.instance.white100,
-                                  border: Border.all(color: isCustomer ? AppColors.instance.success : AppColors.instance.dark300),
-                                  borderRadius: BorderRadius.circular(AppSize.width(value: 10)),
-                                ),
-                                alignment: Alignment.center,
-                                child: AppText(
-                                  text: "Customer",
-                                  color: isCustomer ? AppColors.instance.white50 : AppColors.instance.dark500,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Gap(width: 20),
-                          Expanded(
-                            child: InkWell(
-                              onTap: () async {
-                                ref.read(signUpProvider.notifier).stateUpdate(isCustomer: false);
-                              },
-                              overlayColor: WidgetStatePropertyAll(Colors.transparent),
-                              child: AnimatedContainer(
-                                duration: Durations.long1,
-                                padding: EdgeInsets.all(AppSize.width(value: 10)),
-                                decoration: BoxDecoration(
-                                  color: !isCustomer ? AppColors.instance.success : AppColors.instance.white100,
-                                  border: Border.all(color: !isCustomer ? AppColors.instance.success : AppColors.instance.dark300),
-                                  borderRadius: BorderRadius.circular(AppSize.width(value: 10)),
-                                ),
-                                alignment: Alignment.center,
-                                child: AppText(
-                                  text: "Vendor",
-                                  color: !isCustomer ? AppColors.instance.white50 : AppColors.instance.dark500,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                  Gap(height: 10),
-                  AppInputWidgetTwo(
-                    validator: (String? value) {
-                      if (value?.isEmpty ?? true) {
-                        return "Enter your name";
-                      }
-                      return null;
-                    },
-                    title: "Name",
-                    padding: EdgeInsets.symmetric(horizontal: 0),
-                    controller: nameTextEditingController,
-                    onChanged: (v) {
-                      ref.read(signUpProvider.notifier).stateUpdate(name: v);
-                    },
-                    hintText: "Enter your name",
-                  ),
-                  AppInputWidgetTwo(
-                    validator: (String? value) {
-                      if (value == null || value.isEmpty) {
-                        return "Enter your email";
-                      }
-                      final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-                      if (!emailRegex.hasMatch(value)) {
-                        return "Enter a valid email address";
-                      }
-                      return null;
-                    },
-                    title: "Email",
-                    padding: EdgeInsets.symmetric(horizontal: 0),
-                    isEmail: true,
-                    controller: emailTextEditingController,
-                    onChanged: (v) {
-                      ref.read(signUpProvider.notifier).stateUpdate(email: v);
-                    },
-                    hintText: "Enter your email",
-                  ),
-                  AppInputWidgetTwo(
-                    validator: (String? value) {
-                      if (value?.isEmpty ?? true) {
-                        return "Enter your phone number";
-                      }
-                      return null;
-                    },
-                    title: "Phone Number",
-                    padding: EdgeInsets.symmetric(horizontal: 0),
-                    controller: phoneNumberTextEditingController,
-                    onChanged: (v) {
-                      ref.read(signUpProvider.notifier).stateUpdate(phoneNumber: v);
-                    },
-                    hintText: "Enter your phone number",
-                  ),
-                  Consumer(
-                    builder: (context, ref, child) {
-                      final isCustomer = ref.watch(signUpProvider.select((p) => p.isCustomer));
-                      if (!isCustomer) {
-                        return Column(
-                          children: [
-                            AppInputWidgetTwo(
-                              controller: storeNameTextEditingController,
-                              title: "Store Name",
-                              onChanged: (v) {
-                                ref.read(signUpProvider.notifier).stateUpdate(storeName: v);
-                              },
-                              validator: (String? value) {
-                                if (value?.isEmpty ?? true) {
-                                  return " enter your store name";
-                                }
-                                return null;
-                              },
-                              padding: EdgeInsets.symmetric(horizontal: 0),
-                              // controller: phoneNumberTextEditingController,
-                              hintText: "Enter store name",
-                            ),
-                            AppInputWidgetTwo(
-                              controller: storeBioTextEditingController,
-                              validator: (String? value) {
-                                if (value?.isEmpty ?? true) {
-                                  return " enter your store Bio";
-                                }
-                                return null;
-                              },
-                              title: "Store Bio",
-                              onChanged: (v) {
-                                ref.read(signUpProvider.notifier).stateUpdate(storeBio: v);
-                              },
-                              padding: EdgeInsets.symmetric(horizontal: 0),
-                              // controller: phoneNumberTextEditingController,
-                              hintText: "Enter store bio",
-                            ),
-                            AppInputWidgetTwo(
-                              controller: storeAddressTextEditingController,
-                              validator: (String? value) {
-                                if (value?.isEmpty ?? true) {
-                                  return " enter your store address";
-                                }
-                                return null;
-                              },
-                              onChanged: (v) {
-                                ref.read(signUpProvider.notifier).stateUpdate(storeAddress: v);
-                              },
-                              title: "Store Address",
-                              padding: EdgeInsets.symmetric(horizontal: 0),
-                              // controller: phoneNumberTextEditingController,
-                              hintText: "Enter store address",
-                            ),
-                          ],
-                        );
-                      }
-                      return const SizedBox.shrink();
-                    },
-                  ),
+                    const Gap(height: 28),
 
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: AppInputWidgetTwo(
-                          maxLines: 1,
-                          controller: fontImageController,
-                          readOnly: true,
-                          onTap: () {
-                            appImageUserTake(
-                              callBack: (v) {
-                                ref.read(signUpProvider.notifier).stateUpdate(idCardFrontendPart: v);
-                                fontImageController.text = v;
-                              },
-                            );
-                          },
-                          validator: (String? value) {
-                            if (value?.isEmpty ?? true) {
-                              return "Enter your image";
-                            }
-                            return null;
-                          },
-                          title: "Resident Card",
-                          hintText: "Upload font side photo",
-                          padding: EdgeInsets.symmetric(horizontal: 0),
-                        ),
+                    // Full Name
+                    TextFormField(
+                      controller: _nameController,
+                      decoration: InputDecoration(
+                        labelText: "Full Name",
+                        prefixIcon: const Icon(Icons.person_outline),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        filled: true,
+                        fillColor: Colors.white,
                       ),
-                      Gap(width: AppSize.size.width * 0.02),
-                      Expanded(
-                        flex: 1,
-                        child: AppButton(
-                          onTap: () {
-                            appImageUserTake(
-                              callBack: (v) {
-                                ref.read(signUpProvider.notifier).stateUpdate(idCardFrontendPart: v);
-                                fontImageController.text = v;
-                              },
-                            );
-                          },
-                          height: AppSize.size.width * 0.13,
-                          backgroundColor: AppColors.instance.success,
-                          borderColor: AppColors.instance.success,
-                          title: "Upload",
-                        ),
+                      validator: (val) => val == null || val.trim().isEmpty ? "Name is required" : null,
+                    ),
+                    const Gap(height: 16),
+
+                    // Email
+                    TextFormField(
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        labelText: "Email Address",
+                        prefixIcon: const Icon(Icons.email_outlined),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        filled: true,
+                        fillColor: Colors.white,
                       ),
-                    ],
-                  ),
-                  Gap(height: AppSize.size.width * 0.015),
-                  Consumer(
-                    builder: (context, ref, child) {
-                      final backImage = ref.watch(signUpProvider.select((p) => p.idCardBackendPart));
-                      return Row(
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: AppInputWidget(
-                              maxLines: 1,
-                              controller: backImageController,
-                              readOnly: true,
-                              onTap: () {
-                                appImageUserTake(
-                                  callBack: (v) {
-                                    ref.read(signUpProvider.notifier).stateUpdate(idCardBackendPart: v);
-                                  },
-                                );
-                              },
-                              validator: (String? value) {
-                                if (backImage.isEmpty) {
-                                  return "Enter your image";
-                                }
-                                return null;
-                              },
-                              borderColor: AppColors.instance.success,
-                              hintText: backImage.isEmpty ? "Upload back side photo" : backImage.split("/").last,
-                            ),
-                          ),
-                          Gap(width: AppSize.size.width * 0.02),
-                          Expanded(
-                            flex: 1,
-                            child: AppButton(
-                              onTap: () {
-                                appImageUserTake(
-                                  callBack: (v) {
-                                    ref.read(signUpProvider.notifier).stateUpdate(idCardBackendPart: v);
-                                  },
-                                );
-                              },
-                              height: AppSize.size.width * 0.13,
-                              backgroundColor: AppColors.instance.success,
-                              borderColor: AppColors.instance.success,
-                              title: "Upload",
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                  Consumer(
-                    builder: (context, ref, child) {
-                      final isCustomer = ref.watch(signUpProvider.select((p) => p.isCustomer));
-                      final storePhoto = ref.watch(signUpProvider.select((p) => p.storePhoto));
-                      if (!isCustomer) {
-                        return Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              flex: 2,
-                              child: AppInputWidgetTwo(
-                                maxLines: 1,
-                                controller: storeImageController,
-                                readOnly: true,
-                                onTap: () {
-                                  appImageUserTake(
-                                    callBack: (v) {
-                                      ref.read(signUpProvider.notifier).stateUpdate(storePhoto: v);
-                                    },
-                                  );
-                                },
-                                validator: (String? value) {
-                                  if (storePhoto.isEmpty) {
-                                    return "Enter your image";
-                                  }
-                                  return null;
-                                },
-                                title: "Store Photo",
-                                hintText: storePhoto.isEmpty ? "Upload store photo" : storePhoto.split("/").last,
-                                padding: EdgeInsets.symmetric(horizontal: 0),
+                      validator: (val) {
+                        if (val == null || val.trim().isEmpty) return "Email is required";
+                        if (!val.contains('@') || !val.contains('.')) return "Please enter a valid email";
+                        return null;
+                      },
+                    ),
+                    const Gap(height: 16),
+
+                    // Password
+                    TextFormField(
+                      controller: _passwordController,
+                      obscureText: _obscurePassword,
+                      decoration: InputDecoration(
+                        labelText: "Password",
+                        prefixIcon: const Icon(Icons.lock_outline),
+                        suffixIcon: IconButton(
+                          icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility),
+                          onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                        ),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
+                      validator: (val) {
+                        if (val == null || val.isEmpty) return "Password is required";
+                        if (val.length < 6) return "Password must be at least 6 characters";
+                        return null;
+                      },
+                    ),
+                    const Gap(height: 16),
+
+                    // Confirm Password
+                    TextFormField(
+                      controller: _confirmPasswordController,
+                      obscureText: _obscureConfirmPassword,
+                      decoration: InputDecoration(
+                        labelText: "Confirm Password",
+                        prefixIcon: const Icon(Icons.lock_outline),
+                        suffixIcon: IconButton(
+                          icon: Icon(_obscureConfirmPassword ? Icons.visibility_off : Icons.visibility),
+                          onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
+                        ),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
+                      validator: (val) {
+                        if (val == null || val.isEmpty) return "Please confirm password";
+                        if (val != _passwordController.text) return "Passwords do not match";
+                        return null;
+                      },
+                    ),
+                    const Gap(height: 24),
+
+                    // Register Button
+                    SizedBox(
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: state.isLoading ? null : _handleSignUp,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: primaryGreen,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        ),
+                        child: state.isLoading
+                            ? const SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                              )
+                            : const Text(
+                                "Register",
+                                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                               ),
-                            ),
-                            Gap(width: AppSize.size.width * 0.02),
-                            Expanded(
-                              flex: 1,
-                              child: AppButton(
-                                onTap: () {
-                                  appImageUserTake(
-                                    callBack: (v) {
-                                      ref.read(signUpProvider.notifier).stateUpdate(storePhoto: v);
-                                    },
-                                  );
-                                },
-                                height: AppSize.size.width * 0.13,
-                                backgroundColor: AppColors.instance.success,
-                                borderColor: AppColors.instance.success,
-                                title: "Upload",
-                              ),
-                            ),
-                          ],
-                        );
-                      }
-                      return const SizedBox.shrink();
-                    },
-                  ),
-                  AppInputWidgetTwo(
-                    validator: (String? value) {
-                      if (value?.isEmpty ?? true) {
-                        return "Enter your password";
-                      }
-                      if (value!.length < 6) {
-                        return "Password must be at least 6 characters";
-                      }
-                      return null;
-                    },
-                    title: "Password",
-                    padding: EdgeInsets.symmetric(horizontal: 0),
-                    isPassWord: true,
-                    controller: passwordTextEditingController,
-                    onChanged: (v) {
-                      ref.read(signUpProvider.notifier).stateUpdate(password: v);
-                    },
-                    hintText: "Enter your password",
-                  ),
-                  AppInputWidgetTwo(
-                    validator: (String? value) {
-                      if (value?.isEmpty ?? true) {
-                        return "Enter your password";
-                      }
-                      if (value!.length < 6) {
-                        return "Password must be at least 6 characters";
-                      }
-                      if (value != passwordTextEditingController.text) {
-                        return "Password not matching";
-                      }
-                      return null;
-                    },
-                    title: "Confirm Password",
-                    padding: EdgeInsets.symmetric(horizontal: 0),
-                    isPassWord: true,
-                    controller: confirmPasswordTextEditingController,
-                    hintText: "Enter Confirm Password",
-                  ),
-                  Gap(height: 20),
-                  Consumer(
-                    builder: (context, ref, child) {
-                      final isLoading = ref.watch(signUpProvider.select((p) => p.isLoading));
-                      return AppButton(
-                        onTap: () async {
-                          await ref.read(signUpProvider.notifier).customerSignUp(formKey: formKey);
-                        },
-                        isLoading: isLoading,
-                        backgroundColor: AppColors.instance.success,
-                        borderColor: AppColors.instance.success,
-                        title: "Create Account",
-                        padding: EdgeInsets.all(AppSize.width(value: 10)),
-                      );
-                    },
-                  ),
-                  Gap(height: 15),
-                  Center(
-                    child: Wrap(
+                      ),
+                    ),
+                    const Gap(height: 20),
+
+                    // Sign In link
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        AppText(text: "Already have an account?"),
-                        Gap(width: 10),
-                        InkWell(
+                        Text("Already have an account? ", style: TextStyle(color: Colors.grey[700])),
+                        GestureDetector(
                           onTap: () {
-                            AppRoutes.instance.go(AppRoutesKey.instance.signInScreen);
+                            AppRoutes.instance.go("/${AppRoutesKey.instance.signInScreen}");
                           },
-                          overlayColor: WidgetStatePropertyAll(Colors.transparent),
-                          child: AppText(text: "Sign In", fontWeight: FontWeight.w600),
+                          child: Text(
+                            "Sign In",
+                            style: TextStyle(color: primaryGreen, fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                  Gap(height: 70),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

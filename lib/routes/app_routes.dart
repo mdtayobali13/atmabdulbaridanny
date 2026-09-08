@@ -33,6 +33,7 @@ import 'package:flutter_riverpod_template/screens/video_gallery_screen/video_gal
 import 'package:flutter_riverpod_template/screens/blog_screen/blog_screen.dart';
 import 'package:flutter_riverpod_template/screens/contact_screen/contact_screen.dart';
 import 'package:flutter_riverpod_template/screens/appointment_screen/appointment_screen.dart';
+import 'package:flutter_riverpod_template/screens/profile_screen/profile_screen.dart';
 import 'package:flutter_riverpod_template/screens/splash_screen/splash_screen.dart';
 import 'package:flutter_riverpod_template/utils/app_log.dart';
 import 'package:go_router/go_router.dart';
@@ -228,6 +229,11 @@ class AppRoutes {
         path: "/complain_screen",
         name: "complainScreen",
         builder: (context, state) => const ComplainScreen(),
+      ),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.profileScreen}",
+        name: AppRoutesKey.instance.profileScreen,
+        builder: (context, state) => const ProfileScreen(),
       ),
     ],
     errorBuilder: (context, state) {

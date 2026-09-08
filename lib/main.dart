@@ -1,12 +1,18 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod_template/constant/app_colors.dart';
 import 'package:flutter_riverpod_template/main_app_entry.dart';
 
 Future<void> main() async {
   //////////////  flutter binding initialize
   WidgetsFlutterBinding.ensureInitialized();
+
+  ///////////// load environment variables
+  try {
+    await dotenv.load(fileName: ".env");
+  } catch (_) {}
 
   ///////////// devices orientation set
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);

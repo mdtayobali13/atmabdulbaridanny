@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:flutter_riverpod_template/services/repository/auth_repository.dart';
 import 'package:flutter_riverpod_template/utils/app_log.dart';

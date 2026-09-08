@@ -1,60 +1,94 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod_template/constant/app_colors.dart';
 import 'package:flutter_riverpod_template/screens/home_screen/widgets/card_item.dart';
 import 'package:flutter_riverpod_template/screens/home_screen/widgets/custom_footer.dart';
+import 'package:flutter_riverpod_template/services/providers/api_providers.dart';
 
-class BlogScreen extends StatelessWidget {
+class BlogScreen extends ConsumerWidget {
   const BlogScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-  
-
-    final List<Map<String, String>> blogs = [
-      {
-        "title": "Construction of concrete culvert over the river in Hatirjhil style...",
-        "imageUrl": "https://picsum.photos/seed/b1/300/200",
-      },
-      {
-        "title": "Kayser Kamal stands beside Ahona, born with a hole in the heart",
-        "imageUrl": "https://picsum.photos/seed/b2/300/200",
-      },
-      {
-        "title": "No representative before, now a capable and visionary leader...",
-        "imageUrl": "https://picsum.photos/seed/b3/300/200",
-      },
-      {
-        "title": "Discussion meeting protesting human rights violations...",
-        "imageUrl": "https://picsum.photos/seed/b4/300/200",
-      },
-      {"title": "Dreaming of a new day with the youth...", "imageUrl": "https://picsum.photos/seed/b5/300/200"},
-      {"title": "Exchange of views meeting with lawyers...", "imageUrl": "https://picsum.photos/seed/b6/300/200"},
-    ];
+  Widget build(BuildContext context, WidgetRef ref) {
+    final primaryGreen = AppColors.instance.primaryGreen;
+    final blogsAsync = ref.watch(blogListProvider);
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Grid content
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Wrap(
-                spacing: 12,
-                runSpacing: 16,
-                alignment: WrapAlignment.center,
-                children: blogs.map((blog) {
-                  return FractionallySizedBox(
-                    widthFactor: 0.47, // Roughly half screen width minus spacing
-                    child: CardItem(
-                      title: blog["title"]!,
-                      btnText: "Read More",
-                      imageUrl: blog["imageUrl"]!,
-                      sourceScreenName: "Blog Articles",
-                    ),
-                  );
-                }).toList(),
+            // Top Green Banner
+            Container(
+              width: double.infinity,
+              color: primaryGreen,
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 28.0),
+              child: const Column(
+                children: [
+                  Text(
+                    "Articles & Publications",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 6),
+                  Text(
+                    "Read articles, legal opinions, and analyses written by Barrister Kayser Kamal.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white70, fontSize: 13),
+                  ),
+                ],
               ),
             ),
+
+            // Grid content
+            blogsAsync.when(
+              data: (blogs) {
+                if (blogs.isEmpty) {
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 48),
+                    child: Center(child: Text("No blog articles available at this moment")),
+                  );
+                }
+
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Wrap(
+                    spacing: 12,
+                    runSpacing: 16,
+                    alignment: WrapAlignment.center,
+                    children: blogs.map((blog) {
+                      final title = blog.localizedTitle(false);
+                      final imgUrl = blog.fullImageUrl;
+                      final content = blog.localizedContent(false);
+                      final time = blog.createdAt != null && blog.createdAt!.length >= 10
+                          ? blog.createdAt!.substring(0, 10)
+                          : '';
+
+                      return FractionallySizedBox(
+                        widthFactor: 0.47,
+                        child: CardItem(
+                          title: title,
+                          btnText: "Read More",
+                          imageUrl: imgUrl,
+                          time: time,
+                          description: content.isNotEmpty ? content : "No detailed article body provided.",
+                          sourceScreenName: "Blog Article",
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                );
+              },
+              loading: () => const Padding(
+                padding: EdgeInsets.symmetric(vertical: 60),
+                child: Center(child: CircularProgressIndicator()),
+              ),
+              error: (err, stack) => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 40),
+                child: Center(child: Text("Failed to load blog articles: $err")),
+              ),
+            ),
+
             const CustomFooter(),
           ],
         ),

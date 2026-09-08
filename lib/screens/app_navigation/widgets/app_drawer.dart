@@ -5,7 +5,6 @@ import 'package:flutter_riverpod_template/routes/app_routes.dart';
 import 'package:flutter_riverpod_template/routes/app_routes_key.dart';
 import 'package:flutter_riverpod_template/services/repository/auth_repository.dart';
 import 'package:flutter_riverpod_template/services/storage/storage_services.dart';
-import 'package:flutter_riverpod_template/utils/app_snack_bar.dart';
 import 'package:go_router/go_router.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -71,6 +70,42 @@ class AppDrawer extends StatelessWidget {
             child: ListView(
               padding: EdgeInsets.zero,
               children: [
+                _buildDrawerItem(
+                  context: context,
+                  icon: CupertinoIcons.person_crop_circle,
+                  title: "My Account",
+                  onTap: () {
+                    Navigator.pop(context);
+                    context.go('/${AppRoutesKey.instance.profileScreen}');
+                  },
+                ),
+                _buildDrawerItem(
+                  context: context,
+                  icon: CupertinoIcons.info_circle,
+                  title: "About Me",
+                  onTap: () {
+                    Navigator.pop(context);
+                    context.go('/${AppRoutesKey.instance.aboutScreen}');
+                  },
+                ),
+                _buildDrawerItem(
+                  context: context,
+                  icon: CupertinoIcons.book,
+                  title: "Biography",
+                  onTap: () {
+                    Navigator.pop(context);
+                    context.go('/biography_screen');
+                  },
+                ),
+                _buildDrawerItem(
+                  context: context,
+                  icon: CupertinoIcons.time,
+                  title: "History of Life & Struggle",
+                  onTap: () {
+                    Navigator.pop(context);
+                    context.go('/history_of_life_screen');
+                  },
+                ),
                 _buildDrawerItem(
                   context: context,
                   icon: CupertinoIcons.phone,

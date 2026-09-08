@@ -6,6 +6,8 @@ class CardItem extends StatelessWidget {
   final String title;
   final String btnText;
   final String imageUrl;
+  final String time;
+  final String description;
   final String sourceScreenName;
 
   const CardItem({
@@ -13,6 +15,8 @@ class CardItem extends StatelessWidget {
     required this.title, 
     required this.btnText, 
     required this.imageUrl,
+    this.time = '',
+    this.description = '',
     this.sourceScreenName = "News Details",
   });
 
@@ -24,8 +28,9 @@ class CardItem extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => NewsDetailScreen(
               title: title,
-              time: "26 April 2024", // Placeholder time for cards
+              time: time,
               imageUrl: imageUrl,
+              description: description,
               sourceScreenName: sourceScreenName,
             ),
           ),

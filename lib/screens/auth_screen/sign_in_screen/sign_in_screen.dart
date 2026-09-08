@@ -62,26 +62,19 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     final password = _passwordController.text.trim();
 
     try {
-      await ref.read(signInProvider.notifier).signIn(email, password);
+      final success = await ref.read(signInProvider.notifier).signIn(email, password);
 
       if (!mounted) return;
+
+      if (!success) return;
 
       if (_rememberMe && email.isNotEmpty) {
         await StorageServices.instance.setLogDedData({"email": email});
       }
 
-      final currentToken = await StorageServices.instance.getToken();
-      if (currentToken.isEmpty) {
-        await StorageServices.instance.setToken("auth_user_session");
-        await StorageServices.instance.setAppRoll("user");
-      }
-
       AppRoutes.instance.go(AppRoutesKey.instance.homeScreen);
     } catch (e) {
       errorLog("_handleLogin error", e);
-      if (mounted) {
-        AppRoutes.instance.go(AppRoutesKey.instance.homeScreen);
-      }
     }
   }
 

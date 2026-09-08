@@ -1,225 +1,275 @@
-import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod_template/constant/app_api_url.dart';
+import 'package:flutter_riverpod_template/models/auth_user_model.dart';
 import 'package:flutter_riverpod_template/services/api/api_services.dart';
-import 'package:flutter_riverpod_template/services/api/non_auth_api.dart';
 import 'package:flutter_riverpod_template/services/storage/storage_services.dart';
 import 'package:flutter_riverpod_template/utils/app_log.dart';
-import 'package:http_parser/http_parser.dart';
-import 'package:mime/mime.dart';
 
 class AuthRepository {
-  ////////////// Contractures
-  AuthRepository._privetContractures();
-  static final AuthRepository _instance = AuthRepository._privetContractures();
+  AuthRepository._privateConstructor();
+  static final AuthRepository _instance = AuthRepository._privateConstructor();
   static AuthRepository get instance => _instance;
 
-  /////////////// object
-  final ApiServices apiServices = ApiServices.instance;
-  NonAuthApi nonAuthApi = NonAuthApi();
-  AppApiUrl api = AppApiUrl.instance;
-  StorageServices storageServices = StorageServices.instance;
-  /////////////// function
-  Future<bool> login({required String email, required String password, required String fcmToken, required String deviceId}) async {
-    try {
-      Map<String, String> bodyData = {
-        "email": email.trim().toLowerCase(),
-        "password": password.trim(),
-        "deviceId": deviceId.trim(),
-        "fcmToken": fcmToken.trim(),
-      };
+  final ApiServices _apiServices = ApiServices.instance;
+  final AppApiUrl _api = AppApiUrl.instance;
+  final StorageServices _storage = StorageServices.instance;
 
-      var response = await apiServices.postServices(url: api.login, body: bodyData);
-      if (response != null) {
-        if (response["data"] is Map) {
-          var data = response["data"];
-          if (data["role"] is String) {
-            await storageServices.setAppRoll(data["role"].toString());
-          }
-          if (data["accessToken"] is String) {
-            await storageServices.setToken(data["accessToken"].toString());
-          }
-          if (data["refreshToken"] is String) {
-            await storageServices.setRefreshToken(data["refreshToken"].toString());
-          }
-          return true;
-        }
-      }
-    } catch (e) {
-      errorLog("login function repo", e);
-    }
-    return false;
-  }
+  // ─────────────────────────────────────────────────────────────
+  // Standard tymon/jwt-auth Methods
+  // ─────────────────────────────────────────────────────────────
 
-  Future<bool> accountDelete({required String password}) async {
-    try {
-      Map<String, String> body = {"password": password};
-      var response = await apiServices.deleteServices(url: api.authDeleteAccount, body: body);
-      if (response != null) {
-        return true;
-      }
-    } catch (e) {
-      errorLog("accountDelete AuthRepository", e);
-    }
-    return false;
-  }
-
-  Future<bool> updateProfile({required String profileImage, required Map<String, String> body}) async {
-    try {
-      FormData formData = FormData.fromMap(body);
-      if (profileImage.isNotEmpty) {
-        final file = File(profileImage);
-        if (await file.exists()) {
-          String fileName = file.path.split('/').last;
-          var mimeType = lookupMimeType(file.path);
-          formData.files.add(
-            MapEntry(
-              "profile",
-              await MultipartFile.fromFile(file.path, filename: fileName, contentType: MediaType.parse(mimeType ?? "application/octet-stream")),
-            ),
-          );
-        }
-      }
-      var response = await apiServices.patchServices(url: api.user, body: formData);
-      if (response != null) {
-        return true;
-      }
-    } catch (e) {
-      errorLog("updateProfile repo", e);
-    }
-    return false;
-  }
-
-  Future<bool> changePassword({required String currentPassword, required String newPassword, required String confirmPassword}) async {
-    try {
-      Map<String, String> body = {"currentPassword": currentPassword, "newPassword": newPassword, "confirmPassword": confirmPassword};
-
-      var response = await apiServices.postServices(url: api.changePassword, body: body);
-      if (response != null) {
-        return true;
-      }
-    } catch (e) {
-      errorLog("changePassword repo", e);
-    }
-    return false;
-  }
-
-  Future<bool> signUp({
-    required String firstName,
-    required String lastName,
+  /// Log in and receive JWT token and user info
+  Future<bool> login({
     required String email,
-    required String mobileNumber,
     required String password,
-    required String role,
-    required String drivingLicense,
-    required List<String> drivingPhoto,
+    String fcmToken = "",
+    String deviceId = "",
   }) async {
     try {
-      FormData formBodyData = FormData.fromMap({
-        "firstName": firstName,
-        "lastName": lastName,
-        "email": email,
-        "role": role,
-        "mobileNumber": mobileNumber,
-        "password": password,
-      });
+      final bodyData = {
+        "email": email.trim().toLowerCase(),
+        "password": password.trim(),
+      };
 
-      if (drivingLicense.isNotEmpty) {
-        formBodyData.fields.add(MapEntry("DvLicences", drivingLicense));
-      }
-      for (var element in drivingPhoto) {
-        final file = File(element);
-        if (await file.exists()) {
-          String fileName = file.path.split('/').last;
-          var mimeType = lookupMimeType(file.path);
-          formBodyData.files.add(
-            MapEntry(
-              "image",
-              await MultipartFile.fromFile(file.path, filename: fileName, contentType: MediaType.parse(mimeType ?? "application/octet-stream")),
-            ),
-          );
+      final response = await _apiServices.postServices(url: _api.login, body: bodyData);
+
+      if (response != null && response is Map) {
+        // tymon/jwt-auth format: {"token": "...", "user": {...}}
+        final token = response['token'] ?? response['accessToken'];
+        if (token != null && token.toString().isNotEmpty) {
+          await _storage.setToken(token.toString());
         }
-      }
 
-      var response = await apiServices.postServices(url: api.user, body: formBodyData);
-      if (response != null) {
+        if (response['user'] != null && response['user'] is Map) {
+          final userMap = Map<String, dynamic>.from(response['user'] as Map);
+          await _storage.setUserData(userMap);
+
+          if (userMap['permissions'] is List) {
+            final perms = (userMap['permissions'] as List).map((e) => e.toString()).toList();
+            await _storage.setPermissions(perms);
+          }
+          if (userMap['role'] != null) {
+            await _storage.setAppRoll(userMap['role'].toString());
+          }
+        }
+
+        // Backward compatibility if backend wraps in response["data"]
+        if (response['data'] != null && response['data'] is Map) {
+          final data = response['data'] as Map;
+          if (data['accessToken'] != null) {
+            await _storage.setToken(data['accessToken'].toString());
+          }
+          if (data['role'] != null) {
+            await _storage.setAppRoll(data['role'].toString());
+          }
+        }
+
         return true;
       }
     } catch (e) {
-      errorLog("signUp repo", e);
+      errorLog("login repo error", e);
     }
     return false;
   }
 
-  Future<bool> authResendOTP({required String email}) async {
+  /// Register a new user
+  Future<bool> register({
+    required String name,
+    required String email,
+    required String password,
+  }) async {
     try {
-      var response = await apiServices.postServices(url: api.userResendOtp, body: {"email": email});
-      if (response != null) {
+      final bodyData = {
+        "name": name.trim(),
+        "email": email.trim().toLowerCase(),
+        "password": password.trim(),
+      };
+
+      final response = await _apiServices.postServices(
+        url: _api.register,
+        body: bodyData,
+        statusCodeStart: 200,
+        statusCodeEnd: 201,
+      );
+
+      if (response != null && response is Map) {
+        final token = response['token'];
+        if (token != null && token.toString().isNotEmpty) {
+          await _storage.setToken(token.toString());
+        }
+        if (response['user'] != null && response['user'] is Map) {
+          await _storage.setUserData(Map<String, dynamic>.from(response['user'] as Map));
+        }
         return true;
       }
     } catch (e) {
-      errorLog("authResendOTP", e);
+      errorLog("register repo error", e);
     }
     return false;
   }
 
-  Future<bool> authOtpVerify({required String email, required int otp}) async {
+  /// Invalidate token and log out
+  Future<bool> logout() async {
     try {
-      Map<String, dynamic> bodyData = {"email": email, "oneTimeCode": otp};
-      var response = await apiServices.postServices(url: api.authOtpVerify, body: bodyData);
-      if (response != null) {
-        return true;
-      }
+      await _apiServices.postServices(url: _api.logout);
     } catch (e) {
-      errorLog("authOtpVerify", e);
+      errorLog("logout repo error", e);
+    } finally {
+      await _storage.logout();
     }
-    return false;
+    return true;
   }
 
-  ////////// forgot
-  Future<bool> forgotPassword({required String email}) async {
+  /// Get a new token via Bearer authentication
+  Future<String?> refreshToken() async {
     try {
-      Map<String, String> bodyData = {"email": email};
-      var response = await apiServices.postServices(url: api.authForgotPassword, body: bodyData);
-      if (response != null) {
-        return true;
+      final currentToken = await _storage.getToken();
+      if (currentToken.isEmpty) return null;
+
+      final response = await _apiServices.postServices(
+        url: _api.refresh,
+        options: Options(headers: {'Authorization': 'Bearer $currentToken'}),
+      );
+
+      if (response != null && response is Map && response['token'] != null) {
+        final newToken = response['token'].toString();
+        await _storage.setToken(newToken);
+        return newToken;
       }
     } catch (e) {
-      errorLog("forgotPassword repo", e);
+      errorLog("refreshToken repo error", e);
     }
-    return false;
+    return null;
   }
+
+  /// Get currently authenticated user details
+  Future<AuthUserModel?> getMe() async {
+    try {
+      final response = await _apiServices.getServices(_api.me);
+      if (response != null && response is Map) {
+        final user = AuthUserModel.fromJson(Map<String, dynamic>.from(response));
+        await _storage.setUserData(user.toJson());
+        await _storage.setPermissions(user.permissions);
+        return user;
+      }
+    } catch (e) {
+      errorLog("getMe repo error", e);
+    }
+    return null;
+  }
+
+  /// Send password reset email
+  Future<bool> resetPassword({required String email}) async {
+    try {
+      final response = await _apiServices.postServices(
+        url: _api.resetPassword,
+        body: {"email": email.trim().toLowerCase()},
+      );
+      return response != null;
+    } catch (e) {
+      errorLog("resetPassword repo error", e);
+      return false;
+    }
+  }
+
+  /// Set new password using reset token
+  Future<bool> updatePassword({required String token, required String newPassword}) async {
+    try {
+      final response = await _apiServices.postServices(
+        url: _api.updatePassword(token),
+        body: {"password": newPassword.trim()},
+      );
+      return response != null;
+    } catch (e) {
+      errorLog("updatePassword repo error", e);
+      return false;
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // Legacy / Helper Methods (Preserved for compatibility)
+  // ─────────────────────────────────────────────────────────────
+
+  Future<bool> forgotPassword({required String email}) => resetPassword(email: email);
 
   Future<String> forgotVerifyEmail({required String email, required int otp}) async {
     try {
-      Map<String, dynamic> bodyData = {"email": email, "oneTimeCode": otp};
-      var response = await apiServices.postServices(url: api.authVerifyEmail, body: bodyData);
-      if (response != null) {
-        if (response["data"] != null && response["data"] is String) {
-          return response["data"].toString();
-        }
+      final response = await _apiServices.postServices(
+        url: _api.authVerifyEmail,
+        body: {"email": email, "oneTimeCode": otp},
+      );
+      if (response != null && response is Map && response["data"] != null) {
+        return response["data"].toString();
       }
     } catch (e) {
-      errorLog("forgotPassword repo", e);
+      errorLog("forgotVerifyEmail repo", e);
     }
     return "";
   }
 
-  Future<bool> forgotResetPassword({required String token, required String newPassword, required String confirmPassword}) async {
-    try {
-      Map<String, dynamic> bodyData = {"newPassword": newPassword, "confirmPassword": confirmPassword};
-      var response = await nonAuthApi.sendRequest.post(
-        api.authResetPassword,
-        data: bodyData,
-        options: Options(headers: {"Authorization": "Bearer $token", "Content-Type": "application/json", "Accept": "*/*"}),
-      );
+  Future<bool> forgotResetPassword({
+    required String token,
+    required String newPassword,
+    required String confirmPassword,
+  }) => updatePassword(token: token, newPassword: newPassword);
 
-      if (response.statusCode == 200) {
-        return true;
-      }
+  Future<bool> authOtpVerify({required String email, required int otp}) async {
+    try {
+      final response = await _apiServices.postServices(
+        url: _api.authOtpVerify,
+        body: {"email": email, "oneTimeCode": otp},
+      );
+      return response != null;
     } catch (e) {
-      errorLog("forgotPassword repo", e);
+      errorLog("authOtpVerify repo", e);
+      return false;
     }
-    return false;
+  }
+
+  Future<bool> authResendOTP({required String email}) async {
+    try {
+      final response = await _apiServices.postServices(
+        url: _api.userResendOtp,
+        body: {"email": email},
+      );
+      return response != null;
+    } catch (e) {
+      errorLog("authResendOTP repo", e);
+      return false;
+    }
+  }
+
+  Future<bool> accountDelete({required String password}) async {
+    try {
+      final response = await _apiServices.deleteServices(
+        url: _api.authDeleteAccount,
+        body: {"password": password},
+      );
+      return response != null;
+    } catch (e) {
+      errorLog("accountDelete repo", e);
+      return false;
+    }
+  }
+
+  Future<bool> changePassword({
+    required String currentPassword,
+    required String newPassword,
+    required String confirmPassword,
+  }) async {
+    try {
+      final response = await _apiServices.postServices(
+        url: _api.changePassword,
+        body: {
+          "currentPassword": currentPassword,
+          "newPassword": newPassword,
+          "confirmPassword": confirmPassword,
+        },
+      );
+      return response != null;
+    } catch (e) {
+      errorLog("changePassword repo", e);
+      return false;
+    }
   }
 }

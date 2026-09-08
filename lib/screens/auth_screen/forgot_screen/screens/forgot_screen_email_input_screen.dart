@@ -4,8 +4,10 @@ import 'provider/forgot_password_provider.dart';
 import 'package:flutter_riverpod_template/constant/app_asserts_image_path.dart';
 import 'package:flutter_riverpod_template/constant/app_colors.dart';
 import 'package:flutter_riverpod_template/routes/app_routes.dart';
+import 'package:flutter_riverpod_template/routes/app_routes_key.dart';
 import 'package:flutter_riverpod_template/utils/app_log.dart';
 import 'package:flutter_riverpod_template/utils/app_size.dart';
+import 'package:flutter_riverpod_template/utils/app_snack_bar.dart';
 import 'package:flutter_riverpod_template/utils/gap.dart';
 import 'package:flutter_riverpod_template/widgets/app_image/app_image.dart';
 import 'package:flutter_riverpod_template/widgets/buttons/app_button.dart';
@@ -24,8 +26,8 @@ class ForgotScreenEmailInputScreen extends ConsumerWidget {
         final email = emailTextEditingController.text.trim();
         final success = await ref.read(forgotPasswordProvider.notifier).forgotPassword(email: email);
         if (success) {
-          // await StorageServices.instance.setEmail(email);
-          onChange(1);
+          AppSnackBar.instance.success("Password reset email sent. Please check your inbox.");
+          AppRoutes.instance.go("/${AppRoutesKey.instance.signInScreen}");
         }
       }
     } catch (e) {

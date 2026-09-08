@@ -30,4 +30,6 @@ class AppRoutesKey {
   /////////////// app navigation
   final String homeScreen = "homeScreen";
   final String profileScreen = "profileScreen";
+  final String complainScreen = "complainScreen";
+  final String appointmentScreen = "appointmentScreen";
 }

@@ -123,6 +123,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
                       ),
                       Offset.zero & overlay.size,
                     );
+                    final router = GoRouter.of(context);
                     showMenu(
                       context: context,
                       position: position,
@@ -136,6 +137,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
                         _buildPopupMenuItem("Journey", "Journey"),
                       ],
                     ).then((value) {
+                      if (!mounted) return;
                       setState(() {
                         _openedMenuIndex = null;
                       });
@@ -143,13 +145,13 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
                         if (value == "About Me") {
                           widget.onTap(5); // Existing index
                         } else if (value == "Biography") {
-                          context.go('/biography_screen');
+                          router.go('/biography_screen');
                         } else if (value == "History") {
-                          context.go('/history_of_life_screen');
+                          router.go('/history_of_life_screen');
                         } else if (value == "Achievement") {
-                          context.go('/achievement_screen');
+                          router.go('/achievement_screen');
                         } else if (value == "Journey") {
-                          context.go('/journey_screen');
+                          router.go('/journey_screen');
                         } else {
                           widget.onTap(5); // Fallback for unimplemented
                         }
