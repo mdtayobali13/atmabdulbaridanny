@@ -378,7 +378,7 @@ class _AppointmentScreenState extends ConsumerState<AppointmentScreen> {
                           children: [
                             Expanded(
                               child: RadioListTile<String>(
-                                title: const Text("Local", style: TextStyle(fontSize: 14)),
+                                title: const Text("Local", style: TextStyle(fontSize: 14, color: Colors.black87)),
                                 value: 'local',
                                 groupValue: _selectedType,
                                 contentPadding: EdgeInsets.zero,
@@ -390,7 +390,7 @@ class _AppointmentScreenState extends ConsumerState<AppointmentScreen> {
                             ),
                             Expanded(
                               child: RadioListTile<String>(
-                                title: const Text("Foreign / NRB", style: TextStyle(fontSize: 14)),
+                                title: const Text("Foreign / NRB", style: TextStyle(fontSize: 14, color: Colors.black87)),
                                 value: 'nrb',
                                 groupValue: _selectedType,
                                 contentPadding: EdgeInsets.zero,
@@ -634,6 +634,7 @@ class _AppointmentScreenState extends ConsumerState<AppointmentScreen> {
         ),
         const SizedBox(height: 8),
         TextFormField(
+          style: const TextStyle(color: Colors.black87, fontSize: 14),
           controller: controller,
           maxLines: maxLines,
           readOnly: readOnly,
@@ -743,7 +744,7 @@ class _AppointmentScreenState extends ConsumerState<AppointmentScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey)),
+        Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black87)),
         const SizedBox(height: 8),
         Container(
           width: double.infinity,

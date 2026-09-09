@@ -174,7 +174,7 @@ class _AppInputWidgetState extends State<AppInputWidget> {
       obscuringCharacter: "*",
       style:
           widget.style ??
-          TextStyle(height: 2, color: widget.textColor, fontFamily: AppConstant.instance.fontFamilyPoppins, fontWeight: FontWeight.w500),
+          TextStyle(height: 2, color: widget.textColor ?? AppColors.instance.black900, fontFamily: AppConstant.instance.fontFamilyPoppins, fontWeight: FontWeight.w500),
       autofillHints: widget.autofillHints,
 
       decoration: InputDecoration(

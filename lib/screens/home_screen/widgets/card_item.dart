@@ -65,13 +65,15 @@ class CardItem extends StatelessWidget {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                title,
-                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black87),
-                maxLines: 6,
-                overflow: TextOverflow.ellipsis,
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  title,
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black87),
+                  maxLines: 4,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ),
             Padding(

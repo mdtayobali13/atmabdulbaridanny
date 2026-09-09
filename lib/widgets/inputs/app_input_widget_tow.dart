@@ -197,7 +197,7 @@ class _AppInputWidgetTwoState extends State<AppInputWidgetTwo> {
                   widget.style ??
                   Theme.of(
                     context,
-                  ).textTheme.titleSmall?.copyWith(color: widget.textColor ?? AppColors.instance.black300, fontWeight: FontWeight.w400, fontSize: 16),
+                  ).textTheme.titleSmall?.copyWith(color: widget.textColor ?? AppColors.instance.black900, fontWeight: FontWeight.w400, fontSize: 16),
               textAlign: widget.textAlign,
               decoration: InputDecoration(
                 alignLabelWithHint: widget.alignLabelWithHint,
