@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_riverpod_template/constant/app_colors.dart';
 import 'package:flutter_riverpod_template/screens/home_screen/widgets/custom_footer.dart';
+import 'package:flutter_riverpod_template/utils/languages/language_provider.dart';
 
-class NewsDetailScreen extends StatelessWidget {
+class NewsDetailScreen extends ConsumerWidget {
   final String title;
   final String time;
   final String imageUrl;
@@ -20,14 +22,23 @@ class NewsDetailScreen extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final primaryGreen = AppColors.instance.primaryGreen;
+    final isBangla = ref.watch(isBanglaProvider);
 
-    final displayDescription = description == "No detailed description provided."
-        ? "Barrister Kayser Kamal said, you have to advise me before I make a mistake. So that I can't do any corruption. I will not do corruption myself, nor will I let anyone do it.\n\n"
+    final displayDescription = (description == "No detailed description provided." || description.isEmpty)
+        ? (isBangla
+            ? "ব্যারিস্টার কায়সার কামাল বলেন, আমি ভুল করার আগেই আপনারা আমাকে পরামর্শ দেবেন এবং সতর্ক করবেন। যাতে আমি কোনো ভুল বা অনিয়মে না জড়াই। আমি নিজে দুর্নীতি করব না, কাউকে দুর্নীতি করতেও দেব না।\n\n"
+              "নিজ নির্বাচনী এলাকায় সাধারণ মানুষের সাথে মতবিনিময় ও সহায়তা কর্মসূচি চলাকালে তিনি এসব কথা বলেন। তিনি সৎ নেতৃত্ব ও স্বচ্ছ সুশাসনের ওপর গুরুত্বারোপ করেন।\n\n"
+              "কায়সার কামাল উল্লেখ করেন যে, তিনি জনগণের সেবক হিসেবে দায়িত্ব পালন করছেন। এলাকার উন্নয়নমূলক প্রকল্পে যেকোনো প্রকার দুর্নীতি বা গাফিলতি বরদাস্ত করা হবে না।"
+            : "Barrister Kayser Kamal said, you have to advise me before I make a mistake. So that I can't do any corruption. I will not do corruption myself, nor will I let anyone do it.\n\n"
               "He made these remarks during a discussion where he distributed various items among the people of his constituency. He emphasized the need for honest leadership and transparent governance.\n\n"
-              "Kayser Kamal mentioned that he is acting as a servant of the people. No irregularity or corruption will be tolerated in any development project. The laws will apply equally to everyone, regardless of their political affiliation."
+              "Kayser Kamal mentioned that he is acting as a servant of the people. No irregularity or corruption will be tolerated in any development project. The laws will apply equally to everyone, regardless of their political affiliation.")
         : description;
+
+    final displaySource = sourceScreenName == "News Details"
+        ? (isBangla ? "সংবাদের বিস্তারিত" : "News Details")
+        : sourceScreenName;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -37,7 +48,7 @@ class NewsDetailScreen extends StatelessWidget {
         iconTheme: const IconThemeData(color: Colors.white),
         elevation: 0,
         title: Text(
-          sourceScreenName,
+          displaySource,
           style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),

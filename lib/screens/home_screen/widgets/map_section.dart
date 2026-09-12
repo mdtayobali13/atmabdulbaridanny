@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_template/constant/app_colors.dart';
 import 'package:flutter_riverpod_template/services/providers/api_providers.dart';
+import 'package:flutter_riverpod_template/utils/languages/language_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MapSection extends ConsumerWidget {
@@ -24,10 +25,12 @@ class MapSection extends ConsumerWidget {
     final lightGreen = AppColors.instance.lightGreen;
     final primaryGreen = AppColors.instance.primaryGreen;
     final setting = ref.watch(websiteSettingProvider).asData?.value;
+    final isBangla = ref.watch(isBanglaProvider);
+    final tr = AppTranslations.of(isBangla);
 
     final address = setting?.address?.isNotEmpty == true
         ? setting!.address!
-        : "Supreme Court Bar Association, Dhaka, Bangladesh";
+        : tr.defaultAddress;
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -53,7 +56,7 @@ class MapSection extends ConsumerWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    "Office Location: $address",
+                    isBangla ? "অফিসের অবস্থান: $address" : "Office Location: $address",
                     style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -93,7 +96,10 @@ class MapSection extends ConsumerWidget {
                 ElevatedButton.icon(
                   onPressed: () => _launchMap(setting?.googleMap, address),
                   icon: const Icon(Icons.directions, color: Colors.white, size: 18),
-                  label: const Text("View on Google Maps", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                  label: Text(
+                    tr.viewOnGoogleMaps,
+                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primaryGreen,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

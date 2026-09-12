@@ -5,6 +5,7 @@ import 'package:flutter_riverpod_template/screens/home_screen/widgets/custom_foo
 import 'package:flutter_riverpod_template/screens/home_screen/widgets/news_item.dart';
 import 'package:flutter_riverpod_template/screens/news_detail_screen/news_detail_screen.dart';
 import 'package:flutter_riverpod_template/services/providers/api_providers.dart';
+import 'package:flutter_riverpod_template/utils/languages/language_provider.dart';
 
 class NewsScreen extends ConsumerWidget {
   const NewsScreen({super.key});
@@ -13,6 +14,8 @@ class NewsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final primaryGreen = AppColors.instance.primaryGreen;
     final newsAsync = ref.watch(newsListProvider);
+    final isBangla = ref.watch(isBanglaProvider);
+    final tr = AppTranslations.of(isBangla);
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -24,18 +27,18 @@ class NewsScreen extends ConsumerWidget {
               width: double.infinity,
               color: primaryGreen,
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 28.0),
-              child: const Column(
+              child: Column(
                 children: [
                   Text(
-                    "Latest News & Updates",
+                    tr.newsTitle,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                    style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 6),
+                  const SizedBox(height: 6),
                   Text(
-                    "Read official press releases, political statements, and news coverage.",
+                    tr.newsSubtitle,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white70, fontSize: 13),
+                    style: const TextStyle(color: Colors.white70, fontSize: 13),
                   ),
                 ],
               ),
@@ -45,9 +48,9 @@ class NewsScreen extends ConsumerWidget {
             newsAsync.when(
               data: (newsList) {
                 if (newsList.isEmpty) {
-                  return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 48),
-                    child: Center(child: Text("No news articles available at this moment")),
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 48),
+                    child: Center(child: Text(tr.newsEmpty)),
                   );
                 }
 
@@ -65,12 +68,14 @@ class NewsScreen extends ConsumerWidget {
                     itemCount: newsList.length,
                     itemBuilder: (context, index) {
                       final news = newsList[index];
-                      final title = news.localizedTitle(false);
-                      final time = news.createdAt != null && news.createdAt!.length >= 10
+                      final title = news.localizedTitle(isBangla);
+                      final rawTime = news.createdAt != null && news.createdAt!.length >= 10
                           ? news.createdAt!.substring(0, 10)
                           : '';
+                      final time = rawTime.toBanglaDigits(isBangla);
                       final imgUrl = news.fullImageUrl;
-                      final content = news.localizedContent(false);
+                      final content = news.localizedContent(isBangla);
+                      final screenName = tr.newsDetailsTitle;
 
                       return GestureDetector(
                         onTap: () {
@@ -80,8 +85,10 @@ class NewsScreen extends ConsumerWidget {
                                 title: title,
                                 time: time,
                                 imageUrl: imgUrl,
-                                description: content.isNotEmpty ? content : "No additional details provided.",
-                                sourceScreenName: "News Details",
+                                description: content.isNotEmpty
+                                    ? content
+                                    : (isBangla ? "বিস্তারিত বিবরণ পাওয়া যায়নি।" : "No additional details provided."),
+                                sourceScreenName: screenName,
                               ),
                             ),
                           );
@@ -90,7 +97,7 @@ class NewsScreen extends ConsumerWidget {
                           title: title,
                           time: time,
                           imageUrl: imgUrl,
-                          sourceScreenName: "News Details",
+                          sourceScreenName: screenName,
                         ),
                       );
                     },
@@ -103,7 +110,7 @@ class NewsScreen extends ConsumerWidget {
               ),
               error: (err, stack) => Padding(
                 padding: const EdgeInsets.symmetric(vertical: 40),
-                child: Center(child: Text("Failed to load news: $err")),
+                child: Center(child: Text(isBangla ? "সংবাদ লোড করতে ব্যর্থ হয়েছে: $err" : "Failed to load news: $err")),
               ),
             ),
 

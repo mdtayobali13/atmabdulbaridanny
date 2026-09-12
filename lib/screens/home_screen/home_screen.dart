@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_template/constant/app_colors.dart';
+import 'package:flutter_riverpod_template/models/content_models.dart';
 import 'package:flutter_riverpod_template/routes/app_routes.dart';
 import 'package:flutter_riverpod_template/screens/home_screen/widgets/appointment_form.dart';
 import 'package:flutter_riverpod_template/screens/home_screen/widgets/card_item.dart';
@@ -19,6 +20,7 @@ import 'package:flutter_riverpod_template/screens/life_history_screen/life_histo
 import 'package:flutter_riverpod_template/screens/print_media_screen/print_media_screen.dart';
 import 'package:flutter_riverpod_template/services/providers/api_providers.dart';
 import 'package:flutter_riverpod_template/services/repository/home_repository.dart';
+import 'package:flutter_riverpod_template/utils/languages/language_provider.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -37,10 +39,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isBangla = ref.watch(isBanglaProvider);
     final slidersAsync = ref.watch(sliderListProvider);
     final lifeAsync = ref.watch(lifeStruggleListProvider);
     final newsAsync = ref.watch(newsListProvider);
     final blogsAsync = ref.watch(blogListProvider);
+
+    final websiteSettingAsync = ref.watch(websiteSettingProvider);
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -48,49 +53,49 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         child: Column(
           children: [
             // ─────────────────────────────────────────────────────────────
-            // 1. Banner Slider (Live API)
+            // 1. Banner Slider / Hero Banner (Live API)
             // ─────────────────────────────────────────────────────────────
             slidersAsync.when(
               data: (sliders) {
-                if (sliders.isEmpty) {
-                  return _buildDefaultBanner();
+                if (sliders.isNotEmpty) {
+                  return CarouselSlider(
+                    options: CarouselOptions(
+                      height: 230.0,
+                      autoPlay: true,
+                      enlargeCenterPage: true,
+                      viewportFraction: 0.92,
+                      autoPlayInterval: const Duration(seconds: 4),
+                    ),
+                    items: sliders.map((slider) {
+                      final imgUrl = slider.fullImageUrl;
+                      return Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: const EdgeInsets.symmetric(vertical: 8.0),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(color: Colors.black.withValues(alpha: 0.1), spreadRadius: 1, blurRadius: 5),
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: imgUrl.isNotEmpty
+                              ? CachedNetworkImage(
+                                  imageUrl: imgUrl,
+                                  fit: BoxFit.cover,
+                                  placeholder: (context, url) =>
+                                      const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.broken_image, size: 40, color: Colors.grey),
+                                )
+                              : const Icon(Icons.image, size: 40, color: Colors.grey),
+                        ),
+                      );
+                    }).toList(),
+                  );
                 }
-                return CarouselSlider(
-                  options: CarouselOptions(
-                    height: 230.0,
-                    autoPlay: true,
-                    enlargeCenterPage: true,
-                    viewportFraction: 0.92,
-                    autoPlayInterval: const Duration(seconds: 4),
-                  ),
-                  items: sliders.map((slider) {
-                    final imgUrl = slider.fullImageUrl;
-                    return Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: const EdgeInsets.symmetric(vertical: 8.0),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(color: Colors.black.withValues(alpha: 0.1), spreadRadius: 1, blurRadius: 5),
-                        ],
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: imgUrl.isNotEmpty
-                            ? CachedNetworkImage(
-                                imageUrl: imgUrl,
-                                fit: BoxFit.cover,
-                                placeholder: (context, url) =>
-                                    const Center(child: CircularProgressIndicator(strokeWidth: 2)),
-                                errorWidget: (context, url, error) =>
-                                    const Icon(Icons.broken_image, size: 40, color: Colors.grey),
-                              )
-                            : const Icon(Icons.image, size: 40, color: Colors.grey),
-                      ),
-                    );
-                  }).toList(),
-                );
+                return _buildApiBanner(websiteSettingAsync);
               },
               loading: () => Container(
                 height: 220,
@@ -101,7 +106,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
                 child: const Center(child: CircularProgressIndicator()),
               ),
-              error: (err, stack) => _buildDefaultBanner(),
+              error: (err, stack) => _buildApiBanner(websiteSettingAsync),
             ),
 
             const SizedBox(height: 20),
@@ -110,7 +115,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             // 2. Life & Success Records (Live API)
             // ─────────────────────────────────────────────────────────────
             SectionTitle(
-              title: "Life & Success Records",
+              title: isBangla ? "জীবন ও সফলতার ইতিহাস" : "Life & Success Records",
+              buttonText: isBangla ? "সব দেখুন" : "View All",
               onViewAllPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const LifeHistoryScreen()));
               },
@@ -118,9 +124,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             lifeAsync.when(
               data: (items) {
                 if (items.isEmpty) {
-                  return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20),
-                    child: Center(child: Text("No life history records available")),
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Center(child: Text(isBangla ? "কোন তথ্য পাওয়া যায়নি" : "No life history records available")),
                   );
                 }
                 return HorizontalList(
@@ -128,14 +134,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     final time = item.createdAt != null && item.createdAt!.length >= 10
                         ? item.createdAt!.substring(0, 10)
                         : '';
-                    final desc = item.localizedContent(false).replaceAll(RegExp(r'<[^>]*>'), '').trim();
+                    final desc = item.localizedContent(isBangla).replaceAll(RegExp(r'<[^>]*>'), '').trim();
                     return CardItem(
-                      title: item.localizedTitle(false),
-                      btnText: "Read More",
+                      title: item.localizedTitle(isBangla),
+                      btnText: isBangla ? "বিস্তারিত পড়ুন" : "Read More",
                       imageUrl: item.fullImageUrl,
                       time: time,
                       description: desc,
-                      sourceScreenName: "Life & Success Records",
+                      sourceScreenName: isBangla ? "জীবন ও সফলতার ইতিহাস" : "Life & Success Records",
                     );
                   }).toList(),
                 );
@@ -160,7 +166,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             // 4. News & Activities (Live API)
             // ─────────────────────────────────────────────────────────────
             SectionTitle(
-              title: "News & Activities",
+              title: isBangla ? "সংবাদ ও কার্যক্রম" : "News & Activities",
+              buttonText: isBangla ? "সব দেখুন" : "View All",
               onViewAllPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const PrintMediaScreen()));
               },
@@ -168,21 +175,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             newsAsync.when(
               data: (items) {
                 if (items.isEmpty) {
-                  return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20),
-                    child: Center(child: Text("No news available")),
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Center(child: Text(isBangla ? "কোন সংবাদ পাওয়া যায়নি" : "No news available")),
                   );
                 }
                 final displayItems = items.take(4).toList();
                 return GridList(
                   items: displayItems.map((news) {
                     return NewsItem(
-                      title: news.localizedTitle(false),
+                      title: news.localizedTitle(isBangla),
                       time: news.createdAt != null && news.createdAt!.length >= 10
                           ? news.createdAt!.substring(0, 10)
                           : '',
                       imageUrl: news.fullImageUrl,
-                      sourceScreenName: "News & Activities",
+                      sourceScreenName: isBangla ? "সংবাদ ও কার্যক্রম" : "News & Activities",
                     );
                   }).toList(),
                 );
@@ -200,7 +207,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             // 5. Blog (Live API)
             // ─────────────────────────────────────────────────────────────
             SectionTitle(
-              title: "Blog",
+              title: isBangla ? "ব্লগ" : "Blog",
+              buttonText: isBangla ? "সব দেখুন" : "View All",
               onViewAllPressed: () {
                 AppRoutes.instance.go("/blog_screen");
               },
@@ -208,9 +216,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             blogsAsync.when(
               data: (blogs) {
                 if (blogs.isEmpty) {
-                  return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20),
-                    child: Center(child: Text("No blog articles available")),
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Center(child: Text(isBangla ? "কোন ব্লগ পাওয়া যায়নি" : "No blog articles available")),
                   );
                 }
                 return HorizontalList(
@@ -218,14 +226,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     final time = blog.createdAt != null && blog.createdAt!.length >= 10
                         ? blog.createdAt!.substring(0, 10)
                         : '';
-                    final desc = blog.localizedContent(false).replaceAll(RegExp(r'<[^>]*>'), '').trim();
+                    final desc = blog.localizedContent(isBangla).replaceAll(RegExp(r'<[^>]*>'), '').trim();
                     return CardItem(
-                      title: blog.localizedTitle(false),
-                      btnText: "Read More",
+                      title: blog.localizedTitle(isBangla),
+                      btnText: isBangla ? "বিস্তারিত পড়ুন" : "Read More",
                       imageUrl: blog.fullImageUrl,
                       time: time,
                       description: desc,
-                      sourceScreenName: "Blog",
+                      sourceScreenName: isBangla ? "ব্লগ" : "Blog",
                     );
                   }).toList(),
                 );
@@ -243,7 +251,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             // 6. Photo Gallery (Live API)
             // ─────────────────────────────────────────────────────────────
             SectionTitle(
-              title: "Photo Gallery",
+              title: isBangla ? "ফটো গ্যালারি" : "Photo Gallery",
+              buttonText: isBangla ? "সব দেখুন" : "View All",
               onViewAllPressed: () {
                 AppRoutes.instance.go("/photo_gallery_screen");
               },
@@ -256,7 +265,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             // 7. Video Gallery (Live API)
             // ─────────────────────────────────────────────────────────────
             SectionTitle(
-              title: "Video Gallery",
+              title: isBangla ? "ভিডিও গ্যালারি" : "Video Gallery",
+              buttonText: isBangla ? "সব দেখুন" : "View All",
               onViewAllPressed: () {
                 AppRoutes.instance.go("/video_gallery_screen");
               },
@@ -289,27 +299,85 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  Widget _buildDefaultBanner() {
+  Widget _buildApiBanner(AsyncValue<WebsiteSettingModel?> websiteSettingAsync) {
+    return websiteSettingAsync.when(
+      data: (setting) {
+        final bannerUrl = setting?.fullBannerUrl;
+        if (bannerUrl != null && bannerUrl.trim().isNotEmpty) {
+          return Container(
+            width: double.infinity,
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.08),
+                  spreadRadius: 1,
+                  blurRadius: 6,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: CachedNetworkImage(
+                imageUrl: bannerUrl,
+                fit: BoxFit.cover,
+                placeholder: (context, url) => Container(
+                  height: 180,
+                  color: Colors.grey[200],
+                  child: const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+                ),
+                errorWidget: (context, url, error) => _buildFallbackBannerCard(setting),
+              ),
+            ),
+          );
+        }
+        return _buildFallbackBannerCard(setting);
+      },
+      loading: () => Container(
+        height: 180,
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: const Center(child: CircularProgressIndicator()),
+      ),
+      error: (err, stack) => _buildFallbackBannerCard(null),
+    );
+  }
+
+  Widget _buildFallbackBannerCard(WebsiteSettingModel? setting) {
+    final isBangla = ref.watch(isBanglaProvider);
+    final title = isBangla
+        ? (setting?.titleBn ?? "ব্যারিস্টার কায়সার কামাল")
+        : (setting?.titleEn ?? "Barrister Kayser Kamal");
+
     return Container(
-      height: 200,
+      height: 180,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
         color: AppColors.instance.primaryGreen,
         borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.1),
+            spreadRadius: 1,
+            blurRadius: 6,
+          ),
+        ],
       ),
-      child: const Center(
+      child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.account_balance, color: Colors.white, size: 48),
-            SizedBox(height: 8),
+            const Icon(Icons.account_balance, color: Colors.white, size: 44),
+            const SizedBox(height: 8),
             Text(
-              "Barrister Kayser Kamal",
-              style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              "Deputy Speaker, 13th Parliament of Bangladesh",
-              style: TextStyle(color: Colors.white70, fontSize: 13),
+              title,
+              style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ],
         ),

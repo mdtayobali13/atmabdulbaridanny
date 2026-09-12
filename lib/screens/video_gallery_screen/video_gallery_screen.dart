@@ -5,6 +5,7 @@ import 'package:flutter_riverpod_template/constant/app_colors.dart';
 import 'package:flutter_riverpod_template/screens/home_screen/widgets/custom_footer.dart';
 import 'package:flutter_riverpod_template/screens/video_gallery_screen/video_detail_screen.dart';
 import 'package:flutter_riverpod_template/services/providers/api_providers.dart';
+import 'package:flutter_riverpod_template/utils/languages/language_provider.dart';
 
 class VideoGalleryScreen extends ConsumerWidget {
   const VideoGalleryScreen({super.key});
@@ -13,6 +14,8 @@ class VideoGalleryScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final primaryGreen = AppColors.instance.primaryGreen;
     final videosAsync = ref.watch(videoGalleryProvider);
+    final isBangla = ref.watch(isBanglaProvider);
+    final tr = AppTranslations.of(isBangla);
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -24,17 +27,17 @@ class VideoGalleryScreen extends ConsumerWidget {
               width: double.infinity,
               color: primaryGreen,
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 28.0),
-              child: const Column(
+              child: Column(
                 children: [
                   Text(
-                    "Video Gallery",
-                    style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+                    tr.videoGalleryTitle,
+                    style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 6),
+                  const SizedBox(height: 6),
                   Text(
-                    "Watch speeches, interviews, parliamentary debates, and public programs.",
+                    tr.videoGallerySubtitle,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white70, fontSize: 13),
+                    style: const TextStyle(color: Colors.white70, fontSize: 13),
                   ),
                 ],
               ),
@@ -44,9 +47,9 @@ class VideoGalleryScreen extends ConsumerWidget {
             videosAsync.when(
               data: (videos) {
                 if (videos.isEmpty) {
-                  return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 48),
-                    child: Center(child: Text("No videos available at this moment")),
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 48),
+                    child: Center(child: Text(tr.videoEmpty)),
                   );
                 }
 
@@ -58,10 +61,11 @@ class VideoGalleryScreen extends ConsumerWidget {
                     itemCount: videos.length,
                     itemBuilder: (context, index) {
                       final video = videos[index];
-                      final title = video.localizedTitle(false);
-                      final date = video.createdAt != null && video.createdAt!.length >= 10
+                      final title = video.localizedTitle(isBangla);
+                      final rawDate = video.createdAt != null && video.createdAt!.length >= 10
                           ? video.createdAt!.substring(0, 10)
                           : '';
+                      final date = rawDate.toBanglaDigits(isBangla);
                       final imgUrl = video.fullImageUrl;
                       final videoId = video.youtubeVideoId ?? 'dQw4w9WgXcQ';
 

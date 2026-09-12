@@ -6,6 +6,7 @@ import 'package:flutter_riverpod_template/screens/home_screen/widgets/custom_foo
 import 'package:flutter_riverpod_template/screens/news_detail_screen/news_detail_screen.dart';
 import 'package:flutter_riverpod_template/services/providers/api_providers.dart';
 import 'package:flutter_riverpod_template/services/repository/home_repository.dart';
+import 'package:flutter_riverpod_template/utils/languages/language_provider.dart';
 
 class PrintMediaScreen extends ConsumerStatefulWidget {
   const PrintMediaScreen({super.key});
@@ -34,9 +35,11 @@ class _PrintMediaScreenState extends ConsumerState<PrintMediaScreen> {
   Widget build(BuildContext context) {
     final primaryGreen = AppColors.instance.primaryGreen;
     final newsAsync = ref.watch(newsListProvider);
+    final isBangla = ref.watch(isBanglaProvider);
+    final tr = AppTranslations.of(isBangla);
 
-    final todayVisits = _visitStats?['today_visits']?.toString() ?? '7';
-    final totalVisits = _visitStats?['total_visits']?.toString() ?? '113';
+    final todayVisits = (_visitStats?['today_visits']?.toString() ?? '7').toBanglaDigits(isBangla);
+    final totalVisits = (_visitStats?['total_visits']?.toString() ?? '113').toBanglaDigits(isBangla);
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -50,24 +53,24 @@ class _PrintMediaScreenState extends ConsumerState<PrintMediaScreen> {
               padding: const EdgeInsets.only(top: 36.0, bottom: 20.0, left: 16.0, right: 16.0),
               child: Column(
                 children: [
-                  const Text(
-                    "Print Media",
-                    style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                  Text(
+                    tr.printMediaTitle,
+                    style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 4),
-                  const Text(
-                    "Browse the latest news, publications, and important media updates here.",
+                  Text(
+                    tr.printMediaSubtitle,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white70, fontSize: 13),
+                    style: const TextStyle(color: Colors.white70, fontSize: 13),
                   ),
                   const SizedBox(height: 16),
                   // Stats Row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _buildStatBox("Today Visitor", todayVisits),
+                      _buildStatBox(tr.todayVisitor, todayVisits),
                       const SizedBox(width: 16),
-                      _buildStatBox("Total Visitor", totalVisits),
+                      _buildStatBox(tr.totalVisitor, totalVisits),
                     ],
                   ),
                 ],
@@ -78,9 +81,9 @@ class _PrintMediaScreenState extends ConsumerState<PrintMediaScreen> {
             newsAsync.when(
               data: (newsList) {
                 if (newsList.isEmpty) {
-                  return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 48),
-                    child: Center(child: Text("No print media articles available at this moment")),
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 48),
+                    child: Center(child: Text(tr.printMediaEmpty)),
                   );
                 }
 
@@ -98,12 +101,14 @@ class _PrintMediaScreenState extends ConsumerState<PrintMediaScreen> {
                     itemCount: newsList.length,
                     itemBuilder: (context, index) {
                       final item = newsList[index];
-                      final title = item.localizedTitle(false);
-                      final time = item.createdAt != null && item.createdAt!.length >= 10
+                      final title = item.localizedTitle(isBangla);
+                      final rawTime = item.createdAt != null && item.createdAt!.length >= 10
                           ? item.createdAt!.substring(0, 10)
                           : '';
+                      final time = rawTime.toBanglaDigits(isBangla);
                       final imgUrl = item.fullImageUrl;
-                      final content = item.localizedContent(false);
+                      final content = item.localizedContent(isBangla);
+                      final screenName = tr.printMediaTitle;
 
                       return GestureDetector(
                         onTap: () {
@@ -113,8 +118,10 @@ class _PrintMediaScreenState extends ConsumerState<PrintMediaScreen> {
                                 title: title,
                                 time: time,
                                 imageUrl: imgUrl,
-                                description: content.isNotEmpty ? content : "No additional details provided.",
-                                sourceScreenName: "Print Media",
+                                description: content.isNotEmpty
+                                    ? content
+                                    : (isBangla ? "কোন অতিরিক্ত বিবরণ পাওয়া যায়নি।" : "No additional details provided."),
+                                sourceScreenName: screenName,
                               ),
                             ),
                           );
@@ -123,7 +130,7 @@ class _PrintMediaScreenState extends ConsumerState<PrintMediaScreen> {
                           title: title,
                           time: time,
                           imageUrl: imgUrl,
-                          sourceScreenName: "Print Media",
+                          sourceScreenName: screenName,
                         ),
                       );
                     },
@@ -136,7 +143,7 @@ class _PrintMediaScreenState extends ConsumerState<PrintMediaScreen> {
               ),
               error: (err, stack) => Padding(
                 padding: const EdgeInsets.symmetric(vertical: 40),
-                child: Center(child: Text("Failed to load news: $err")),
+                child: Center(child: Text(isBangla ? "লোড করতে ব্যর্থ হয়েছে: $err" : "Failed to load: $err")),
               ),
             ),
 

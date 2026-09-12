@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_riverpod_template/constant/app_colors.dart';
 import 'package:flutter_riverpod_template/models/content_models.dart';
 import 'package:flutter_riverpod_template/services/providers/api_providers.dart';
+import 'package:flutter_riverpod_template/utils/languages/language_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CustomFooter extends ConsumerWidget {
@@ -24,6 +25,8 @@ class CustomFooter extends ConsumerWidget {
     final primaryGreen = AppColors.instance.primaryGreen;
     final setting = ref.watch(websiteSettingProvider).asData?.value;
     final footerLinks = ref.watch(footerLinksProvider).asData?.value ?? [];
+    final isBangla = ref.watch(isBanglaProvider);
+    final tr = AppTranslations.of(isBangla);
 
     return Container(
       width: double.infinity,
@@ -33,24 +36,24 @@ class CustomFooter extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Section 1: Profile & Contact Info
-          _buildProfileInfo(setting),
+          _buildProfileInfo(setting, isBangla, tr),
           const SizedBox(height: 32),
 
           // Section 2: Important Links from API
-          _buildImportantLinks(footerLinks),
+          _buildImportantLinks(footerLinks, isBangla, tr),
           const SizedBox(height: 32),
 
           // Section 3: Facebook Page Section
-          _buildFacebookCard(setting),
+          _buildFacebookCard(setting, isBangla, tr),
           const SizedBox(height: 32),
 
           // Copyright
           const Divider(color: Colors.white24),
           const SizedBox(height: 16),
-          const Center(
+          Center(
             child: Text(
-              "© 2026 Barrister Kayser Kamal. All rights reserved.",
-              style: TextStyle(color: Colors.white54, fontSize: 12),
+              tr.copyrightText,
+              style: const TextStyle(color: Colors.white54, fontSize: 12),
               textAlign: TextAlign.center,
             ),
           ),
@@ -59,17 +62,20 @@ class CustomFooter extends ConsumerWidget {
     );
   }
 
-  Widget _buildProfileInfo(WebsiteSettingModel? setting) {
+  Widget _buildProfileInfo(WebsiteSettingModel? setting, bool isBangla, AppTranslations tr) {
     final avatarUrl = setting?.fullAdminLogoUrl.isNotEmpty == true
         ? setting!.fullAdminLogoUrl
         : setting?.fullFileUrl.isNotEmpty == true
             ? setting!.fullFileUrl
             : 'https://ui-avatars.com/api/?name=Kayser+Kamal&background=0C4B33&color=fff&size=100';
 
-    final title = setting?.titleEn?.isNotEmpty == true ? setting!.titleEn! : "Barrister Kayser Kamal";
+    final title = isBangla
+        ? (setting?.titleBn?.isNotEmpty == true ? setting!.titleBn! : tr.appTitle)
+        : (setting?.titleEn?.isNotEmpty == true ? setting!.titleEn! : tr.appTitle);
+
     final address = setting?.address?.isNotEmpty == true
         ? setting!.address!
-        : "Law Affairs Secretary, BNP\nAdvocate, Bangladesh Supreme Court\nDhaka, Bangladesh.";
+        : tr.profileDesignation;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -89,9 +95,9 @@ class CustomFooter extends ConsumerWidget {
                 height: 80,
                 fit: BoxFit.cover,
                 placeholder: (context, url) =>
-                    const SizedBox(width: 80, height: 80, child: Center(child: CircularProgressIndicator(strokeWidth: 2))),
+                    const SizedBox(height: 80, width: 80, child: Center(child: CircularProgressIndicator())),
                 errorWidget: (context, url, error) =>
-                    const Icon(Icons.person, color: Colors.white, size: 60),
+                    const CircleAvatar(radius: 40, child: Icon(Icons.person, size: 40)),
               ),
             ),
           ),
@@ -107,16 +113,16 @@ class CustomFooter extends ConsumerWidget {
           Center(
             child: Text(
               address,
-              style: const TextStyle(color: Colors.white70, fontSize: 13, height: 1.5),
+              style: const TextStyle(color: Colors.white70, fontSize: 13, height: 1.4),
               textAlign: TextAlign.center,
             ),
           ),
           if (setting?.mobile != null && setting!.mobile!.isNotEmpty) ...[
-            const SizedBox(height: 6),
+            const SizedBox(height: 12),
             Center(
               child: Text(
-                "Phone: ${setting.mobile}",
-                style: const TextStyle(color: Colors.white70, fontSize: 12),
+                "${isBangla ? 'ফোন: ' : 'Phone: '}${setting.mobile}",
+                style: const TextStyle(color: Colors.white70, fontSize: 13),
               ),
             ),
           ],
@@ -124,7 +130,7 @@ class CustomFooter extends ConsumerWidget {
             const SizedBox(height: 4),
             Center(
               child: Text(
-                "Email: ${setting.email}",
+                "${isBangla ? 'ইমেইল: ' : 'Email: '}${setting.email}",
                 style: const TextStyle(color: Colors.white70, fontSize: 12),
               ),
             ),
@@ -164,13 +170,13 @@ class CustomFooter extends ConsumerWidget {
     );
   }
 
-  Widget _buildImportantLinks(List<FooterLinkModel> links) {
+  Widget _buildImportantLinks(List<FooterLinkModel> links, bool isBangla, AppTranslations tr) {
     final displayLinks = links.isNotEmpty
         ? links
-        : const [
-            FooterLinkModel(titleEn: "Parliament of Bangladesh", link: "http://www.parliament.gov.bd"),
-            FooterLinkModel(titleEn: "Bangladesh Supreme Court", link: "http://www.supremecourt.gov.bd"),
-            FooterLinkModel(titleEn: "Dhaka Bar Association", link: "http://www.dhakabar.org"),
+        : [
+            FooterLinkModel(titleEn: "Parliament of Bangladesh", titleBn: "বাংলাদেশ জাতীয় সংসদ", link: "http://www.parliament.gov.bd"),
+            FooterLinkModel(titleEn: "Bangladesh Supreme Court", titleBn: "বাংলাদেশ সুপ্রিম কোর্ট", link: "http://www.supremecourt.gov.bd"),
+            FooterLinkModel(titleEn: "Dhaka Bar Association", titleBn: "ঢাকা বার অ্যাসোসিয়েশন", link: "http://www.dhakabar.org"),
           ];
 
     return Container(
@@ -182,9 +188,9 @@ class CustomFooter extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Important Links",
-            style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+          Text(
+            tr.importantLinks,
+            style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
           ...displayLinks.map((link) => InkWell(
@@ -197,7 +203,7 @@ class CustomFooter extends ConsumerWidget {
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          link.localizedTitle(false),
+                          link.localizedTitle(isBangla),
                           style: const TextStyle(color: Colors.white70, fontSize: 14),
                         ),
                       ),
@@ -210,7 +216,7 @@ class CustomFooter extends ConsumerWidget {
     );
   }
 
-  Widget _buildFacebookCard(WebsiteSettingModel? setting) {
+  Widget _buildFacebookCard(WebsiteSettingModel? setting, bool isBangla, AppTranslations tr) {
     final fbPage = setting?.fbPage ?? setting?.fb ?? "https://facebook.com";
     return Container(
       padding: const EdgeInsets.all(16),
@@ -221,9 +227,9 @@ class CustomFooter extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Facebook Page",
-            style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+          Text(
+            tr.facebookPage,
+            style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
           Container(
@@ -249,17 +255,17 @@ class CustomFooter extends ConsumerWidget {
                         ),
                       ),
                       const SizedBox(width: 12),
-                      const Expanded(
+                      Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Barrister Kayser Kamal",
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black87),
+                              tr.appTitle,
+                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black87),
                             ),
                             Text(
-                              "Official Public Page",
-                              style: TextStyle(color: Colors.grey, fontSize: 12),
+                              isBangla ? "অফিসিয়াল পাবলিক পেইজ" : "Official Public Page",
+                              style: const TextStyle(color: Colors.grey, fontSize: 12),
                             ),
                           ],
                         ),
@@ -267,7 +273,7 @@ class CustomFooter extends ConsumerWidget {
                       ElevatedButton.icon(
                         onPressed: () => _launch(fbPage),
                         icon: const Icon(Icons.facebook, size: 16),
-                        label: const Text("Follow"),
+                        label: Text(tr.followUs),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue[700],
                           foregroundColor: Colors.white,

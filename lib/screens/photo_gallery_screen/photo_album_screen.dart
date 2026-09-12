@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_riverpod_template/constant/app_colors.dart';
 import 'package:flutter_riverpod_template/screens/home_screen/widgets/custom_footer.dart';
+import 'package:flutter_riverpod_template/utils/languages/language_provider.dart';
 
-class PhotoAlbumScreen extends StatelessWidget {
+class PhotoAlbumScreen extends ConsumerWidget {
   final String albumTitle;
   final List<String> imageUrls;
 
@@ -59,8 +61,10 @@ class PhotoAlbumScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final primaryGreen = AppColors.instance.primaryGreen;
+    final isBangla = ref.watch(isBanglaProvider);
+    final tr = AppTranslations.of(isBangla);
     final photos = imageUrls.isNotEmpty ? imageUrls : <String>[];
 
     return Scaffold(
@@ -91,19 +95,21 @@ class PhotoAlbumScreen extends StatelessWidget {
                     style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 4),
-                  const Text(
-                    "High-resolution photos from official activities and public gatherings.",
+                  Text(
+                    tr.photoAlbumSubtitle,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white70, fontSize: 13),
+                    style: const TextStyle(color: Colors.white70, fontSize: 13),
                   ),
                 ],
               ),
             ),
 
             if (photos.isEmpty)
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 48),
-                child: Center(child: Text("No photos uploaded to this album yet.")),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 48),
+                child: Center(
+                  child: Text(tr.photoAlbumEmpty),
+                ),
               )
             else
               Padding(

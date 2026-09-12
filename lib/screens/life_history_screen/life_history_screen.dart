@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_riverpod_template/constant/app_colors.dart';
 import 'package:flutter_riverpod_template/services/providers/api_providers.dart';
+import 'package:flutter_riverpod_template/utils/languages/language_provider.dart';
 
 class LifeHistoryScreen extends ConsumerWidget {
   const LifeHistoryScreen({super.key});
@@ -11,21 +12,22 @@ class LifeHistoryScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final primaryGreen = AppColors.instance.primaryGreen;
     final lifeAsync = ref.watch(lifeStruggleListProvider);
+    final isBangla = ref.watch(isBanglaProvider);
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
         backgroundColor: primaryGreen,
         iconTheme: const IconThemeData(color: Colors.white),
-        title: const Text(
-          "Life & Success Records",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        title: Text(
+          isBangla ? "জীবন ও সফলতার ইতিহাস" : "Life & Success Records",
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
       body: lifeAsync.when(
         data: (records) {
           if (records.isEmpty) {
-            return const Center(child: Text("No records available"));
+            return Center(child: Text(isBangla ? "কোন তথ্য পাওয়া যায়নি" : "No records available"));
           }
 
           return ListView.builder(
@@ -33,8 +35,8 @@ class LifeHistoryScreen extends ConsumerWidget {
             itemCount: records.length,
             itemBuilder: (context, index) {
               final record = records[index];
-              final title = record.localizedTitle(false);
-              final description = record.localizedContent(false).replaceAll(RegExp(r'<[^>]*>'), '').trim();
+              final title = record.localizedTitle(isBangla);
+              final description = record.localizedContent(isBangla).replaceAll(RegExp(r'<[^>]*>'), '').trim();
               final imgUrl = record.fullImageUrl;
 
               return Card(

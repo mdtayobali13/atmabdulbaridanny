@@ -5,6 +5,7 @@ import 'package:flutter_riverpod_template/constant/app_colors.dart';
 import 'package:flutter_riverpod_template/screens/home_screen/widgets/custom_footer.dart';
 import 'package:flutter_riverpod_template/services/providers/api_providers.dart';
 import 'package:flutter_riverpod_template/services/repository/home_repository.dart';
+import 'package:flutter_riverpod_template/utils/languages/language_provider.dart';
 
 class BiographyScreen extends ConsumerStatefulWidget {
   const BiographyScreen({super.key});
@@ -34,9 +35,11 @@ class _BiographyScreenState extends ConsumerState<BiographyScreen> {
     final primaryGreen = AppColors.instance.primaryGreen;
     final bioAsync = ref.watch(biographyListProvider);
     final aboutMeAsync = ref.watch(aboutMeProvider);
+    final isBangla = ref.watch(isBanglaProvider);
+    final tr = AppTranslations.of(isBangla);
 
-    final todayVisits = _visitStats?['today_visits']?.toString() ?? '5';
-    final totalVisits = _visitStats?['total_visits']?.toString() ?? '192';
+    final todayVisits = (_visitStats?['today_visits']?.toString() ?? '5').toBanglaDigits(isBangla);
+    final totalVisits = (_visitStats?['total_visits']?.toString() ?? '192').toBanglaDigits(isBangla);
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -51,24 +54,24 @@ class _BiographyScreenState extends ConsumerState<BiographyScreen> {
               child: Column(
                 children: [
                   const SizedBox(height: 12),
-                  const Text(
-                    "Biography",
-                    style: TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.bold),
+                  Text(
+                    tr.biographyTitle,
+                    style: const TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 6),
-                  const Text(
-                    "Life story, legal milestones, and parliamentary leadership of Barrister Kayser Kamal.",
+                  Text(
+                    tr.biographySubtitle,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white70, fontSize: 13),
+                    style: const TextStyle(color: Colors.white70, fontSize: 13),
                   ),
                   const SizedBox(height: 16),
                   // Stats Row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _buildStatBox("Today Visitor", todayVisits),
+                      _buildStatBox(tr.todayVisitor, todayVisits),
                       const SizedBox(width: 16),
-                      _buildStatBox("Total Visitor", totalVisits),
+                      _buildStatBox(tr.totalVisitor, totalVisits),
                     ],
                   ),
                 ],
@@ -79,7 +82,7 @@ class _BiographyScreenState extends ConsumerState<BiographyScreen> {
             aboutMeAsync.when(
               data: (aboutMe) {
                 if (aboutMe == null) return const SizedBox.shrink();
-                final content = aboutMe.localizedContent(false);
+                final content = aboutMe.localizedContent(isBangla);
                 if (content.isEmpty) return const SizedBox.shrink();
 
                 return Container(
@@ -110,9 +113,9 @@ class _BiographyScreenState extends ConsumerState<BiographyScreen> {
                         ),
                         const SizedBox(height: 16),
                       ],
-                      const Text(
-                        "About Barrister Kayser Kamal",
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
+                      Text(
+                        isBangla ? "ব্যারিস্টার কায়সার কামাল সম্পর্কে" : "About Barrister Kayser Kamal",
+                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
                       ),
                       const SizedBox(height: 10),
                       Text(
@@ -131,9 +134,9 @@ class _BiographyScreenState extends ConsumerState<BiographyScreen> {
             bioAsync.when(
               data: (bios) {
                 if (bios.isEmpty) {
-                  return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 48),
-                    child: Center(child: Text("No biography entries available")),
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 48),
+                    child: Center(child: Text(tr.biographyEmpty)),
                   );
                 }
 
@@ -141,8 +144,8 @@ class _BiographyScreenState extends ConsumerState<BiographyScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                   child: Column(
                     children: bios.map((bio) {
-                      final title = bio.localizedTitle(false);
-                      final content = bio.localizedContent(false);
+                      final title = bio.localizedTitle(isBangla);
+                      final content = bio.localizedContent(isBangla);
                       final imgUrl = bio.fullImageUrl;
 
                       return _buildBioCard(
@@ -160,7 +163,7 @@ class _BiographyScreenState extends ConsumerState<BiographyScreen> {
               ),
               error: (err, stack) => Padding(
                 padding: const EdgeInsets.symmetric(vertical: 40),
-                child: Center(child: Text("Failed to load biography: $err")),
+                child: Center(child: Text(isBangla ? "লোড করতে ব্যর্থ হয়েছে: $err" : "Failed to load biography: $err")),
               ),
             ),
 

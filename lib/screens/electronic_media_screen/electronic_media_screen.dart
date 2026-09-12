@@ -6,6 +6,7 @@ import 'package:flutter_riverpod_template/screens/home_screen/widgets/custom_foo
 import 'package:flutter_riverpod_template/screens/video_gallery_screen/video_detail_screen.dart';
 import 'package:flutter_riverpod_template/services/providers/api_providers.dart';
 import 'package:flutter_riverpod_template/services/repository/home_repository.dart';
+import 'package:flutter_riverpod_template/utils/languages/language_provider.dart';
 
 class ElectronicMediaScreen extends ConsumerStatefulWidget {
   const ElectronicMediaScreen({super.key});
@@ -34,9 +35,11 @@ class _ElectronicMediaScreenState extends ConsumerState<ElectronicMediaScreen> {
   Widget build(BuildContext context) {
     final primaryGreen = AppColors.instance.primaryGreen;
     final mediaAsync = ref.watch(electronicMediaProvider);
+    final isBangla = ref.watch(isBanglaProvider);
+    final tr = AppTranslations.of(isBangla);
 
-    final todayVisits = _visitStats?['today_visits']?.toString() ?? '3';
-    final totalVisits = _visitStats?['total_visits']?.toString() ?? '145';
+    final todayVisits = (_visitStats?['today_visits']?.toString() ?? '3').toBanglaDigits(isBangla);
+    final totalVisits = (_visitStats?['total_visits']?.toString() ?? '145').toBanglaDigits(isBangla);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -49,18 +52,18 @@ class _ElectronicMediaScreenState extends ConsumerState<ElectronicMediaScreen> {
               width: double.infinity,
               color: primaryGreen,
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-              child: const Column(
+              child: Column(
                 children: [
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Text(
-                    "Electronic Media",
-                    style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                    tr.electronicMediaTitle,
+                    style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
-                    "Browse television interviews, broadcast news, and electronic media reports.",
+                    tr.electronicMediaSubtitle,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white70, fontSize: 14),
+                    style: const TextStyle(color: Colors.white70, fontSize: 14),
                   ),
                 ],
               ),
@@ -73,14 +76,14 @@ class _ElectronicMediaScreenState extends ConsumerState<ElectronicMediaScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _buildStatItem("Today Visitor", todayVisits),
+                  _buildStatItem(tr.todayVisitor, todayVisits),
                   Container(
                     width: 1,
                     height: 30,
                     color: Colors.white30,
                     margin: const EdgeInsets.symmetric(horizontal: 24),
                   ),
-                  _buildStatItem("Total Visitor", totalVisits),
+                  _buildStatItem(tr.totalVisitor, totalVisits),
                 ],
               ),
             ),
@@ -91,9 +94,9 @@ class _ElectronicMediaScreenState extends ConsumerState<ElectronicMediaScreen> {
             mediaAsync.when(
               data: (mediaList) {
                 if (mediaList.isEmpty) {
-                  return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 48),
-                    child: Center(child: Text("No electronic media items available")),
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 48),
+                    child: Center(child: Text(tr.electronicMediaEmpty)),
                   );
                 }
 
@@ -105,10 +108,11 @@ class _ElectronicMediaScreenState extends ConsumerState<ElectronicMediaScreen> {
                     itemCount: mediaList.length,
                     itemBuilder: (context, index) {
                       final item = mediaList[index];
-                      final title = item.localizedTitle(false);
-                      final date = item.createdAt != null && item.createdAt!.length >= 10
+                      final title = item.localizedTitle(isBangla);
+                      final rawDate = item.createdAt != null && item.createdAt!.length >= 10
                           ? item.createdAt!.substring(0, 10)
                           : '';
+                      final date = rawDate.toBanglaDigits(isBangla);
                       final imgUrl = item.fullImageUrl;
                       final videoId = item.youtubeVideoId ?? 'dQw4w9WgXcQ';
 

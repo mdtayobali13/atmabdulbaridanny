@@ -5,6 +5,7 @@ import 'package:flutter_riverpod_template/constant/app_colors.dart';
 import 'package:flutter_riverpod_template/screens/home_screen/widgets/custom_footer.dart';
 import 'package:flutter_riverpod_template/services/providers/api_providers.dart';
 import 'package:flutter_riverpod_template/services/repository/home_repository.dart';
+import 'package:flutter_riverpod_template/utils/languages/language_provider.dart';
 
 class HistoryOfLifeScreen extends ConsumerStatefulWidget {
   const HistoryOfLifeScreen({super.key});
@@ -33,9 +34,11 @@ class _HistoryOfLifeScreenState extends ConsumerState<HistoryOfLifeScreen> {
   Widget build(BuildContext context) {
     final primaryGreen = AppColors.instance.primaryGreen;
     final lifeAsync = ref.watch(lifeStruggleListProvider);
+    final isBangla = ref.watch(isBanglaProvider);
+    final tr = AppTranslations.of(isBangla);
 
-    final todayVisits = _visitStats?['today_visits']?.toString() ?? '8';
-    final totalVisits = _visitStats?['total_visits']?.toString() ?? '162';
+    final todayVisits = (_visitStats?['today_visits']?.toString() ?? '8').toBanglaDigits(isBangla);
+    final totalVisits = (_visitStats?['total_visits']?.toString() ?? '162').toBanglaDigits(isBangla);
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -49,24 +52,24 @@ class _HistoryOfLifeScreenState extends ConsumerState<HistoryOfLifeScreen> {
               padding: const EdgeInsets.only(top: 36.0, bottom: 20.0, left: 16.0, right: 16.0),
               child: Column(
                 children: [
-                  const Text(
-                    "History of Life and Struggle",
-                    style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+                  Text(
+                    tr.lifeHistoryTitle,
+                    style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 6),
-                  const Text(
-                    "Key chapters of dedication, constitutional activism, and democratic struggle.",
+                  Text(
+                    tr.lifeHistorySubtitle,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white70, fontSize: 13),
+                    style: const TextStyle(color: Colors.white70, fontSize: 13),
                   ),
                   const SizedBox(height: 16),
                   // Stats Row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _buildStatBox("Today Visitor", todayVisits),
+                      _buildStatBox(tr.todayVisitor, todayVisits),
                       const SizedBox(width: 16),
-                      _buildStatBox("Total Visitor", totalVisits),
+                      _buildStatBox(tr.totalVisitor, totalVisits),
                     ],
                   ),
                 ],
@@ -77,9 +80,9 @@ class _HistoryOfLifeScreenState extends ConsumerState<HistoryOfLifeScreen> {
             lifeAsync.when(
               data: (items) {
                 if (items.isEmpty) {
-                  return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 48),
-                    child: Center(child: Text("No life struggle records available")),
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 48),
+                    child: Center(child: Text(tr.lifeHistoryEmpty)),
                   );
                 }
 
@@ -87,8 +90,8 @@ class _HistoryOfLifeScreenState extends ConsumerState<HistoryOfLifeScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
                   child: Column(
                     children: items.map((item) {
-                      final title = item.localizedTitle(false);
-                      final content = item.localizedContent(false);
+                      final title = item.localizedTitle(isBangla);
+                      final content = item.localizedContent(isBangla);
                       final imgUrl = item.fullImageUrl;
 
                       return _buildBioCard(
@@ -106,7 +109,7 @@ class _HistoryOfLifeScreenState extends ConsumerState<HistoryOfLifeScreen> {
               ),
               error: (err, stack) => Padding(
                 padding: const EdgeInsets.symmetric(vertical: 40),
-                child: Center(child: Text("Failed to load: $err")),
+                child: Center(child: Text(isBangla ? "লোড করতে ব্যর্থ হয়েছে: $err" : "Failed to load: $err")),
               ),
             ),
 

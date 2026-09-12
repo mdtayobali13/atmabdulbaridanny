@@ -4,8 +4,9 @@ import 'package:flutter_riverpod_template/constant/app_colors.dart';
 class SectionTitle extends StatelessWidget {
   final String title;
   final VoidCallback? onViewAllPressed;
+  final String? buttonText;
 
-  const SectionTitle({super.key, required this.title, this.onViewAllPressed});
+  const SectionTitle({super.key, required this.title, this.onViewAllPressed, this.buttonText});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class SectionTitle extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               minimumSize: const Size(0, 30),
             ),
-            child: const Text("View All", style: TextStyle(fontSize: 12)),
+            child: Text(buttonText ?? "View All", style: const TextStyle(fontSize: 12)),
           )
         ],
       ),

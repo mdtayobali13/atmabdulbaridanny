@@ -1,21 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_template/constant/app_colors.dart';
 import 'package:flutter_riverpod_template/screens/home_screen/widgets/custom_footer.dart';
+import 'package:flutter_riverpod_template/utils/languages/language_provider.dart';
 
-class JourneyScreen extends StatelessWidget {
+class JourneyScreen extends ConsumerWidget {
   const JourneyScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final primaryGreen = AppColors.instance.primaryGreen;
+    final isBangla = ref.watch(isBanglaProvider);
+    final tr = AppTranslations.of(isBangla);
 
     final journeys = [
       {
-        "title": "Barrister Kayser Kamal, MP, Deputy Speaker, Netrokona-1 (Kalmakanda-Durgapur)",
-        "date": "06-Dec 1991",
-        "year": "1991",
-        "desc": "efwe",
-        "color": const Color(0xFF713c54), // Matches the burgundy color in the screenshot
+        "title": isBangla
+            ? "ব্যারিস্টার কায়সার কামাল, এমপি, ডেপুটি স্পিকার, নেত্রকোনা-১ (কলমাকান্দা-দুর্গাপুর)"
+            : "Barrister Kayser Kamal, MP, Deputy Speaker, Netrokona-1 (Kalmakanda-Durgapur)",
+        "date": isBangla ? "০৬-ডিসেম্বর ১৯৯১" : "06-Dec 1991",
+        "year": "1991".toBanglaDigits(isBangla),
+        "desc": isBangla
+            ? "ছাত্র রাজনীতি ও সামাজিক কর্মকাণ্ডের মধ্য দিয়ে মানুষের অধিকার আদায়ের দীর্ঘ অভিযাত্রা শুরু হয়।"
+            : "The long journey towards advocating for civil rights began through student politics and community engagement.",
+        "color": const Color(0xFF713c54),
+      },
+      {
+        "title": isBangla
+            ? "আইন পেশায় যোগদান ও সুপ্রিম কোর্টে অন্তর্ভুক্তি"
+            : "Entry into Legal Practice & Supreme Court Advocacy",
+        "date": isBangla ? "১৫-মে ১৯৯৮" : "15-May 1998",
+        "year": "1998".toBanglaDigits(isBangla),
+        "desc": isBangla
+            ? "আইনজীবনের সূচনা করে সাংবিধানিক ন্যায়বিচার ও আইনের শাসন প্রতিষ্ঠায় সক্রিয় অংশগ্রহণ।"
+            : "Embarked upon legal advocacy, actively championing constitutional justice and the rule of law.",
+        "color": const Color(0xFF0C4B33),
+      },
+      {
+        "title": isBangla
+            ? "জনপ্রতিনিধিত্ব ও জাতীয় সংসদে ঐতিহাসিক দায়িত্ব"
+            : "Public Representation & Historic Parliamentary Responsibility",
+        "date": isBangla ? "১২-ফেব্রুয়ারি ২০২৬" : "12-Feb 2026",
+        "year": "2026".toBanglaDigits(isBangla),
+        "desc": isBangla
+            ? "নেত্রকোনা-১ আসনের জনগণের ভালোবাসায় সংসদ সদস্য এবং জাতীয় সংসদের ডেপুটি স্পিকার নির্বাচিত হওয়া।"
+            : "Elected Member of Parliament from Netrokona-1 and appointed Deputy Speaker of the National Parliament.",
+        "color": const Color(0xFF1E3A8A),
       },
     ];
 
@@ -31,23 +61,23 @@ class JourneyScreen extends StatelessWidget {
               padding: const EdgeInsets.only(top: 16.0, bottom: 16.0, left: 16.0, right: 16.0),
               child: Column(
                 children: [
-                  const Text(
-                    "Journey",
-                    style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                  Text(
+                    tr.journeyTitle,
+                    style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 4),
-                  const Text(
-                    "Important achievements, timeline highlights, and notable milestones are presented here.",
+                  Text(
+                    tr.journeySubtitle,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white70, fontSize: 13),
+                    style: const TextStyle(color: Colors.white70, fontSize: 13),
                   ),
                   const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _buildStatBox("Today Visitor", "2"),
+                      _buildStatBox(tr.todayVisitor, "2".toBanglaDigits(isBangla)),
                       const SizedBox(width: 16),
-                      _buildStatBox("Total Visitor", "57"),
+                      _buildStatBox(tr.totalVisitor, "57".toBanglaDigits(isBangla)),
                     ],
                   ),
                 ],

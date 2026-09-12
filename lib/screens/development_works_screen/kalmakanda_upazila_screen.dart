@@ -5,6 +5,7 @@ import 'package:flutter_riverpod_template/constant/app_colors.dart';
 import 'package:flutter_riverpod_template/screens/home_screen/widgets/custom_footer.dart';
 import 'package:flutter_riverpod_template/services/providers/api_providers.dart';
 import 'package:flutter_riverpod_template/services/repository/home_repository.dart';
+import 'package:flutter_riverpod_template/utils/languages/language_provider.dart';
 
 class KalmakandaUpazilaScreen extends ConsumerStatefulWidget {
   const KalmakandaUpazilaScreen({super.key});
@@ -33,9 +34,11 @@ class _KalmakandaUpazilaScreenState extends ConsumerState<KalmakandaUpazilaScree
   Widget build(BuildContext context) {
     final primaryGreen = AppColors.instance.primaryGreen;
     final devWorkAsync = ref.watch(developmentWorkContentProvider);
+    final isBangla = ref.watch(isBanglaProvider);
+    final tr = AppTranslations.of(isBangla);
 
-    final todayVisits = _visitStats?['today_visits']?.toString() ?? '3';
-    final totalVisits = _visitStats?['total_visits']?.toString() ?? '27';
+    final todayVisits = (_visitStats?['today_visits']?.toString() ?? '3').toBanglaDigits(isBangla);
+    final totalVisits = (_visitStats?['total_visits']?.toString() ?? '27').toBanglaDigits(isBangla);
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -49,23 +52,23 @@ class _KalmakandaUpazilaScreenState extends ConsumerState<KalmakandaUpazilaScree
               padding: const EdgeInsets.only(top: 36.0, bottom: 20.0, left: 16.0, right: 16.0),
               child: Column(
                 children: [
-                  const Text(
-                    "Kalmakanda Upazila",
-                    style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                  Text(
+                    tr.kalmakandaTitle,
+                    style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 6),
-                  const Text(
-                    "Development works, infrastructure projects, and public welfare initiatives in Kalmakanda.",
+                  Text(
+                    tr.kalmakandaSubtitle,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white70, fontSize: 13),
+                    style: const TextStyle(color: Colors.white70, fontSize: 13),
                   ),
                   const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _buildStatBox("Today Visitor", todayVisits),
+                      _buildStatBox(tr.todayVisitor, todayVisits),
                       const SizedBox(width: 16),
-                      _buildStatBox("Total Visitor", totalVisits),
+                      _buildStatBox(tr.totalVisitor, totalVisits),
                     ],
                   ),
                 ],
@@ -77,14 +80,16 @@ class _KalmakandaUpazilaScreenState extends ConsumerState<KalmakandaUpazilaScree
               data: (items) {
                 final list = items.where((e) =>
                     e.localizedTitle(false).toLowerCase().contains('kalmakanda') ||
-                    e.localizedContent(false).toLowerCase().contains('kalmakanda')).toList();
+                    e.localizedContent(false).toLowerCase().contains('kalmakanda') ||
+                    e.localizedTitle(true).contains('কলমাকান্দা') ||
+                    e.localizedContent(true).contains('কলমাকান্দা')).toList();
 
                 final displayList = list.isNotEmpty ? list : items;
 
                 if (displayList.isEmpty) {
-                  return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 48),
-                    child: Center(child: Text("No development works listed yet")),
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 48),
+                    child: Center(child: Text(tr.kalmakandaEmpty)),
                   );
                 }
 
@@ -93,8 +98,8 @@ class _KalmakandaUpazilaScreenState extends ConsumerState<KalmakandaUpazilaScree
                   child: Column(
                     children: displayList.map((item) {
                       return _buildContentCard(
-                        title: item.localizedTitle(false),
-                        text: item.localizedContent(false).replaceAll(RegExp(r'<[^>]*>'), '').trim(),
+                        title: item.localizedTitle(isBangla),
+                        text: item.localizedContent(isBangla).replaceAll(RegExp(r'<[^>]*>'), '').trim(),
                         imageUrl: item.fullImageUrl,
                       );
                     }).toList(),
@@ -107,7 +112,7 @@ class _KalmakandaUpazilaScreenState extends ConsumerState<KalmakandaUpazilaScree
               ),
               error: (err, stack) => Padding(
                 padding: const EdgeInsets.symmetric(vertical: 40),
-                child: Center(child: Text("Failed to load: $err")),
+                child: Center(child: Text(isBangla ? "লোড করতে ব্যর্থ হয়েছে: $err" : "Failed to load: $err")),
               ),
             ),
 

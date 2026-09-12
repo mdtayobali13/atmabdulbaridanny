@@ -1,17 +1,49 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_template/constant/app_colors.dart';
 import 'package:flutter_riverpod_template/routes/app_routes.dart';
 import 'package:flutter_riverpod_template/routes/app_routes_key.dart';
 import 'package:flutter_riverpod_template/services/repository/auth_repository.dart';
 import 'package:flutter_riverpod_template/services/storage/storage_services.dart';
+import 'package:flutter_riverpod_template/utils/languages/language_provider.dart';
 import 'package:go_router/go_router.dart';
 
-class AppDrawer extends StatelessWidget {
+class AppDrawer extends ConsumerWidget {
   const AppDrawer({super.key});
 
+  String _getFormattedDate(bool isBangla) {
+    final now = DateTime.now();
+    if (isBangla) {
+      const banglaDays = ['সোমবার', 'মঙ্গলবার', 'বুধবার', 'বৃহস্পতিবার', 'শুক্রবার', 'শনিবার', 'রবিবার'];
+      const banglaMonths = [
+        'জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন',
+        'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'
+      ];
+      const banglaDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+      String toBanglaDigits(int n) => n.toString().split('').map((c) => banglaDigits[int.parse(c)]).join('');
+
+      final dayName = banglaDays[now.weekday - 1];
+      final monthName = banglaMonths[now.month - 1];
+      final dayNum = toBanglaDigits(now.day);
+      final yearNum = toBanglaDigits(now.year);
+      return '$dayName, $dayNum $monthName, $yearNum';
+    } else {
+      const englishDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+      const englishMonths = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+      ];
+      final dayName = englishDays[now.weekday - 1];
+      final monthName = englishMonths[now.month - 1];
+      return '$dayName, $monthName ${now.day}, ${now.year}';
+    }
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isBangla = ref.watch(isBanglaProvider);
+
     return Drawer(
       backgroundColor: Colors.white,
       child: Column(
@@ -34,12 +66,12 @@ class AppDrawer extends StatelessWidget {
                           color: Colors.white.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child: const FittedBox(
+                        child: FittedBox(
                           fit: BoxFit.scaleDown,
                           alignment: Alignment.center,
                           child: Text(
-                            "Monday, August 31, 2026",
-                            style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500),
+                            _getFormattedDate(isBangla),
+                            style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500),
                           ),
                         ),
                       ),
@@ -55,12 +87,15 @@ class AppDrawer extends StatelessWidget {
                   child: Icon(Icons.gavel, color: AppColors.instance.primaryGreen, size: 36),
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  "Barrister Kayser Kamal",
-                  style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                Text(
+                  isBangla ? "ব্যারিস্টার কায়সার কামাল" : "Barrister Kayser Kamal",
+                  style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 4),
-                const Text("Secondary Categories", style: TextStyle(color: Colors.white70, fontSize: 14)),
+                Text(
+                  isBangla ? "সেকেন্ডারি ক্যাটাগরি" : "Secondary Categories",
+                  style: const TextStyle(color: Colors.white70, fontSize: 14),
+                ),
               ],
             ),
           ),
@@ -73,7 +108,7 @@ class AppDrawer extends StatelessWidget {
                 _buildDrawerItem(
                   context: context,
                   icon: CupertinoIcons.person_crop_circle,
-                  title: "My Account",
+                  title: isBangla ? "আমার প্রোফাইল" : "My Account",
                   onTap: () {
                     Navigator.pop(context);
                     context.go('/${AppRoutesKey.instance.profileScreen}');
@@ -82,7 +117,7 @@ class AppDrawer extends StatelessWidget {
                 _buildDrawerItem(
                   context: context,
                   icon: CupertinoIcons.info_circle,
-                  title: "About Me",
+                  title: isBangla ? "আমার সম্পর্কে" : "About Me",
                   onTap: () {
                     Navigator.pop(context);
                     context.go('/${AppRoutesKey.instance.aboutScreen}');
@@ -91,7 +126,7 @@ class AppDrawer extends StatelessWidget {
                 _buildDrawerItem(
                   context: context,
                   icon: CupertinoIcons.book,
-                  title: "Biography",
+                  title: isBangla ? "জীবনবৃত্তান্ত" : "Biography",
                   onTap: () {
                     Navigator.pop(context);
                     context.go('/biography_screen');
@@ -100,7 +135,7 @@ class AppDrawer extends StatelessWidget {
                 _buildDrawerItem(
                   context: context,
                   icon: CupertinoIcons.time,
-                  title: "History of Life & Struggle",
+                  title: isBangla ? "জীবন ও সংগ্রামের ইতিহাস" : "History of Life & Struggle",
                   onTap: () {
                     Navigator.pop(context);
                     context.go('/history_of_life_screen');
@@ -109,7 +144,7 @@ class AppDrawer extends StatelessWidget {
                 _buildDrawerItem(
                   context: context,
                   icon: CupertinoIcons.phone,
-                  title: "Contact",
+                  title: isBangla ? "যোগাযোগ" : "Contact",
                   onTap: () {
                     Navigator.pop(context); // Close the drawer
                     context.go('/contact_screen');
@@ -118,7 +153,7 @@ class AppDrawer extends StatelessWidget {
                 _buildDrawerItem(
                   context: context,
                   icon: CupertinoIcons.calendar,
-                  title: "Appointment",
+                  title: isBangla ? "সাক্ষাৎকার" : "Appointment",
                   onTap: () {
                     Navigator.pop(context); // Close the drawer
                     context.go('/appointment_screen');
@@ -127,7 +162,7 @@ class AppDrawer extends StatelessWidget {
                 _buildDrawerItem(
                   context: context,
                   icon: CupertinoIcons.exclamationmark_bubble,
-                  title: "Complaint",
+                  title: isBangla ? "অভিযোগ" : "Complaint",
                   onTap: () {
                     Navigator.pop(context); // Close the drawer
                     context.go('/complain_screen');
@@ -136,11 +171,11 @@ class AppDrawer extends StatelessWidget {
                 _buildDrawerDropdown(
                   context: context,
                   icon: CupertinoIcons.building_2_fill,
-                  title: "Development Works",
+                  title: isBangla ? "উন্নয়নমূলক কাজ" : "Development Works",
                   children: [
                     _buildSubDrawerItem(
                       context: context,
-                      title: "Kalmakanda Upazila",
+                      title: isBangla ? "কলমাকান্দা উপজেলা" : "Kalmakanda Upazila",
                       onTap: () {
                         Navigator.pop(context);
                         context.go('/kalmakanda_upazila_screen');
@@ -148,7 +183,7 @@ class AppDrawer extends StatelessWidget {
                     ),
                     _buildSubDrawerItem(
                       context: context,
-                      title: "Durgapur Upazila",
+                      title: isBangla ? "দুর্গাপুর উপজেলা" : "Durgapur Upazila",
                       onTap: () {
                         Navigator.pop(context);
                         context.go('/durgapur_upazila_screen');
@@ -156,7 +191,7 @@ class AppDrawer extends StatelessWidget {
                     ),
                     _buildSubDrawerItem(
                       context: context,
-                      title: "Others",
+                      title: isBangla ? "অন্যান্য" : "Others",
                       onTap: () {
                         Navigator.pop(context);
                         context.go('/others_screen');
@@ -167,11 +202,11 @@ class AppDrawer extends StatelessWidget {
                 _buildDrawerDropdown(
                   context: context,
                   icon: CupertinoIcons.news,
-                  title: "Media",
+                  title: isBangla ? "মিডিয়া" : "Media",
                   children: [
                     _buildSubDrawerItem(
                       context: context,
-                      title: "Print Media",
+                      title: isBangla ? "প্রিন্ট মিডিয়া" : "Print Media",
                       onTap: () {
                         Navigator.pop(context);
                         context.go('/print_media_screen');
@@ -179,7 +214,7 @@ class AppDrawer extends StatelessWidget {
                     ),
                     _buildSubDrawerItem(
                       context: context,
-                      title: "Electronic Media",
+                      title: isBangla ? "ইলেকট্রনিক মিডিয়া" : "Electronic Media",
                       onTap: () {
                         Navigator.pop(context);
                         context.go('/electronic_media_screen');
@@ -191,7 +226,7 @@ class AppDrawer extends StatelessWidget {
                 _buildDrawerItem(
                   context: context,
                   icon: CupertinoIcons.doc_text,
-                  title: "Terms and Conditions",
+                  title: isBangla ? "শর্তাবলী ও নীতিমালা" : "Terms and Conditions",
                   onTap: () {
                     Navigator.pop(context);
                     context.go('/${AppRoutesKey.instance.termsAndConditionsScreen}');
@@ -200,7 +235,7 @@ class AppDrawer extends StatelessWidget {
                 _buildDrawerItem(
                   context: context,
                   icon: CupertinoIcons.shield,
-                  title: "Privacy Policy",
+                  title: isBangla ? "গোপনীয়তা নীতি" : "Privacy Policy",
                   onTap: () {
                     Navigator.pop(context);
                     context.go('/${AppRoutesKey.instance.privacyPolicyScreen}');
@@ -209,7 +244,7 @@ class AppDrawer extends StatelessWidget {
                 _buildDrawerItem(
                   context: context,
                   icon: CupertinoIcons.question_circle,
-                  title: "FAQ",
+                  title: isBangla ? "সাধারণ জিজ্ঞাসা (FAQ)" : "FAQ",
                   onTap: () {
                     Navigator.pop(context);
                     context.go('/${AppRoutesKey.instance.faqsScreen}');
@@ -228,10 +263,10 @@ class AppDrawer extends StatelessWidget {
               children: [
                 Expanded(
                   child: OutlinedButton.icon(
-                    onPressed: () => _showDeleteAccountDialog(context),
+                    onPressed: () => _showDeleteAccountDialog(context, isBangla),
                     icon: Icon(Icons.delete_outline_rounded, size: 17, color: Colors.red.shade700),
                     label: Text(
-                      "Delete Account",
+                      isBangla ? "অ্যাকাউন্ট মুছুন" : "Delete Account",
                       style: TextStyle(
                         color: Colors.red.shade700,
                         fontSize: 12,
@@ -249,11 +284,11 @@ class AppDrawer extends StatelessWidget {
                 const SizedBox(width: 10),
                 Expanded(
                   child: ElevatedButton.icon(
-                    onPressed: () => _showLogoutDialog(context),
+                    onPressed: () => _showLogoutDialog(context, isBangla),
                     icon: const Icon(Icons.logout_rounded, size: 17, color: Colors.white),
-                    label: const Text(
-                      "Logout",
-                      style: TextStyle(
+                    label: Text(
+                      isBangla ? "লগআউট" : "Logout",
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
@@ -274,14 +309,17 @@ class AppDrawer extends StatelessWidget {
           // App Version
           Padding(
             padding: const EdgeInsets.only(bottom: 16.0),
-            child: Text("Version 1.0.0", style: TextStyle(color: Colors.grey[500], fontSize: 12)),
+            child: Text(
+              isBangla ? "ভার্সন ১.০.০" : "Version 1.0.0",
+              style: TextStyle(color: Colors.grey[500], fontSize: 12),
+            ),
           ),
         ],
       ),
     );
   }
 
-  void _showLogoutDialog(BuildContext context) {
+  void _showLogoutDialog(BuildContext context, bool isBangla) {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -299,22 +337,24 @@ class AppDrawer extends StatelessWidget {
               child: Icon(Icons.logout_rounded, color: Colors.red.shade700, size: 22),
             ),
             const SizedBox(width: 12),
-            const Text(
-              "Logout",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF111518)),
+            Text(
+              isBangla ? "লগআউট" : "Logout",
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF111518)),
             ),
           ],
         ),
-        content: const Text(
-          "Are you sure you want to logout from your account?",
-          style: TextStyle(fontSize: 14, color: Color(0xFF333333)),
+        content: Text(
+          isBangla
+              ? "আপনি কি নিশ্চিত যে আপনার অ্যাকাউন্ট থেকে লগআউট করতে চান?"
+              : "Are you sure you want to logout from your account?",
+          style: const TextStyle(fontSize: 14, color: Color(0xFF333333)),
         ),
         actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
             child: Text(
-              "Cancel",
+              isBangla ? "বাতিল" : "Cancel",
               style: TextStyle(color: Colors.grey.shade700, fontWeight: FontWeight.w600),
             ),
           ),
@@ -331,14 +371,14 @@ class AppDrawer extends StatelessWidget {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               elevation: 0,
             ),
-            child: const Text("Logout"),
+            child: Text(isBangla ? "লগআউট" : "Logout"),
           ),
         ],
       ),
     );
   }
 
-  void _showDeleteAccountDialog(BuildContext context) {
+  void _showDeleteAccountDialog(BuildContext context, bool isBangla) {
     final emailController = TextEditingController();
     final passwordController = TextEditingController();
     bool obscurePassword = true;
@@ -369,9 +409,9 @@ class AppDrawer extends StatelessWidget {
                   child: Icon(Icons.warning_amber_rounded, color: Colors.red.shade700, size: 22),
                 ),
                 const SizedBox(width: 12),
-                const Text(
-                  "Delete Account",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF111518)),
+                Text(
+                  isBangla ? "অ্যাকাউন্ট মুছুন" : "Delete Account",
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF111518)),
                 ),
               ],
             ),
@@ -381,13 +421,15 @@ class AppDrawer extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Please enter your email and password to permanently delete your account. This action cannot be undone.",
+                    isBangla
+                        ? "আপনার অ্যাকাউন্টটি স্থায়ীভাবে মুছে ফেলতে ইমেইল এবং পাসওয়ার্ড দিন। এই প্রক্রিয়াটি অপরিবর্তনীয়।"
+                        : "Please enter your email and password to permanently delete your account. This action cannot be undone.",
                     style: TextStyle(fontSize: 13, color: Colors.grey.shade700, height: 1.4),
                   ),
                   const SizedBox(height: 16),
-                  const Text(
-                    "Email Address",
-                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF222222)),
+                  Text(
+                    isBangla ? "ইমেইল ঠিকানা" : "Email Address",
+                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF222222)),
                   ),
                   const SizedBox(height: 6),
                   TextField(
@@ -395,7 +437,7 @@ class AppDrawer extends StatelessWidget {
                     keyboardType: TextInputType.emailAddress,
                     style: const TextStyle(fontSize: 14, color: Color(0xFF111518)),
                     decoration: InputDecoration(
-                      hintText: "Enter your email",
+                      hintText: isBangla ? "ইমেইল লিখুন" : "Enter your email",
                       hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 13),
                       prefixIcon: Icon(Icons.alternate_email_rounded, color: Colors.grey.shade600, size: 18),
                       filled: true,
@@ -416,9 +458,9 @@ class AppDrawer extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  const Text(
-                    "Password",
-                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF222222)),
+                  Text(
+                    isBangla ? "পাসওয়ার্ড" : "Password",
+                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF222222)),
                   ),
                   const SizedBox(height: 6),
                   TextField(
@@ -426,7 +468,7 @@ class AppDrawer extends StatelessWidget {
                     obscureText: obscurePassword,
                     style: const TextStyle(fontSize: 14, color: Color(0xFF111518)),
                     decoration: InputDecoration(
-                      hintText: "Enter your password",
+                      hintText: isBangla ? "পাসওয়ার্ড লিখুন" : "Enter your password",
                       hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 13),
                       prefixIcon: Icon(Icons.lock_outline_rounded, color: Colors.grey.shade600, size: 18),
                       suffixIcon: IconButton(
@@ -466,7 +508,7 @@ class AppDrawer extends StatelessWidget {
               TextButton(
                 onPressed: () => Navigator.pop(dialogContext),
                 child: Text(
-                  "Cancel",
+                  isBangla ? "বাতিল" : "Cancel",
                   style: TextStyle(color: Colors.grey.shade700, fontWeight: FontWeight.w600),
                 ),
               ),
@@ -488,7 +530,7 @@ class AppDrawer extends StatelessWidget {
                   elevation: 0,
                   padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
                 ),
-                child: const Text("Delete"),
+                child: Text(isBangla ? "মুছে ফেলুন" : "Delete"),
               ),
             ],
           );
@@ -553,18 +595,13 @@ class AppDrawer extends StatelessWidget {
   }
 }
 
-class _LanguageToggle extends StatefulWidget {
+class _LanguageToggle extends ConsumerWidget {
   const _LanguageToggle();
 
   @override
-  State<_LanguageToggle> createState() => _LanguageToggleState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isBangla = ref.watch(isBanglaProvider);
 
-class _LanguageToggleState extends State<_LanguageToggle> {
-  String _selectedLang = 'Eng';
-
-  @override
-  Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
       child: Container(
@@ -577,19 +614,19 @@ class _LanguageToggleState extends State<_LanguageToggle> {
           children: [
             InkWell(
               onTap: () {
-                setState(() => _selectedLang = 'Eng');
+                ref.read(languageProvider.notifier).setLanguage('en_US');
               },
               borderRadius: BorderRadius.circular(16),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                 decoration: BoxDecoration(
-                  color: _selectedLang == 'Eng' ? Colors.white : Colors.transparent,
+                  color: !isBangla ? Colors.white : Colors.transparent,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Text(
                   "Eng",
                   style: TextStyle(
-                    color: _selectedLang == 'Eng' ? AppColors.instance.primaryGreen : Colors.white,
+                    color: !isBangla ? AppColors.instance.primaryGreen : Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 12,
                   ),
@@ -598,19 +635,19 @@ class _LanguageToggleState extends State<_LanguageToggle> {
             ),
             InkWell(
               onTap: () {
-                setState(() => _selectedLang = 'বাংলা');
+                ref.read(languageProvider.notifier).setLanguage('bn_BD');
               },
               borderRadius: BorderRadius.circular(16),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                 decoration: BoxDecoration(
-                  color: _selectedLang == 'বাংলা' ? Colors.white : Colors.transparent,
+                  color: isBangla ? Colors.white : Colors.transparent,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Text(
                   "বাংলা",
                   style: TextStyle(
-                    color: _selectedLang == 'বাংলা' ? AppColors.instance.primaryGreen : Colors.white,
+                    color: isBangla ? AppColors.instance.primaryGreen : Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 12,
                   ),

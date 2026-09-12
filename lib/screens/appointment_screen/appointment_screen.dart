@@ -9,6 +9,7 @@ import 'package:flutter_riverpod_template/services/providers/api_providers.dart'
 import 'package:flutter_riverpod_template/services/repository/citizen_request_repository.dart';
 import 'package:flutter_riverpod_template/services/repository/home_repository.dart';
 import 'package:flutter_riverpod_template/utils/app_snack_bar.dart';
+import 'package:flutter_riverpod_template/utils/languages/language_provider.dart';
 import 'package:go_router/go_router.dart';
 
 class AppointmentScreen extends ConsumerStatefulWidget {
@@ -112,18 +113,21 @@ class _AppointmentScreenState extends ConsumerState<AppointmentScreen> {
   }
 
   Future<void> _submitAppointment() async {
+    final isBangla = ref.read(isBanglaProvider);
+    final tr = AppTranslations.of(isBangla);
+
     if (!_formKey.currentState!.validate()) return;
 
     if (_selectedDivision == null ||
         _selectedDistrict == null ||
         _selectedUpazila == null ||
         _selectedUnion == null) {
-      AppSnackBar.instance.error("Please select Division, District, Upazila, and Union");
+      AppSnackBar.instance.error(tr.selectLocationError);
       return;
     }
 
     if (_dateController.text.trim().isEmpty) {
-      AppSnackBar.instance.error("Please select appointment date");
+      AppSnackBar.instance.error(tr.selectDateError);
       return;
     }
 
@@ -158,26 +162,29 @@ class _AppointmentScreenState extends ConsumerState<AppointmentScreen> {
   }
 
   void _showSuccessDialog(String trackingNo) {
+    final isBangla = ref.read(isBanglaProvider);
+    final tr = AppTranslations.of(isBangla);
+
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title: const Row(
+          title: Row(
             children: [
-              Icon(Icons.check_circle, color: Color(0xFF0C4B33), size: 28),
-              SizedBox(width: 8),
-              Text("Appointment Requested", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const Icon(Icons.check_circle, color: Color(0xFF0C4B33), size: 28),
+              const SizedBox(width: 8),
+              Text(tr.appointmentRequestedTitle, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             ],
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Your appointment request has been submitted successfully. Please save your tracking number:",
-                style: TextStyle(fontSize: 14, color: Colors.black87),
+              Text(
+                tr.appointmentRequestedMessage,
+                style: const TextStyle(fontSize: 14, color: Colors.black87),
               ),
               const SizedBox(height: 16),
               Container(
@@ -204,7 +211,7 @@ class _AppointmentScreenState extends ConsumerState<AppointmentScreen> {
                       icon: const Icon(Icons.copy, size: 20, color: Color(0xFF0C4B33)),
                       onPressed: () {
                         Clipboard.setData(ClipboardData(text: trackingNo));
-                        AppSnackBar.instance.success("Tracking number copied!");
+                        AppSnackBar.instance.success(tr.trackingCopied);
                       },
                     ),
                   ],
@@ -219,7 +226,7 @@ class _AppointmentScreenState extends ConsumerState<AppointmentScreen> {
                 backgroundColor: const Color(0xFF0C4B33),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               ),
-              child: const Text("Done", style: TextStyle(color: Colors.white)),
+              child: Text(tr.done, style: const TextStyle(color: Colors.white)),
             ),
           ],
         );
@@ -229,6 +236,8 @@ class _AppointmentScreenState extends ConsumerState<AppointmentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isBangla = ref.watch(isBanglaProvider);
+    final tr = AppTranslations.of(isBangla);
     final primaryGreen = AppColors.instance.primaryGreen;
 
     final divisionsAsync = ref.watch(divisionsProvider);
@@ -242,8 +251,8 @@ class _AppointmentScreenState extends ConsumerState<AppointmentScreen> {
         ? ref.watch(unionsProvider(_selectedUpazila!.id))
         : null;
 
-    final todayVisits = _visitStats?['today_visits']?.toString() ?? '2';
-    final totalVisits = _visitStats?['total_visits']?.toString() ?? '192';
+    final todayVisits = (_visitStats?['today_visits']?.toString() ?? '2').toBanglaDigits(isBangla);
+    final totalVisits = (_visitStats?['total_visits']?.toString() ?? '192').toBanglaDigits(isBangla);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -260,11 +269,11 @@ class _AppointmentScreenState extends ConsumerState<AppointmentScreen> {
                   Stack(
                     alignment: Alignment.center,
                     children: [
-                      const Align(
+                      Align(
                         alignment: Alignment.center,
                         child: Text(
-                          "Get An Appointment",
-                          style: TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.bold),
+                          tr.appointmentBannerTitle,
+                          style: const TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.bold),
                         ),
                       ),
                       Align(
@@ -283,10 +292,10 @@ class _AppointmentScreenState extends ConsumerState<AppointmentScreen> {
                     ],
                   ),
                   const SizedBox(height: 12),
-                  const Text(
-                    "Fill out the form below to request an appointment. Provide accurate information so we can assist you efficiently.",
+                  Text(
+                    tr.appointmentBannerSubtitle,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white, fontSize: 14, height: 1.4),
+                    style: const TextStyle(color: Colors.white, fontSize: 14, height: 1.4),
                   ),
                   const SizedBox(height: 24),
                   // Visitor Stats
@@ -300,14 +309,14 @@ class _AppointmentScreenState extends ConsumerState<AppointmentScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _buildStatItem("Today Visitor", todayVisits),
+                        _buildStatItem(tr.todayVisitor, todayVisits),
                         Container(
                           width: 1,
                           height: 30,
                           color: Colors.white30,
                           margin: const EdgeInsets.symmetric(horizontal: 24),
                         ),
-                        _buildStatItem("Total Visitor", totalVisits),
+                        _buildStatItem(tr.totalVisitor, totalVisits),
                       ],
                     ),
                   ),
@@ -334,32 +343,36 @@ class _AppointmentScreenState extends ConsumerState<AppointmentScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Personal Information",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+                    Text(
+                      tr.personalInfoSection,
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
                     ),
                     const SizedBox(height: 16),
 
                     _buildTextFormField(
-                      label: "Full Name *",
-                      hint: "Enter your full name",
+                      label: tr.fullNameLabel,
+                      hint: tr.fullNameHint,
                       controller: _nameController,
-                      validator: (val) => val == null || val.trim().isEmpty ? "Name is required" : null,
+                      validator: (val) => val == null || val.trim().isEmpty
+                          ? tr.fullNameRequired
+                          : null,
                     ),
                     const SizedBox(height: 16),
 
                     _buildTextFormField(
-                      label: "Mobile Number *",
-                      hint: "e.g. 01700000000",
+                      label: tr.mobileLabel,
+                      hint: tr.mobileHint,
                       controller: _mobileController,
                       keyboardType: TextInputType.phone,
-                      validator: (val) => val == null || val.trim().isEmpty ? "Mobile number is required" : null,
+                      validator: (val) => val == null || val.trim().isEmpty
+                          ? tr.mobileRequired
+                          : null,
                     ),
                     const SizedBox(height: 16),
 
                     _buildTextFormField(
-                      label: "Email (Optional)",
-                      hint: "e.g. user@example.com",
+                      label: tr.emailOptionalLabel,
+                      hint: tr.emailHint,
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
                     ),
@@ -369,57 +382,55 @@ class _AppointmentScreenState extends ConsumerState<AppointmentScreen> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          "Citizen Type *",
-                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black87),
+                        Text(
+                          tr.citizenTypeLabel,
+                          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black87),
                         ),
                         const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: RadioListTile<String>(
-                                title: const Text("Local", style: TextStyle(fontSize: 14, color: Colors.black87)),
-                                value: 'local',
-                                groupValue: _selectedType,
-                                contentPadding: EdgeInsets.zero,
-                                activeColor: primaryGreen,
-                                onChanged: (val) {
-                                  if (val != null) setState(() => _selectedType = val);
-                                },
+                        RadioGroup<String>(
+                          groupValue: _selectedType,
+                          onChanged: (val) {
+                            if (val != null) setState(() => _selectedType = val);
+                          },
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: RadioListTile<String>(
+                                  title: Text(tr.citizenLocal, style: const TextStyle(fontSize: 14, color: Colors.black87)),
+                                  value: 'local',
+                                  contentPadding: EdgeInsets.zero,
+                                  activeColor: primaryGreen,
+                                ),
                               ),
-                            ),
-                            Expanded(
-                              child: RadioListTile<String>(
-                                title: const Text("Foreign / NRB", style: TextStyle(fontSize: 14, color: Colors.black87)),
-                                value: 'nrb',
-                                groupValue: _selectedType,
-                                contentPadding: EdgeInsets.zero,
-                                activeColor: primaryGreen,
-                                onChanged: (val) {
-                                  if (val != null) setState(() => _selectedType = val);
-                                },
+                              Expanded(
+                                child: RadioListTile<String>(
+                                  title: Text(tr.citizenForeignNrb, style: const TextStyle(fontSize: 14, color: Colors.black87)),
+                                  value: 'nrb',
+                                  contentPadding: EdgeInsets.zero,
+                                  activeColor: primaryGreen,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ],
                     ),
 
                     const SizedBox(height: 24),
-                    const Text(
-                      "Address Details",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+                    Text(
+                      tr.addressDetailsSection,
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
                     ),
                     const SizedBox(height: 16),
 
                     // Division
                     divisionsAsync.when(
                       data: (divisions) => _buildDropdown<DivisionModel>(
-                        label: "Division *",
-                        hint: "Select Division",
+                        label: tr.divisionLabel,
+                        hint: tr.divisionHint,
                         items: divisions,
                         value: _selectedDivision,
-                        itemLabel: (item) => item.localizedName(false),
+                        itemLabel: (item) => item.localizedName(isBangla),
                         onChanged: (division) {
                           setState(() {
                             _selectedDivision = division;
@@ -429,8 +440,8 @@ class _AppointmentScreenState extends ConsumerState<AppointmentScreen> {
                           });
                         },
                       ),
-                      loading: () => _buildDropdownLoading("Division *"),
-                      error: (err, stack) => _buildDropdownError("Division *", "Failed to load divisions"),
+                      loading: () => _buildDropdownLoading(tr.divisionLabel),
+                      error: (err, stack) => _buildDropdownError(tr.divisionLabel, tr.loadDivisionsError),
                     ),
                     const SizedBox(height: 16),
 
@@ -438,11 +449,11 @@ class _AppointmentScreenState extends ConsumerState<AppointmentScreen> {
                     if (districtsAsync != null)
                       districtsAsync.when(
                         data: (districts) => _buildDropdown<DistrictModel>(
-                          label: "District *",
-                          hint: "Select District",
+                          label: tr.districtLabel,
+                          hint: tr.districtHint,
                           items: districts,
                           value: _selectedDistrict,
-                          itemLabel: (item) => item.localizedName(false),
+                          itemLabel: (item) => item.localizedName(isBangla),
                           onChanged: (district) {
                             setState(() {
                               _selectedDistrict = district;
@@ -451,22 +462,22 @@ class _AppointmentScreenState extends ConsumerState<AppointmentScreen> {
                             });
                           },
                         ),
-                        loading: () => _buildDropdownLoading("District *"),
-                        error: (err, stack) => _buildDropdownError("District *", "Failed to load districts"),
+                        loading: () => _buildDropdownLoading(tr.districtLabel),
+                        error: (err, stack) => _buildDropdownError(tr.districtLabel, tr.loadDistrictsError),
                       )
                     else
-                      _buildDisabledDropdown("District *", "Select Division first"),
+                      _buildDisabledDropdown(tr.districtLabel, tr.selectDivisionFirst),
                     const SizedBox(height: 16),
 
                     // Upazila
                     if (upazilasAsync != null)
                       upazilasAsync.when(
                         data: (upazilas) => _buildDropdown<UpazilaModel>(
-                          label: "Upazila *",
-                          hint: "Select Upazila",
+                          label: tr.upazilaLabel,
+                          hint: tr.upazilaHint,
                           items: upazilas,
                           value: _selectedUpazila,
-                          itemLabel: (item) => item.localizedName(false),
+                          itemLabel: (item) => item.localizedName(isBangla),
                           onChanged: (upazila) {
                             setState(() {
                               _selectedUpazila = upazila;
@@ -474,115 +485,145 @@ class _AppointmentScreenState extends ConsumerState<AppointmentScreen> {
                             });
                           },
                         ),
-                        loading: () => _buildDropdownLoading("Upazila *"),
-                        error: (err, stack) => _buildDropdownError("Upazila *", "Failed to load upazilas"),
+                        loading: () => _buildDropdownLoading(tr.upazilaLabel),
+                        error: (err, stack) => _buildDropdownError(tr.upazilaLabel, tr.loadUpazilasError),
                       )
                     else
-                      _buildDisabledDropdown("Upazila *", "Select District first"),
+                      _buildDisabledDropdown(tr.upazilaLabel, tr.selectDistrictFirst),
                     const SizedBox(height: 16),
 
                     // Union
                     if (unionsAsync != null)
                       unionsAsync.when(
                         data: (unions) => _buildDropdown<UnionModel>(
-                          label: "Union / Pourashava *",
-                          hint: "Select Union",
+                          label: tr.unionLabel,
+                          hint: tr.unionHint,
                           items: unions,
                           value: _selectedUnion,
-                          itemLabel: (item) => item.localizedName(false),
+                          itemLabel: (item) => item.localizedName(isBangla),
                           onChanged: (union) {
                             setState(() => _selectedUnion = union);
                           },
                         ),
-                        loading: () => _buildDropdownLoading("Union / Pourashava *"),
-                        error: (err, stack) => _buildDropdownError("Union *", "Failed to load unions"),
+                        loading: () => _buildDropdownLoading(tr.unionLabel),
+                        error: (err, stack) => _buildDropdownError(tr.unionLabel, tr.loadUnionsError),
                       )
                     else
-                      _buildDisabledDropdown("Union / Pourashava *", "Select Upazila first"),
+                      _buildDisabledDropdown(tr.unionLabel, tr.selectUpazilaFirst),
                     const SizedBox(height: 16),
 
                     _buildTextFormField(
-                      label: "Ward Number (Optional)",
-                      hint: "e.g. 3",
+                      label: tr.wardLabel,
+                      hint: tr.wardHint,
                       controller: _wardController,
                     ),
                     const SizedBox(height: 16),
 
                     _buildTextFormField(
-                      label: "Village / Mohallah (Optional)",
-                      hint: "e.g. Nabinagar",
+                      label: tr.villageLabel,
+                      hint: tr.villageHint,
                       controller: _villageController,
                     ),
                     const SizedBox(height: 24),
 
-                    const Text(
-                      "Appointment Details",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+                    Text(
+                      tr.appointmentDetailsSection,
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
                     ),
                     const SizedBox(height: 16),
 
                     // Appointment Date
                     _buildTextFormField(
-                      label: "Preferred Appointment Date *",
-                      hint: "YYYY-MM-DD",
+                      label: tr.appointmentDateLabel,
+                      hint: tr.appointmentDateHint,
                       controller: _dateController,
                       readOnly: true,
                       onTap: _selectDate,
                       icon: Icons.calendar_today,
-                      validator: (val) => val == null || val.trim().isEmpty ? "Date is required" : null,
+                      validator: (val) => val == null || val.trim().isEmpty
+                          ? tr.appointmentDateRequired
+                          : null,
                     ),
                     const SizedBox(height: 16),
 
                     // Subject
                     _buildTextFormField(
-                      label: "Appointment Subject *",
-                      hint: "e.g. Constitutional advisory meeting",
+                      label: tr.appointmentSubjectLabel,
+                      hint: tr.appointmentSubjectHint,
                       controller: _subjectController,
-                      validator: (val) => val == null || val.trim().isEmpty ? "Subject is required" : null,
+                      validator: (val) => val == null || val.trim().isEmpty
+                          ? tr.appointmentSubjectRequired
+                          : null,
                     ),
                     const SizedBox(height: 16),
 
                     // Message
                     _buildTextFormField(
-                      label: "Meeting Purpose / Details *",
-                      hint: "Explain the reason and agenda for requesting the appointment...",
+                      label: tr.appointmentMessageLabel,
+                      hint: tr.appointmentMessageHint,
                       controller: _messageController,
                       maxLines: 5,
-                      validator: (val) => val == null || val.trim().isEmpty ? "Details are required" : null,
+                      validator: (val) => val == null || val.trim().isEmpty
+                          ? tr.appointmentMessageRequired
+                          : null,
                     ),
 
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 24),
 
                     // Actions
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ElevatedButton(
-                          onPressed: _isSubmitting ? null : _discard,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red[600],
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 12),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                        Expanded(
+                          flex: 2,
+                          child: SizedBox(
+                            height: 48,
+                            child: ElevatedButton.icon(
+                              onPressed: _isSubmitting ? null : _discard,
+                              icon: const Icon(Icons.close_rounded, size: 18),
+                              label: Text(
+                                tr.discardBtn,
+                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red[600],
+                                foregroundColor: Colors.white,
+                                elevation: 1,
+                                padding: EdgeInsets.zero,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                              ),
+                            ),
                           ),
-                          child: const Text("Discard", style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
-                        const SizedBox(width: 16),
-                        ElevatedButton(
-                          onPressed: _isSubmitting ? null : _submitAppointment,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF0C4B33),
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 12),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          flex: 3,
+                          child: SizedBox(
+                            height: 48,
+                            child: ElevatedButton.icon(
+                              onPressed: _isSubmitting ? null : _submitAppointment,
+                              icon: _isSubmitting ? null : const Icon(Icons.send_rounded, size: 18),
+                              label: _isSubmitting
+                                  ? const SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                                    )
+                                  : FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Text(
+                                        tr.bookAppointmentBtn,
+                                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                                      ),
+                                    ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF0C4B33),
+                                foregroundColor: Colors.white,
+                                elevation: 1.5,
+                                padding: const EdgeInsets.symmetric(horizontal: 12),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                              ),
+                            ),
                           ),
-                          child: _isSubmitting
-                              ? const SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
-                                )
-                              : const Text("Book Appointment", style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
                       ],
                     ),
@@ -630,11 +671,11 @@ class _AppointmentScreenState extends ConsumerState<AppointmentScreen> {
       children: [
         Text(
           label,
-          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black87),
+          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black),
         ),
         const SizedBox(height: 8),
         TextFormField(
-          style: const TextStyle(color: Colors.black87, fontSize: 14),
+          style: const TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500),
           controller: controller,
           maxLines: maxLines,
           readOnly: readOnly,

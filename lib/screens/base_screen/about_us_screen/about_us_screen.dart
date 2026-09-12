@@ -5,6 +5,7 @@ import 'package:flutter_riverpod_template/constant/app_colors.dart';
 import 'package:flutter_riverpod_template/screens/home_screen/widgets/custom_footer.dart';
 import 'package:flutter_riverpod_template/services/providers/api_providers.dart';
 import 'package:flutter_riverpod_template/services/repository/home_repository.dart';
+import 'package:flutter_riverpod_template/utils/languages/language_provider.dart';
 
 class AboutUsScreen extends ConsumerStatefulWidget {
   const AboutUsScreen({super.key});
@@ -33,9 +34,11 @@ class _AboutUsScreenState extends ConsumerState<AboutUsScreen> {
   Widget build(BuildContext context) {
     final primaryGreen = AppColors.instance.primaryGreen;
     final aboutMeAsync = ref.watch(aboutMeProvider);
+    final isBangla = ref.watch(isBanglaProvider);
+    final tr = AppTranslations.of(isBangla);
 
-    final todayVisits = _visitStats?['today_visits']?.toString() ?? '7';
-    final totalVisits = _visitStats?['total_visits']?.toString() ?? '221';
+    final todayVisits = (_visitStats?['today_visits']?.toString() ?? '7').toBanglaDigits(isBangla);
+    final totalVisits = (_visitStats?['total_visits']?.toString() ?? '221').toBanglaDigits(isBangla);
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -49,24 +52,24 @@ class _AboutUsScreenState extends ConsumerState<AboutUsScreen> {
               padding: const EdgeInsets.only(top: 36.0, bottom: 20.0, left: 16.0, right: 16.0),
               child: Column(
                 children: [
-                  const Text(
-                    "About Me",
-                    style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                  Text(
+                    tr.aboutMeTitle,
+                    style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 6),
-                  const Text(
-                    "Personal profile, experience, and important information are presented here.",
+                  Text(
+                    tr.aboutMeSubtitle,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white70, fontSize: 13),
+                    style: const TextStyle(color: Colors.white70, fontSize: 13),
                   ),
                   const SizedBox(height: 16),
                   // Stats Row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _buildStatBox("Today Visitor", todayVisits),
+                      _buildStatBox(tr.todayVisitor, todayVisits),
                       const SizedBox(width: 16),
-                      _buildStatBox("Total Visitor", totalVisits),
+                      _buildStatBox(tr.totalVisitor, totalVisits),
                     ],
                   ),
                 ],
@@ -76,7 +79,7 @@ class _AboutUsScreenState extends ConsumerState<AboutUsScreen> {
             // 2. Main Content Card
             aboutMeAsync.when(
               data: (aboutMe) {
-                final content = aboutMe?.localizedContent(false) ?? '';
+                final content = aboutMe?.localizedContent(isBangla) ?? '';
                 final cleanText = content.replaceAll(RegExp(r'<[^>]*>'), '').trim();
                 final imgUrl = aboutMe?.fullImageUrl ?? '';
 
@@ -96,7 +99,7 @@ class _AboutUsScreenState extends ConsumerState<AboutUsScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Barrister Kayser Kamal",
+                          isBangla ? "ব্যারিস্টার কায়সার কামাল" : "Barrister Kayser Kamal",
                           style: TextStyle(color: primaryGreen, fontSize: 22, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 20),

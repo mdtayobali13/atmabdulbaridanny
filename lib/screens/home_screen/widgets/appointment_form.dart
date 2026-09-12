@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_template/constant/app_colors.dart';
 import 'package:flutter_riverpod_template/screens/appointment_screen/appointment_screen.dart';
+import 'package:flutter_riverpod_template/utils/languages/language_provider.dart';
 
-class AppointmentForm extends StatelessWidget {
+class AppointmentForm extends ConsumerWidget {
   const AppointmentForm({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final lightGreen = AppColors.instance.lightGreen;
+    final isBangla = ref.watch(isBanglaProvider);
+    final tr = AppTranslations.of(isBangla);
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -27,15 +31,15 @@ class AppointmentForm extends StatelessWidget {
         children: [
           const Icon(Icons.calendar_month_outlined, color: Colors.white, size: 36),
           const SizedBox(height: 8),
-          const Text(
-            "Request An Appointment",
-            style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+          Text(
+            tr.appointmentCardTitle,
+            style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 6),
-          const Text(
-            "Schedule a formal appointment or meeting with Barrister Kayser Kamal by filling out your details.",
+          Text(
+            tr.appointmentCardSubtitle,
             textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.white70, fontSize: 13, height: 1.4),
+            style: const TextStyle(color: Colors.white70, fontSize: 13, height: 1.4),
           ),
           const SizedBox(height: 18),
           ElevatedButton.icon(
@@ -45,9 +49,9 @@ class AppointmentForm extends StatelessWidget {
               );
             },
             icon: const Icon(Icons.send_rounded, color: Color(0xFF0C4B33)),
-            label: const Text(
-              "Book Appointment Now",
-              style: TextStyle(color: Color(0xFF0C4B33), fontWeight: FontWeight.bold, fontSize: 15),
+            label: Text(
+              tr.bookAppointmentBtn,
+              style: const TextStyle(color: Color(0xFF0C4B33), fontWeight: FontWeight.bold, fontSize: 15),
             ),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,

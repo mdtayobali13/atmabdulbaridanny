@@ -5,6 +5,7 @@ import 'package:flutter_riverpod_template/constant/app_colors.dart';
 import 'package:flutter_riverpod_template/screens/home_screen/widgets/custom_footer.dart';
 import 'package:flutter_riverpod_template/services/providers/api_providers.dart';
 import 'package:flutter_riverpod_template/services/repository/home_repository.dart';
+import 'package:flutter_riverpod_template/utils/languages/language_provider.dart';
 
 class OthersScreen extends ConsumerStatefulWidget {
   const OthersScreen({super.key});
@@ -33,9 +34,11 @@ class _OthersScreenState extends ConsumerState<OthersScreen> {
   Widget build(BuildContext context) {
     final primaryGreen = AppColors.instance.primaryGreen;
     final devWorkAsync = ref.watch(developmentWorkContentProvider);
+    final isBangla = ref.watch(isBanglaProvider);
+    final tr = AppTranslations.of(isBangla);
 
-    final todayVisits = _visitStats?['today_visits']?.toString() ?? '1';
-    final totalVisits = _visitStats?['total_visits']?.toString() ?? '16';
+    final todayVisits = (_visitStats?['today_visits']?.toString() ?? '1').toBanglaDigits(isBangla);
+    final totalVisits = (_visitStats?['total_visits']?.toString() ?? '16').toBanglaDigits(isBangla);
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -49,24 +52,24 @@ class _OthersScreenState extends ConsumerState<OthersScreen> {
               padding: const EdgeInsets.only(top: 36.0, bottom: 20.0, left: 16.0, right: 16.0),
               child: Column(
                 children: [
-                  const Text(
-                    "Other Initiatives",
-                    style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                  Text(
+                    tr.othersDevTitle,
+                    style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 6),
-                  const Text(
-                    "Detailed information and activities of development work and public welfare initiatives.",
+                  Text(
+                    tr.othersDevSubtitle,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white70, fontSize: 13),
+                    style: const TextStyle(color: Colors.white70, fontSize: 13),
                   ),
                   const SizedBox(height: 16),
                   // Stats Row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _buildStatBox("Today Visitor", todayVisits),
+                      _buildStatBox(tr.todayVisitor, todayVisits),
                       const SizedBox(width: 16),
-                      _buildStatBox("Total Visitor", totalVisits),
+                      _buildStatBox(tr.totalVisitor, totalVisits),
                     ],
                   ),
                 ],
@@ -80,16 +83,22 @@ class _OthersScreenState extends ConsumerState<OthersScreen> {
                 final list = items.where((e) {
                   final t = e.localizedTitle(false).toLowerCase();
                   final c = e.localizedContent(false).toLowerCase();
+                  final tb = e.localizedTitle(true);
+                  final cb = e.localizedContent(true);
                   return !t.contains('durgapur') && !t.contains('kalmakanda') &&
-                         !c.contains('durgapur') && !c.contains('kalmakanda');
+                         !c.contains('durgapur') && !c.contains('kalmakanda') &&
+                         !tb.contains('দুর্গাপুর') && !tb.contains('কলমাকান্দা') &&
+                         !cb.contains('দুর্গাপুর') && !cb.contains('কলমাকান্দা');
                 }).toList();
 
                 final displayList = list.isNotEmpty ? list : items;
 
                 if (displayList.isEmpty) {
-                  return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 48),
-                    child: Center(child: Text("No other development works listed yet")),
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 48),
+                    child: Center(
+                      child: Text(tr.othersDevEmpty),
+                    ),
                   );
                 }
 
@@ -98,8 +107,8 @@ class _OthersScreenState extends ConsumerState<OthersScreen> {
                   child: Column(
                     children: displayList.map((item) {
                       return _buildContentCard(
-                        title: item.localizedTitle(false),
-                        text: item.localizedContent(false).replaceAll(RegExp(r'<[^>]*>'), '').trim(),
+                        title: item.localizedTitle(isBangla),
+                        text: item.localizedContent(isBangla).replaceAll(RegExp(r'<[^>]*>'), '').trim(),
                         imageUrl: item.fullImageUrl,
                       );
                     }).toList(),
@@ -112,7 +121,7 @@ class _OthersScreenState extends ConsumerState<OthersScreen> {
               ),
               error: (err, stack) => Padding(
                 padding: const EdgeInsets.symmetric(vertical: 40),
-                child: Center(child: Text("Failed to load: $err")),
+                child: Center(child: Text(isBangla ? "লোড করতে ব্যর্থ হয়েছে: $err" : "Failed to load: $err")),
               ),
             ),
 

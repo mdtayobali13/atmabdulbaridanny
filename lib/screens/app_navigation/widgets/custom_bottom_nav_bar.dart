@@ -1,24 +1,28 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod_template/constant/app_colors.dart';
 import 'package:flutter_riverpod_template/screens/app_navigation/widgets/nav_bar_item.dart';
+import 'package:flutter_riverpod_template/utils/languages/language_provider.dart';
 
-class CustomBottomNavBar extends StatefulWidget {
+class CustomBottomNavBar extends ConsumerStatefulWidget {
   final int currentIndex;
   final Function(int) onTap;
 
   const CustomBottomNavBar({super.key, required this.currentIndex, required this.onTap});
 
   @override
-  State<CustomBottomNavBar> createState() => _CustomBottomNavBarState();
+  ConsumerState<CustomBottomNavBar> createState() => _CustomBottomNavBarState();
 }
 
-class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
+class _CustomBottomNavBarState extends ConsumerState<CustomBottomNavBar> {
   int? _openedMenuIndex;
 
   @override
   Widget build(BuildContext context) {
+    final isBangla = ref.watch(isBanglaProvider);
+    final tr = AppTranslations.of(isBangla);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
@@ -43,16 +47,17 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
             ),
             NavBarItem(
               isSelected: widget.currentIndex == 2,
-              icon: CupertinoIcons.doc_text,
-              filledIcon: CupertinoIcons.doc_text_fill,
+              icon: CupertinoIcons.book,
+              filledIcon: CupertinoIcons.book_fill,
               onTap: () => widget.onTap(2),
             ),
             Builder(
               builder: (context) {
+                final isSelected = widget.currentIndex == 3 || widget.currentIndex == 4 || _openedMenuIndex == 3;
                 return NavBarItem(
-                  isSelected: widget.currentIndex == 3 || widget.currentIndex == 4 || _openedMenuIndex == 3,
-                  icon: CupertinoIcons.photo_on_rectangle,
-                  filledIcon: CupertinoIcons.photo_on_rectangle,
+                  isSelected: isSelected,
+                  icon: CupertinoIcons.photo,
+                  filledIcon: CupertinoIcons.photo_fill,
                   onTap: () {
                     setState(() {
                       _openedMenuIndex = 3;
@@ -72,13 +77,13 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
                       color: AppColors.instance.primaryGreen,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       items: [
-                        const PopupMenuItem(
+                        PopupMenuItem(
                           value: 3,
-                          child: Text("Photo Gallery", style: TextStyle(color: Colors.white)),
+                          child: Text(tr.menuPhotoGallery, style: const TextStyle(color: Colors.white)),
                         ),
-                        const PopupMenuItem(
+                        PopupMenuItem(
                           value: 4,
-                          child: Text("Video Gallery", style: TextStyle(color: Colors.white)),
+                          child: Text(tr.menuVideoGallery, style: const TextStyle(color: Colors.white)),
                         ),
                       ],
                     ).then((value) {
@@ -130,11 +135,11 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
                       color: AppColors.instance.primaryGreen,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       items: <PopupMenuEntry<String>>[
-                        _buildPopupMenuItem("About Me", "About Me"),
-                        _buildPopupMenuItem("Biography", "Biography"),
-                        _buildPopupMenuItem("History", "History of Life and Struggle"),
-                        _buildPopupMenuItem("Achievement", "Achievment"),
-                        _buildPopupMenuItem("Journey", "Journey"),
+                        _buildPopupMenuItem("About Me", tr.menuAboutMe),
+                        _buildPopupMenuItem("Biography", tr.menuBiography),
+                        _buildPopupMenuItem("History", tr.menuHistory),
+                        _buildPopupMenuItem("Achievement", tr.menuAchievement),
+                        _buildPopupMenuItem("Journey", tr.menuJourney),
                       ],
                     ).then((value) {
                       if (!mounted) return;

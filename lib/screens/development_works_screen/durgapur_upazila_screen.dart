@@ -5,6 +5,7 @@ import 'package:flutter_riverpod_template/constant/app_colors.dart';
 import 'package:flutter_riverpod_template/screens/home_screen/widgets/custom_footer.dart';
 import 'package:flutter_riverpod_template/services/providers/api_providers.dart';
 import 'package:flutter_riverpod_template/services/repository/home_repository.dart';
+import 'package:flutter_riverpod_template/utils/languages/language_provider.dart';
 
 class DurgapurUpazilaScreen extends ConsumerStatefulWidget {
   const DurgapurUpazilaScreen({super.key});
@@ -33,9 +34,11 @@ class _DurgapurUpazilaScreenState extends ConsumerState<DurgapurUpazilaScreen> {
   Widget build(BuildContext context) {
     final primaryGreen = AppColors.instance.primaryGreen;
     final devWorkAsync = ref.watch(developmentWorkContentProvider);
+    final isBangla = ref.watch(isBanglaProvider);
+    final tr = AppTranslations.of(isBangla);
 
-    final todayVisits = _visitStats?['today_visits']?.toString() ?? '1';
-    final totalVisits = _visitStats?['total_visits']?.toString() ?? '26';
+    final todayVisits = (_visitStats?['today_visits']?.toString() ?? '1').toBanglaDigits(isBangla);
+    final totalVisits = (_visitStats?['total_visits']?.toString() ?? '26').toBanglaDigits(isBangla);
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -49,23 +52,23 @@ class _DurgapurUpazilaScreenState extends ConsumerState<DurgapurUpazilaScreen> {
               padding: const EdgeInsets.only(top: 36.0, bottom: 20.0, left: 16.0, right: 16.0),
               child: Column(
                 children: [
-                  const Text(
-                    "Durgapur Upazila",
-                    style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                  Text(
+                    tr.durgapurTitle,
+                    style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 6),
-                  const Text(
-                    "Development works, infrastructure projects, and public welfare initiatives in Durgapur.",
+                  Text(
+                    tr.durgapurSubtitle,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white70, fontSize: 13),
+                    style: const TextStyle(color: Colors.white70, fontSize: 13),
                   ),
                   const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _buildStatBox("Today Visitor", todayVisits),
+                      _buildStatBox(tr.todayVisitor, todayVisits),
                       const SizedBox(width: 16),
-                      _buildStatBox("Total Visitor", totalVisits),
+                      _buildStatBox(tr.totalVisitor, totalVisits),
                     ],
                   ),
                 ],
@@ -78,14 +81,18 @@ class _DurgapurUpazilaScreenState extends ConsumerState<DurgapurUpazilaScreen> {
                 // Filter items related to Durgapur if title mentions it, otherwise show all development works
                 final list = items.where((e) =>
                     e.localizedTitle(false).toLowerCase().contains('durgapur') ||
-                    e.localizedContent(false).toLowerCase().contains('durgapur')).toList();
+                    e.localizedContent(false).toLowerCase().contains('durgapur') ||
+                    e.localizedTitle(true).contains('দুর্গাপুর') ||
+                    e.localizedContent(true).contains('দুর্গাপুর')).toList();
 
                 final displayList = list.isNotEmpty ? list : items;
 
                 if (displayList.isEmpty) {
-                  return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 48),
-                    child: Center(child: Text("No development works listed yet")),
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 48),
+                    child: Center(
+                      child: Text(tr.durgapurEmpty),
+                    ),
                   );
                 }
 
@@ -94,8 +101,8 @@ class _DurgapurUpazilaScreenState extends ConsumerState<DurgapurUpazilaScreen> {
                   child: Column(
                     children: displayList.map((item) {
                       return _buildContentCard(
-                        title: item.localizedTitle(false),
-                        text: item.localizedContent(false).replaceAll(RegExp(r'<[^>]*>'), '').trim(),
+                        title: item.localizedTitle(isBangla),
+                        text: item.localizedContent(isBangla).replaceAll(RegExp(r'<[^>]*>'), '').trim(),
                         imageUrl: item.fullImageUrl,
                       );
                     }).toList(),
@@ -108,7 +115,7 @@ class _DurgapurUpazilaScreenState extends ConsumerState<DurgapurUpazilaScreen> {
               ),
               error: (err, stack) => Padding(
                 padding: const EdgeInsets.symmetric(vertical: 40),
-                child: Center(child: Text("Failed to load: $err")),
+                child: Center(child: Text(isBangla ? "লোড করতে ব্যর্থ হয়েছে: $err" : "Failed to load: $err")),
               ),
             ),
 

@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_riverpod_template/models/gallery_and_media_models.dart';
 import 'package:flutter_riverpod_template/screens/video_gallery_screen/video_detail_screen.dart';
 import 'package:flutter_riverpod_template/services/providers/api_providers.dart';
+import 'package:flutter_riverpod_template/utils/languages/language_provider.dart';
 
 class VideoGallery extends ConsumerWidget {
   final List<VideoGalleryModel>? items;
@@ -12,8 +13,10 @@ class VideoGallery extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isBangla = ref.watch(isBanglaProvider);
+
     if (items != null && items!.isNotEmpty) {
-      return _buildGrid(context, items!);
+      return _buildGrid(context, items!, isBangla);
     }
 
     final videosAsync = ref.watch(videoGalleryProvider);
@@ -21,12 +24,12 @@ class VideoGallery extends ConsumerWidget {
     return videosAsync.when(
       data: (list) {
         if (list.isEmpty) {
-          return const Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Center(child: Text("No videos available")),
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Center(child: Text(isBangla ? "কোন ভিডিও পাওয়া যায়নি" : "No videos available")),
           );
         }
-        return _buildGrid(context, list.take(4).toList());
+        return _buildGrid(context, list.take(4).toList(), isBangla);
       },
       loading: () => const Padding(
         padding: EdgeInsets.all(24.0),
@@ -36,7 +39,7 @@ class VideoGallery extends ConsumerWidget {
     );
   }
 
-  Widget _buildGrid(BuildContext context, List<VideoGalleryModel> videos) {
+  Widget _buildGrid(BuildContext context, List<VideoGalleryModel> videos, bool isBangla) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: GridView.builder(
@@ -59,7 +62,7 @@ class VideoGallery extends ConsumerWidget {
               Navigator.of(context, rootNavigator: true).push(
                 MaterialPageRoute(
                   builder: (context) => VideoDetailScreen(
-                    title: video.localizedTitle(false),
+                    title: video.localizedTitle(isBangla),
                     date: video.createdAt ?? '',
                     videoId: videoId.isNotEmpty ? videoId : 'dQw4w9WgXcQ',
                   ),
@@ -98,7 +101,7 @@ class VideoGallery extends ConsumerWidget {
                         padding: const EdgeInsets.all(6),
                         color: Colors.black54,
                         child: Text(
-                          video.localizedTitle(false),
+                          video.localizedTitle(isBangla),
                           style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,

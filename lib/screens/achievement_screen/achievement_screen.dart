@@ -1,72 +1,90 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_template/constant/app_colors.dart';
 import 'package:flutter_riverpod_template/screens/home_screen/widgets/custom_footer.dart';
+import 'package:flutter_riverpod_template/utils/languages/language_provider.dart';
 
-class AchievementScreen extends StatelessWidget {
+class AchievementScreen extends ConsumerWidget {
   const AchievementScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final primaryGreen = AppColors.instance.primaryGreen;
+    final isBangla = ref.watch(isBanglaProvider);
+    final tr = AppTranslations.of(isBangla);
 
     final achievements = [
       {
-        "title": "Deputy Speaker",
-        "year": "2026",
-        "desc":
-            "Barrister Kayser Kamal has been elected as the Deputy Speaker of the 13th National Parliament. Natore MP Ruhul Quddus Talukder Dulu proposed Kayser Kamal's name in the parliament session.",
+        "title": isBangla ? "ডেপুটি স্পিকার" : "Deputy Speaker",
+        "year": "2026".toBanglaDigits(isBangla),
+        "desc": isBangla
+            ? "ব্যারিস্টার কায়সার কামাল ত্রয়োদশ জাতীয় সংসদের ডেপুটি স্পিকার নির্বাচিত হয়েছেন। সংসদ অধিবেশনে নাটোরের সংসদ সদস্য রুহুল কুদ্দুস তালুকদার দুলু কায়সার কামালের নাম প্রস্তাব করেন।"
+            : "Barrister Kayser Kamal has been elected as the Deputy Speaker of the 13th National Parliament. Natore MP Ruhul Quddus Talukder Dulu proposed Kayser Kamal's name in the parliament session.",
         "color": Colors.blueAccent,
       },
       {
-        "title": "State Minister For Land",
-        "year": "2026",
-        "desc":
-            "Barrister Kayser Kamal, Member of Parliament for Netrokona-1 (Kalmakanda-Durgapur) constituency, has been inducted into the cabinet as State Minister for Land.",
+        "title": isBangla ? "ভূমি প্রতিমন্ত্রী" : "State Minister For Land",
+        "year": "2026".toBanglaDigits(isBangla),
+        "desc": isBangla
+            ? "নেত্রকোনা-১ (কলমাকান্দা-দুর্গাপুর) আসনের সংসদ সদস্য ব্যারিস্টার কায়সার কামাল ভূমি প্রতিমন্ত্রী হিসেবে মন্ত্রিসভায় অন্তর্ভুক্ত হয়েছেন।"
+            : "Barrister Kayser Kamal, Member of Parliament for Netrokona-1 (Kalmakanda-Durgapur) constituency, has been inducted into the cabinet as State Minister for Land.",
         "color": Colors.teal,
       },
       {
-        "title": "13th Parliament",
-        "year": "2026",
-        "desc":
-            "In the 13th National Parliament election, he received 100,000 votes, while his nearest rival received 81,000 votes. As a result, he won the 13th National Parliament election.",
+        "title": isBangla ? "ত্রয়োদশ জাতীয় সংসদ" : "13th Parliament",
+        "year": "2026".toBanglaDigits(isBangla),
+        "desc": isBangla
+            ? "ত্রয়োদশ জাতীয় সংসদ নির্বাচনে তিনি ১,০০,০০০ ভোট পেয়ে নির্বাচিত হন, যেখানে তাঁর নিকটতম প্রতিদ্বন্দ্বী পান ৮১,০০০ ভোট।"
+            : "In the 13th National Parliament election, he received 100,000 votes, while his nearest rival received 81,000 votes. As a result, he won the 13th National Parliament election.",
         "color": Colors.purpleAccent,
       },
       {
-        "title": "Elected Secretary General of Nationalist Lawyers Forum",
-        "year": "2019",
-        "desc":
-            "In 2019 and the subsequent reconstituted committee, he was elected Secretary General of the Bangladesh Nationalist Lawyers Forum. He played a central role in uniting thousands of nationalist lawyers.",
+        "title": isBangla ? "জাতীয়তাবাদী আইনজীবী ফোরামের মহাসচিব নির্বাচিত" : "Elected Secretary General of Nationalist Lawyers Forum",
+        "year": "2019".toBanglaDigits(isBangla),
+        "desc": isBangla
+            ? "২০১৯ সালে এবং পরবর্তী পুনর্গঠিত কমিটিতে তিনি বাংলাদেশ জাতীয়তাবাদী আইনজীবী ফোরামের মহাসচিব নির্বাচিত হন। তিনি হাজার হাজার আইনজীবীকে ঐক্যবদ্ধ করতে কেন্দ্রীয় ভূমিকা পালন করেন।"
+            : "In 2019 and the subsequent reconstituted committee, he was elected Secretary General of the Bangladesh Nationalist Lawyers Forum. He played a central role in uniting thousands of nationalist lawyers.",
         "color": Colors.deepPurpleAccent,
       },
       {
-        "title": "BNP",
-        "year": "2016",
-        "desc": "He has been serving as the Central Legal Affairs Secretary of the Central BNP since 2016.",
+        "title": isBangla ? "বিএনপি কেন্দ্রীয় আইন বিষয়ক সম্পাদক" : "BNP Legal Affairs Secretary",
+        "year": "2016".toBanglaDigits(isBangla),
+        "desc": isBangla
+            ? "তিনি ২০১৬ সাল থেকে কেন্দ্রীয় বিএনপির আইন বিষয়ক সম্পাদক হিসেবে দায়িত্ব পালন করছেন।"
+            : "He has been serving as the Central Legal Affairs Secretary of the Central BNP since 2016.",
         "color": Colors.lightBlue,
       },
       {
-        "title": "BNP Central Committee",
-        "year": "2009",
-        "desc": "In 2009, he became an executive member of the BNP Central Committee.",
-        "color": Colors.blue[700],
+        "title": isBangla ? "বিএনপি জাতীয় নির্বাহী কমিটি" : "BNP Central Committee",
+        "year": "2009".toBanglaDigits(isBangla),
+        "desc": isBangla
+            ? "২০০৯ সালে তিনি বিএনপির জাতীয় নির্বাহী কমিটির সদস্য হন।"
+            : "In 2009, he became an executive member of the BNP Central Committee.",
+        "color": Colors.blue[700]!,
       },
       {
-        "title": "Senate Member of Dhaka University",
-        "year": "1996",
-        "desc": "He was elected as a member of the Senate of Dhaka University in 1996.",
-        "color": Colors.green[600],
+        "title": isBangla ? "ঢাকা বিশ্ববিদ্যালয়ের সিনেট সদস্য" : "Senate Member of Dhaka University",
+        "year": "1996".toBanglaDigits(isBangla),
+        "desc": isBangla
+            ? "১৯৯৬ সালে তিনি ঢাকা বিশ্ববিদ্যালয়ের সিনেট সদস্য নির্বাচিত হন।"
+            : "He was elected as a member of the Senate of Dhaka University in 1996.",
+        "color": Colors.green[600]!,
       },
       {
-        "title": "Central Chhatra Dal",
-        "year": "1996",
-        "desc": "In 1996, he became an executive member of the Central Chhatra Dal.",
-        "color": Colors.grey[400],
+        "title": isBangla ? "কেন্দ্রীয় ছাত্রদল" : "Central Chhatra Dal",
+        "year": "1996".toBanglaDigits(isBangla),
+        "desc": isBangla
+            ? "১৯৯৬ সালে তিনি কেন্দ্রীয় ছাত্রদলের নির্বাহী সদস্য হন।"
+            : "In 1996, he became an executive member of the Central Chhatra Dal.",
+        "color": Colors.grey[400]!,
       },
       {
-        "title": "Student Politics",
-        "year": "1988",
-        "desc": "He entered student politics in 1988.",
-        "color": Colors.grey[600],
+        "title": isBangla ? "ছাত্র রাজনীতি" : "Student Politics",
+        "year": "1988".toBanglaDigits(isBangla),
+        "desc": isBangla
+            ? "১৯৮৮ সালে তিনি ছাত্র রাজনীতিতে প্রবেশ করেন।"
+            : "He entered student politics in 1988.",
+        "color": Colors.grey[600]!,
       },
     ];
 
@@ -82,23 +100,23 @@ class AchievementScreen extends StatelessWidget {
               padding: const EdgeInsets.only(top: 16.0, bottom: 16.0, left: 16.0, right: 16.0),
               child: Column(
                 children: [
-                  const Text(
-                    "Achievement",
-                    style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                  Text(
+                    tr.achievementTitle,
+                    style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 4),
-                  const Text(
-                    "Important achievements, timeline highlights, and notable milestones are presented here.",
+                  Text(
+                    tr.achievementSubtitle,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white70, fontSize: 13),
+                    style: const TextStyle(color: Colors.white70, fontSize: 13),
                   ),
                   const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _buildStatBox("Today Visitor", "2"),
+                      _buildStatBox(tr.todayVisitor, "2".toBanglaDigits(isBangla)),
                       const SizedBox(width: 16),
-                      _buildStatBox("Total Visitor", "103"),
+                      _buildStatBox(tr.totalVisitor, "103".toBanglaDigits(isBangla)),
                     ],
                   ),
                 ],

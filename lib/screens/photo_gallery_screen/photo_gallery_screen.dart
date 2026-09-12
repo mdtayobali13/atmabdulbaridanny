@@ -5,6 +5,7 @@ import 'package:flutter_riverpod_template/constant/app_colors.dart';
 import 'package:flutter_riverpod_template/screens/home_screen/widgets/custom_footer.dart';
 import 'package:flutter_riverpod_template/screens/photo_gallery_screen/photo_album_screen.dart';
 import 'package:flutter_riverpod_template/services/providers/api_providers.dart';
+import 'package:flutter_riverpod_template/utils/languages/language_provider.dart';
 
 class PhotoGalleryScreen extends ConsumerWidget {
   const PhotoGalleryScreen({super.key});
@@ -13,6 +14,8 @@ class PhotoGalleryScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final primaryGreen = AppColors.instance.primaryGreen;
     final photoAsync = ref.watch(photoGalleryProvider);
+    final isBangla = ref.watch(isBanglaProvider);
+    final tr = AppTranslations.of(isBangla);
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -24,17 +27,17 @@ class PhotoGalleryScreen extends ConsumerWidget {
               width: double.infinity,
               color: primaryGreen,
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 28.0),
-              child: const Column(
+              child: Column(
                 children: [
                   Text(
-                    "Photo Gallery",
-                    style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+                    tr.photoGalleryTitle,
+                    style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 6),
+                  const SizedBox(height: 6),
                   Text(
-                    "Various events, activities, and memorable public moments captured in photos.",
+                    tr.photoGallerySubtitle,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white70, fontSize: 13),
+                    style: const TextStyle(color: Colors.white70, fontSize: 13),
                   ),
                 ],
               ),
@@ -44,9 +47,9 @@ class PhotoGalleryScreen extends ConsumerWidget {
             photoAsync.when(
               data: (photos) {
                 if (photos.isEmpty) {
-                  return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 48),
-                    child: Center(child: Text("No photos available at this moment")),
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 48),
+                    child: Center(child: Text(tr.photoEmpty)),
                   );
                 }
 
@@ -64,7 +67,7 @@ class PhotoGalleryScreen extends ConsumerWidget {
                     itemCount: photos.length,
                     itemBuilder: (context, index) {
                       final photo = photos[index];
-                      final title = photo.localizedTitle(false);
+                      final title = photo.localizedTitle(isBangla);
                       final imgUrl = photo.fullCoverUrl;
 
                       return GestureDetector(

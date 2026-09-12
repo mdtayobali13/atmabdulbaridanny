@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_template/constant/app_colors.dart';
 import 'package:flutter_riverpod_template/screens/app_navigation/widgets/custom_bottom_nav_bar.dart';
 import 'package:flutter_riverpod_template/screens/app_navigation/widgets/app_drawer.dart';
+import 'package:flutter_riverpod_template/utils/languages/language_provider.dart';
 import 'package:go_router/go_router.dart';
 
-class AppNavigationScreen extends StatelessWidget {
+class AppNavigationScreen extends ConsumerWidget {
   final StatefulNavigationShell navigationShell;
 
   const AppNavigationScreen({super.key, required this.navigationShell});
@@ -14,7 +16,9 @@ class AppNavigationScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isBangla = ref.watch(isBanglaProvider);
+    final tr = AppTranslations.of(isBangla);
     final currentRoute = GoRouterState.of(context).uri.toString();
     final hideGlobalAppBar = currentRoute.contains('news_detail_screen') || 
                              currentRoute.contains('contact_screen') || 
@@ -35,9 +39,9 @@ class AppNavigationScreen extends StatelessWidget {
               child: Icon(Icons.gavel, color: AppColors.instance.primaryGreen, size: 20),
             ),
             const SizedBox(width: 10),
-            const Text(
-              "Barrister Kayser Kamal",
-              style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+            Text(
+              tr.appTitle,
+              style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ],
         ),
