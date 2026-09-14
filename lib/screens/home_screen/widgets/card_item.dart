@@ -38,6 +38,7 @@ class CardItem extends StatelessWidget {
       },
       child: Container(
         width: 160,
+        height: 215,
         margin: const EdgeInsets.symmetric(horizontal: 4),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -45,7 +46,6 @@ class CardItem extends StatelessWidget {
           boxShadow: [BoxShadow(color: Colors.grey.withValues(alpha: 0.2), blurRadius: 4, spreadRadius: 1)],
         ),
         child: Column(
-          mainAxisSize: MainAxisSize.min, // Ensures it only takes required height
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
@@ -71,7 +71,7 @@ class CardItem extends StatelessWidget {
                 child: Text(
                   title,
                   style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black87),
-                  maxLines: 4,
+                  maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),

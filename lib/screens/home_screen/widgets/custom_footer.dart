@@ -12,10 +12,15 @@ class CustomFooter extends ConsumerWidget {
 
   Future<void> _launch(String? url) async {
     if (url == null || url.trim().isEmpty) return;
+    String target = url.trim();
+    if (!target.startsWith('http://') && !target.startsWith('https://')) {
+      target = 'https://$target';
+    }
     try {
-      final uri = Uri.parse(url.trim());
-      if (await canLaunchUrl(uri)) {
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      final uri = Uri.parse(target);
+      final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+      if (!launched) {
+        await launchUrl(uri, mode: LaunchMode.platformDefault);
       }
     } catch (_) {}
   }
@@ -218,6 +223,12 @@ class CustomFooter extends ConsumerWidget {
 
   Widget _buildFacebookCard(WebsiteSettingModel? setting, bool isBangla, AppTranslations tr) {
     final fbPage = setting?.fbPage ?? setting?.fb ?? "https://facebook.com";
+    final avatarUrl = setting?.fullAdminLogoUrl.isNotEmpty == true
+        ? setting!.fullAdminLogoUrl
+        : setting?.fullFileUrl.isNotEmpty == true
+            ? setting!.fullFileUrl
+            : '';
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -244,14 +255,36 @@ class CustomFooter extends ConsumerWidget {
                   child: Row(
                     children: [
                       Container(
+                        width: 44,
+                        height: 44,
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey[300]!, width: 1),
-                          borderRadius: BorderRadius.circular(20),
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.grey[300]!, width: 1.5),
                         ),
-                        child: const CircleAvatar(
-                          radius: 20,
-                          backgroundColor: Color(0xFF0C4B33),
-                          child: Icon(Icons.person, color: Colors.white),
+                        child: ClipOval(
+                          child: avatarUrl.isNotEmpty
+                              ? CachedNetworkImage(
+                                  imageUrl: avatarUrl,
+                                  fit: BoxFit.cover,
+                                  placeholder: (context, url) => Container(
+                                    color: const Color(0xFF0C4B33),
+                                    child: const Center(
+                                      child: SizedBox(
+                                        width: 16,
+                                        height: 16,
+                                        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) => Container(
+                                    color: const Color(0xFF0C4B33),
+                                    child: const Icon(Icons.person, color: Colors.white, size: 22),
+                                  ),
+                                )
+                              : Container(
+                                  color: const Color(0xFF0C4B33),
+                                  child: const Icon(Icons.person, color: Colors.white, size: 22),
+                                ),
                         ),
                       ),
                       const SizedBox(width: 12),

@@ -88,9 +88,10 @@ class _ContactScreenState extends ConsumerState<ContactScreen> {
 
   Future<void> _launchUrl(String url) async {
     try {
-      final uri = Uri.parse(url);
-      if (await canLaunchUrl(uri)) {
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      final uri = Uri.parse(url.trim());
+      final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+      if (!launched) {
+        await launchUrl(uri, mode: LaunchMode.platformDefault);
       }
     } catch (_) {}
   }
