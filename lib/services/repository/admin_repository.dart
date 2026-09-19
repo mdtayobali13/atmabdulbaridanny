@@ -1,10 +1,15 @@
+import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:flutter_riverpod_template/constant/app_api_url.dart';
-import 'package:flutter_riverpod_template/models/admin_dashboard_model.dart';
-import 'package:flutter_riverpod_template/models/auth_user_model.dart';
-import 'package:flutter_riverpod_template/models/location_models.dart';
-import 'package:flutter_riverpod_template/services/api/api_services.dart';
-import 'package:flutter_riverpod_template/utils/app_log.dart';
+import 'package:barristerkayserkamal/constant/app_api_url.dart';
+import 'package:barristerkayserkamal/models/admin_dashboard_model.dart';
+import 'package:barristerkayserkamal/models/auth_user_model.dart';
+import 'package:barristerkayserkamal/models/citizen_request_models.dart';
+import 'package:barristerkayserkamal/models/content_models.dart';
+import 'package:barristerkayserkamal/models/location_models.dart';
+import 'package:barristerkayserkamal/services/api/api_services.dart';
+import 'package:barristerkayserkamal/services/repository/citizen_request_repository.dart';
+import 'package:barristerkayserkamal/services/storage/storage_services.dart';
+import 'package:barristerkayserkamal/utils/app_log.dart';
 
 class AdminRepository {
   AdminRepository._privateConstructor();
@@ -19,10 +24,77 @@ class AdminRepository {
   // ─────────────────────────────────────────────────────────────
   Future<AdminDashboardModel?> getDashboard() async {
     try {
+      final token = await StorageServices.instance.getToken();
+      if (token.isEmpty) return null;
       final response = await _apiServices.getServices(_api.dashboard);
+      Map<String, dynamic> map = {};
       if (response != null && response is Map && response['data'] is Map) {
-        return AdminDashboardModel.fromJson(Map<String, dynamic>.from(response['data'] as Map));
+        map = Map<String, dynamic>.from(response['data'] as Map);
       }
+
+      // Concurrently fetch supplementary counts for all 17 modules
+      try {
+        final results = await Future.wait([
+          _apiServices.getServices(_api.slider).catchError((_) => null),
+          _apiServices.getServices(_api.aboutMe).catchError((_) => null),
+          _apiServices.getServices(_api.news).catchError((_) => null),
+          _apiServices.getServices(_api.blog).catchError((_) => null),
+          _apiServices.getServices(_api.developmentWorkContent).catchError((_) => null),
+          CitizenRequestRepository.instance.getAdminCitizenRequests().catchError((_) => <CitizenRequestModel>[]),
+          _apiServices.getServices(_api.footerLink).catchError((_) => null),
+          _apiServices.getServices(_api.websiteSetting).catchError((_) => null),
+        ]);
+
+        int extractCount(dynamic res) {
+          if (res == null) return 0;
+          if (res is List) return res.length;
+          if (res is Map) {
+            if (res['data'] is List) return (res['data'] as List).length;
+            if (res['data'] is Map) return 1;
+            if (res['count'] is int) return res['count'] as int;
+            return 1;
+          }
+          return 0;
+        }
+
+        if (!map.containsKey('slider') || map['slider'] == null) {
+          map['slider'] = extractCount(results[0]);
+        }
+        if (!map.containsKey('about_me') || map['about_me'] == null) {
+          map['about_me'] = extractCount(results[1]);
+        }
+        if (!map.containsKey('news') || map['news'] == null) {
+          map['news'] = extractCount(results[2]);
+        }
+        if (!map.containsKey('blog') || map['blog'] == null) {
+          map['blog'] = extractCount(results[3]);
+        }
+        if (!map.containsKey('development_work') || map['development_work'] == null) {
+          map['development_work'] = extractCount(results[4]);
+        }
+
+        final requests = results[5];
+        if (requests is List<CitizenRequestModel>) {
+          final complaints = requests.where((r) => (r.requestType ?? '').toLowerCase() == 'complaint').length;
+          final appts = requests.where((r) => (r.requestType ?? '').toLowerCase() != 'complaint').length;
+          if (!map.containsKey('complaints') || map['complaints'] == null) {
+            map['complaints'] = complaints;
+          }
+          if (!map.containsKey('appointments') || map['appointments'] == null) {
+            map['appointments'] = appts;
+          }
+        }
+
+        if (!map.containsKey('website_setting') || map['website_setting'] == null) {
+          final flCount = extractCount(results[6]);
+          final wsCount = extractCount(results[7]);
+          map['website_setting'] = (flCount + wsCount) > 0 ? (flCount + wsCount) : 1;
+        }
+      } catch (e) {
+        errorLog("supplementary dashboard counts error", e);
+      }
+
+      return AdminDashboardModel.fromJson(map);
     } catch (e) {
       errorLog("getDashboard repo error", e);
     }
@@ -31,6 +103,8 @@ class AdminRepository {
 
   Future<List<String>> getPermissions() async {
     try {
+      final token = await StorageServices.instance.getToken();
+      if (token.isEmpty) return [];
       final response = await _apiServices.getServices(_api.permissions);
       if (response != null && response is List) {
         return response.map((e) => e.toString()).toList();
@@ -46,6 +120,8 @@ class AdminRepository {
   // ─────────────────────────────────────────────────────────────
   Future<List<AuthUserModel>> getAdminUsers() async {
     try {
+      final token = await StorageServices.instance.getToken();
+      if (token.isEmpty) return [];
       final response = await _apiServices.getServices(_api.adminUsers);
       if (response != null) {
         dynamic dataList = response;
@@ -266,4 +342,134 @@ class AdminRepository {
       return false;
     }
   }
+
+  // ─────────────────────────────────────────────────────────────
+  // 5. Contact List & Delete
+  // ─────────────────────────────────────────────────────────────
+  Future<List<ContactMessageModel>> getContactList() async {
+    try {
+      var response = await _apiServices.getServices(_api.appointmentContact);
+      dynamic dataList;
+      if (response != null) {
+        if (response is List) {
+          dataList = response;
+        } else if (response is Map) {
+          dataList = response['data'] ?? response['items'] ?? response['contacts'];
+        }
+      }
+
+      if (dataList == null) {
+        response = await _apiServices.getServices(_api.appointment, queryParameters: {'type': 'contact'});
+        if (response != null) {
+          if (response is List) {
+            dataList = response;
+          } else if (response is Map) {
+            dataList = response['data'] ?? response['items'];
+          }
+        }
+      }
+
+      if (dataList is List) {
+        return dataList
+            .whereType<Map>()
+            .map((e) => ContactMessageModel.fromJson(Map<String, dynamic>.from(e)))
+            .toList();
+      }
+    } catch (e) {
+      errorLog("getContactList error", e);
+    }
+    return [];
+  }
+
+  Future<bool> deleteContact(int id) async {
+    try {
+      final response = await _apiServices.deleteServices(url: _api.appointmentById(id));
+      return response != null;
+    } catch (e) {
+      errorLog("deleteContact error", e);
+      return false;
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // 6. About Me CRUD
+  // ─────────────────────────────────────────────────────────────
+  Future<List<AboutMeModel>> getAboutMeList() async {
+    try {
+      final response = await _apiServices.getServices(_api.aboutMe);
+      dynamic dataList = response;
+      if (response != null && response is Map) {
+        dataList = response['data'] ?? response['items'] ?? response['about_me'];
+      }
+      if (dataList is List) {
+        return dataList
+            .whereType<Map>()
+            .map((e) => AboutMeModel.fromJson(Map<String, dynamic>.from(e)))
+            .toList();
+      } else if (response is Map && (response.containsKey('id') || (response['data'] is Map))) {
+        final itemMap = response['data'] is Map ? response['data'] : response;
+        return [AboutMeModel.fromJson(Map<String, dynamic>.from(itemMap))];
+      }
+    } catch (e) {
+      errorLog("getAboutMeList error", e);
+    }
+    return [];
+  }
+
+  Future<bool> createAboutMe({
+    required String contentEn,
+    required String contentBn,
+    String? filePath,
+  }) async {
+    try {
+      final Map<String, dynamic> map = {
+        'content_en': contentEn.trim(),
+        'content_bn': contentBn.trim(),
+      };
+      if (filePath != null && filePath.isNotEmpty) {
+        final fileName = filePath.split(Platform.pathSeparator).last;
+        map['file'] = await MultipartFile.fromFile(filePath, filename: fileName);
+      }
+      final formData = FormData.fromMap(map);
+      return await createResource(_api.aboutMe, formData);
+    } catch (e) {
+      errorLog("createAboutMe error", e);
+      return false;
+    }
+  }
+
+  Future<bool> updateAboutMe({
+    required int id,
+    required String contentEn,
+    required String contentBn,
+    String? filePath,
+  }) async {
+    try {
+      final Map<String, dynamic> map = {
+        'content_en': contentEn.trim(),
+        'content_bn': contentBn.trim(),
+      };
+      if (filePath != null && filePath.isNotEmpty) {
+        final fileName = filePath.split(Platform.pathSeparator).last;
+        map['file'] = await MultipartFile.fromFile(filePath, filename: fileName);
+        final formData = FormData.fromMap(map);
+        return await updateResourceWithFile(_api.aboutMeById(id), formData);
+      } else {
+        return await updateResourceJson(_api.aboutMeById(id), map);
+      }
+    } catch (e) {
+      errorLog("updateAboutMe error", e);
+      return false;
+    }
+  }
+
+  Future<bool> deleteAboutMe(int id) async {
+    try {
+      return await deleteResource(_api.aboutMeById(id));
+    } catch (e) {
+      errorLog("deleteAboutMe error", e);
+      return false;
+    }
+  }
 }
+

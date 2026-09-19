@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_riverpod_template/routes/app_routes.dart';
-import 'package:flutter_riverpod_template/services/api/api.dart';
-import 'package:flutter_riverpod_template/services/storage/storage_services.dart';
-import 'package:flutter_riverpod_template/utils/app_log.dart';
-import 'package:flutter_riverpod_template/utils/app_snack_bar.dart';
+import 'package:barristerkayserkamal/routes/app_routes.dart';
+import 'package:barristerkayserkamal/services/api/api.dart';
+import 'package:barristerkayserkamal/services/storage/storage_services.dart';
+import 'package:barristerkayserkamal/utils/app_log.dart';
+import 'package:barristerkayserkamal/utils/app_snack_bar.dart';
 
 class ApiServices {
   ApiServices._privateConstructor();

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod_template/constant/app_colors.dart';
-import 'package:flutter_riverpod_template/screens/photo_gallery_screen/photo_gallery_screen.dart';
-import 'package:flutter_riverpod_template/screens/video_gallery_screen/video_gallery_screen.dart';
-import 'package:flutter_riverpod_template/utils/languages/language_provider.dart';
+import 'package:barristerkayserkamal/constant/app_colors.dart';
+import 'package:barristerkayserkamal/screens/photo_gallery_screen/photo_gallery_screen.dart';
+import 'package:barristerkayserkamal/screens/video_gallery_screen/video_gallery_screen.dart';
+import 'package:barristerkayserkamal/utils/languages/language_provider.dart';
 
 class GalleryScreen extends ConsumerWidget {
   const GalleryScreen({super.key});

@@ -5,7 +5,7 @@
 <!-- permission end  -->
    
     <application
-        android:label="flutter_riverpod_template"
+        android:label="Barrister Kayser Kamal"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

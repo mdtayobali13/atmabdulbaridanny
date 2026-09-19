@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_riverpod_template/constant/app_colors.dart';
-import 'package:flutter_riverpod_template/screens/home_screen/widgets/custom_footer.dart';
-import 'package:flutter_riverpod_template/services/providers/api_providers.dart';
-import 'package:flutter_riverpod_template/services/repository/home_repository.dart';
-import 'package:flutter_riverpod_template/utils/languages/language_provider.dart';
+import 'package:barristerkayserkamal/constant/app_colors.dart';
+import 'package:barristerkayserkamal/screens/home_screen/widgets/custom_footer.dart';
+import 'package:barristerkayserkamal/services/providers/api_providers.dart';
+import 'package:barristerkayserkamal/services/repository/home_repository.dart';
+import 'package:barristerkayserkamal/utils/languages/language_provider.dart';
 
 class DurgapurUpazilaScreen extends ConsumerStatefulWidget {
   const DurgapurUpazilaScreen({super.key});

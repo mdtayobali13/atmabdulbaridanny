@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod_template/utils/app_log.dart';
+import 'package:barristerkayserkamal/utils/app_log.dart';
 
 class CustomExpansionTile extends StatefulWidget {
   final Widget title;

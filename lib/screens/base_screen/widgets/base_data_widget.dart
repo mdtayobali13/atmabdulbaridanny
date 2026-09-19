@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod_template/constant/app_colors.dart';
-import 'package:flutter_riverpod_template/constant/app_constant.dart';
-import 'package:flutter_riverpod_template/utils/app_size.dart';
-import 'package:flutter_riverpod_template/widgets/texts/app_html_text.dart';
+import 'package:barristerkayserkamal/constant/app_colors.dart';
+import 'package:barristerkayserkamal/constant/app_constant.dart';
+import 'package:barristerkayserkamal/utils/app_size.dart';
+import 'package:barristerkayserkamal/widgets/texts/app_html_text.dart';
 
 class BaseDataWidget extends StatelessWidget {
   const BaseDataWidget({super.key, required this.data});

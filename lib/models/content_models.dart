@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod_template/constant/app_api_url.dart';
+import 'package:barristerkayserkamal/constant/app_api_url.dart';
 
 class NewsModel {
   final int? id;

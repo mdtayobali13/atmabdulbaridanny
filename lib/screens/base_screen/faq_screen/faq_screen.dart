@@ -1,34 +1,59 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod_template/screens/base_screen/faq_screen/providers/f_a_q_screen_provider.dart';
-import 'package:flutter_riverpod_template/screens/base_screen/faq_screen/widgets/faq_card.dart';
-import 'package:flutter_riverpod_template/screens/base_screen/faq_screen/widgets/faq_card_loader.dart';
-import 'package:flutter_riverpod_template/utils/app_size.dart';
-import 'package:flutter_riverpod_template/widgets/texts/app_text.dart';
+import 'package:barristerkayserkamal/constant/app_colors.dart';
+import 'package:barristerkayserkamal/screens/base_screen/faq_screen/providers/f_a_q_screen_provider.dart';
+import 'package:barristerkayserkamal/screens/base_screen/faq_screen/widgets/faq_card.dart';
+import 'package:barristerkayserkamal/screens/base_screen/faq_screen/widgets/faq_card_loader.dart';
+import 'package:barristerkayserkamal/screens/base_screen/widgets/coming_soon_widget.dart';
+import 'package:barristerkayserkamal/utils/app_size.dart';
+import 'package:barristerkayserkamal/utils/languages/language_provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class FaqScreen extends StatelessWidget {
+class FaqScreen extends ConsumerWidget {
   const FaqScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isBangla = ref.watch(isBanglaProvider);
+    final primaryGreen = AppColors.instance.primaryGreen;
+
     return Scaffold(
+      backgroundColor: const Color(0xFFF8FAF9),
       appBar: AppBar(
         centerTitle: true,
-        title: AppText(text: "FAQ", fontWeight: FontWeight.w500),
+        title: Text(
+          isBangla ? "সাধারণ জিজ্ঞাসা (FAQ)" : "FAQ",
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+        ),
+        backgroundColor: primaryGreen,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(AppSize.size.width * 0.05),
-        child: Consumer(
-          builder: (context, ref, child) {
-            var provider = ref.watch(fAQScreenProvider);
-            return provider.when(
-              data: (data) {
-                if (data.isEmpty) return SizedBox();
-                return ListView.builder(
+      body: Consumer(
+        builder: (context, ref, child) {
+          final provider = ref.watch(fAQScreenProvider);
+          return provider.when(
+            data: (data) {
+              if (data.isEmpty) {
+                return const ComingSoonWidget(
+                  titleEn: "Frequently Asked Questions",
+                  titleBn: "সাধারণ জিজ্ঞাসা (FAQ)",
+                  icon: CupertinoIcons.question_circle_fill,
+                  descriptionEn: "Frequently asked questions and answers are currently being prepared and will be available soon.",
+                  descriptionBn: "সাধারণ জিজ্ঞাসা ও উত্তরসমূহ বর্তমানে প্রস্তুত করা হচ্ছে এবং খুব শীঘ্রই এখানে প্রকাশ করা হবে।",
+                );
+              }
+              return Padding(
+                padding: EdgeInsets.all(AppSize.size.width * 0.05),
+                child: ListView.builder(
                   itemCount: data.length,
                   itemBuilder: (context, index) {
-                    var item = data[index];
+                    final item = data[index];
                     return FaqCard(
                       item: item,
                       onTap: () {
@@ -36,22 +61,29 @@ class FaqScreen extends StatelessWidget {
                       },
                     );
                   },
-                );
-              },
-              error: (error, stackTrace) {
-                return Center(child: AppText(text: "Something Was Wrong"));
-              },
-              loading: () => Skeletonizer(
+                ),
+              );
+            },
+            error: (_, _) => const ComingSoonWidget(
+              titleEn: "Frequently Asked Questions",
+              titleBn: "সাধারণ জিজ্ঞাসা (FAQ)",
+              icon: CupertinoIcons.question_circle_fill,
+              descriptionEn: "Frequently asked questions and answers are currently being prepared and will be available soon.",
+              descriptionBn: "সাধারণ জিজ্ঞাসা ও উত্তরসমূহ বর্তমানে প্রস্তুত করা হচ্ছে এবং খুব শীঘ্রই এখানে প্রকাশ করা হবে।",
+            ),
+            loading: () => Skeletonizer(
+              child: Padding(
+                padding: EdgeInsets.all(AppSize.size.width * 0.05),
                 child: ListView.builder(
-                  itemCount: 20,
+                  itemCount: 10,
                   itemBuilder: (context, index) {
-                    return FaqCardLoader();
+                    return const FaqCardLoader();
                   },
                 ),
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }

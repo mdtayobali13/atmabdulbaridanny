@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod_template/screens/auth_screen/on_board_screen/screens/onboard_language_screen.dart';
-import 'package:flutter_riverpod_template/screens/auth_screen/on_board_screen/screens/onboard_splash_screen.dart';
+import 'package:barristerkayserkamal/screens/auth_screen/on_board_screen/screens/onboard_language_screen.dart';
+import 'package:barristerkayserkamal/screens/auth_screen/on_board_screen/screens/onboard_splash_screen.dart';
 
 class OnBoardScreen extends StatefulWidget {
   const OnBoardScreen({super.key});

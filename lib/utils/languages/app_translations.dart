@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod_template/utils/languages/language_provider.dart';
+import 'package:barristerkayserkamal/utils/languages/language_provider.dart';
 
 class AppTranslations {
   final bool isBangla;

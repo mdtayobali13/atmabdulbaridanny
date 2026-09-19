@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod_template/constant/app_colors.dart';
+import 'package:barristerkayserkamal/constant/app_colors.dart';
 
 class DottedBorderPainter extends CustomPainter {
   final double cornerRadius;

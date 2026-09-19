@@ -1,7 +1,7 @@
-import 'package:flutter_riverpod_template/constant/app_api_url.dart';
-import 'package:flutter_riverpod_template/models/location_models.dart';
-import 'package:flutter_riverpod_template/services/api/api_services.dart';
-import 'package:flutter_riverpod_template/utils/app_log.dart';
+import 'package:barristerkayserkamal/constant/app_api_url.dart';
+import 'package:barristerkayserkamal/models/location_models.dart';
+import 'package:barristerkayserkamal/services/api/api_services.dart';
+import 'package:barristerkayserkamal/utils/app_log.dart';
 
 class LocationRepository {
   LocationRepository._privateConstructor();

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod_template/constant/app_colors.dart';
-import 'package:flutter_riverpod_template/utils/app_log.dart';
+import 'package:barristerkayserkamal/constant/app_colors.dart';
+import 'package:barristerkayserkamal/utils/app_log.dart';
 
 Future<void> customTimePicker({
   required BuildContext context,

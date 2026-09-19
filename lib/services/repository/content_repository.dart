@@ -1,9 +1,9 @@
-import 'package:flutter_riverpod_template/constant/app_api_url.dart';
-import 'package:flutter_riverpod_template/models/content_models.dart';
-import 'package:flutter_riverpod_template/models/gallery_and_media_models.dart';
-import 'package:flutter_riverpod_template/models/service_and_development_models.dart';
-import 'package:flutter_riverpod_template/services/api/api_services.dart';
-import 'package:flutter_riverpod_template/utils/app_log.dart';
+import 'package:barristerkayserkamal/constant/app_api_url.dart';
+import 'package:barristerkayserkamal/models/content_models.dart';
+import 'package:barristerkayserkamal/models/gallery_and_media_models.dart';
+import 'package:barristerkayserkamal/models/service_and_development_models.dart';
+import 'package:barristerkayserkamal/services/api/api_services.dart';
+import 'package:barristerkayserkamal/utils/app_log.dart';
 
 class ContentRepository {
   ContentRepository._privateConstructor();
@@ -34,7 +34,19 @@ class ContentRepository {
       if (response['data'] is Map) {
         return Map<String, dynamic>.from(response['data'] as Map);
       }
+      if (response['data'] is List && (response['data'] as List).isNotEmpty) {
+        final first = (response['data'] as List).first;
+        if (first is Map) {
+          return Map<String, dynamic>.from(first);
+        }
+      }
       return Map<String, dynamic>.from(response);
+    }
+    if (response is List && response.isNotEmpty) {
+      final first = response.first;
+      if (first is Map) {
+        return Map<String, dynamic>.from(first);
+      }
     }
     return null;
   }
@@ -143,7 +155,21 @@ class ContentRepository {
     try {
       final response = await _apiServices.getServices(_api.aboutMe);
       if (response is List && response.isNotEmpty) {
-        return AboutMeModel.fromJson(Map<String, dynamic>.from(response.first as Map));
+        final first = response.first;
+        if (first is Map) {
+          return AboutMeModel.fromJson(Map<String, dynamic>.from(first));
+        }
+      }
+      if (response is Map) {
+        final dynamic dataList = response['data'] ?? response['AboutMe'] ?? response['items'];
+        if (dataList is List && dataList.isNotEmpty) {
+          final first = dataList.first;
+          if (first is Map) {
+            return AboutMeModel.fromJson(Map<String, dynamic>.from(first));
+          }
+        } else if (dataList is Map) {
+          return AboutMeModel.fromJson(Map<String, dynamic>.from(dataList));
+        }
       }
       final map = _extractMap(response);
       return map != null ? AboutMeModel.fromJson(map) : null;

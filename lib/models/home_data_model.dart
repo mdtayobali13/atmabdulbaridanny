@@ -1,6 +1,6 @@
-import 'package:flutter_riverpod_template/models/content_models.dart';
-import 'package:flutter_riverpod_template/models/gallery_and_media_models.dart';
-import 'package:flutter_riverpod_template/models/service_and_development_models.dart';
+import 'package:barristerkayserkamal/models/content_models.dart';
+import 'package:barristerkayserkamal/models/gallery_and_media_models.dart';
+import 'package:barristerkayserkamal/models/service_and_development_models.dart';
 
 class HomeDataModel {
   final List<NewsModel> news;

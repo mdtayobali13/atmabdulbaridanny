@@ -1,41 +1,42 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod_template/error_handling_screen/error_screen/error_screen.dart';
-import 'package:flutter_riverpod_template/error_handling_screen/no_internet_screen/no_internet_screen.dart';
-import 'package:flutter_riverpod_template/error_handling_screen/not_found_screen/not_found_screen.dart';
-import 'package:flutter_riverpod_template/routes/app_routes_key.dart';
-import 'package:flutter_riverpod_template/routes/internet_check_provider.dart';
-import 'package:flutter_riverpod_template/screens/achievement_screen/achievement_screen.dart';
-import 'package:flutter_riverpod_template/screens/app_navigation/app_navigation_screen.dart';
-import 'package:flutter_riverpod_template/screens/auth_screen/forgot_screen/forgot_screen.dart';
-import 'package:flutter_riverpod_template/screens/auth_screen/on_board_screen/on_board_screen.dart';
-import 'package:flutter_riverpod_template/screens/auth_screen/sign_in_screen/sign_in_screen.dart';
-import 'package:flutter_riverpod_template/screens/auth_screen/sign_up_screen/sign_up_screen.dart';
-import 'package:flutter_riverpod_template/screens/auth_screen/sign_up_verify_screen/sign_up_verify_screen.dart';
-import 'package:flutter_riverpod_template/screens/base_screen/about_us_screen/about_us_screen.dart';
-import 'package:flutter_riverpod_template/screens/biography_screen/biography_screen.dart';
-import 'package:flutter_riverpod_template/screens/electronic_media_screen/electronic_media_screen.dart';
-import 'package:flutter_riverpod_template/screens/history_of_life_screen/history_of_life_screen.dart';
-import 'package:flutter_riverpod_template/screens/journey_screen/journey_screen.dart';
-import 'package:flutter_riverpod_template/screens/development_works_screen/kalmakanda_upazila_screen.dart';
-import 'package:flutter_riverpod_template/screens/development_works_screen/durgapur_upazila_screen.dart';
-import 'package:flutter_riverpod_template/screens/development_works_screen/others_screen.dart';
-import 'package:flutter_riverpod_template/screens/print_media_screen/print_media_screen.dart';
-import 'package:flutter_riverpod_template/screens/complain_screen/complain_screen.dart';
-import 'package:flutter_riverpod_template/screens/base_screen/faq_screen/faq_screen.dart';
-import 'package:flutter_riverpod_template/screens/base_screen/privacy_policy_screen/privacy_policy_screen.dart';
-import 'package:flutter_riverpod_template/screens/base_screen/terms_and_conditions_screen/terms_and_conditions_screen.dart';
-import 'package:flutter_riverpod_template/screens/home_screen/home_screen.dart';
-import 'package:flutter_riverpod_template/screens/news_screen/news_screen.dart';
-import 'package:flutter_riverpod_template/screens/photo_gallery_screen/photo_gallery_screen.dart';
-import 'package:flutter_riverpod_template/screens/video_gallery_screen/video_gallery_screen.dart';
-import 'package:flutter_riverpod_template/screens/blog_screen/blog_screen.dart';
-import 'package:flutter_riverpod_template/screens/contact_screen/contact_screen.dart';
-import 'package:flutter_riverpod_template/screens/appointment_screen/appointment_screen.dart';
-import 'package:flutter_riverpod_template/screens/profile_screen/profile_screen.dart';
-import 'package:flutter_riverpod_template/screens/splash_screen/splash_screen.dart';
-import 'package:flutter_riverpod_template/utils/app_log.dart';
+import 'package:barristerkayserkamal/error_handling_screen/error_screen/error_screen.dart';
+import 'package:barristerkayserkamal/error_handling_screen/no_internet_screen/no_internet_screen.dart';
+import 'package:barristerkayserkamal/error_handling_screen/not_found_screen/not_found_screen.dart';
+import 'package:barristerkayserkamal/routes/app_routes_key.dart';
+import 'package:barristerkayserkamal/routes/internet_check_provider.dart';
+import 'package:barristerkayserkamal/screens/achievement_screen/achievement_screen.dart';
+import 'package:barristerkayserkamal/screens/app_navigation/app_navigation_screen.dart';
+import 'package:barristerkayserkamal/screens/auth_screen/forgot_screen/forgot_screen.dart';
+import 'package:barristerkayserkamal/screens/auth_screen/on_board_screen/on_board_screen.dart';
+import 'package:barristerkayserkamal/screens/auth_screen/sign_in_screen/sign_in_screen.dart';
+import 'package:barristerkayserkamal/screens/auth_screen/sign_up_screen/sign_up_screen.dart';
+import 'package:barristerkayserkamal/screens/auth_screen/sign_up_verify_screen/sign_up_verify_screen.dart';
+import 'package:barristerkayserkamal/screens/base_screen/about_us_screen/about_us_screen.dart';
+import 'package:barristerkayserkamal/screens/biography_screen/biography_screen.dart';
+import 'package:barristerkayserkamal/screens/electronic_media_screen/electronic_media_screen.dart';
+import 'package:barristerkayserkamal/screens/history_of_life_screen/history_of_life_screen.dart';
+import 'package:barristerkayserkamal/screens/journey_screen/journey_screen.dart';
+import 'package:barristerkayserkamal/screens/development_works_screen/kalmakanda_upazila_screen.dart';
+import 'package:barristerkayserkamal/screens/development_works_screen/durgapur_upazila_screen.dart';
+import 'package:barristerkayserkamal/screens/development_works_screen/others_screen.dart';
+import 'package:barristerkayserkamal/screens/print_media_screen/print_media_screen.dart';
+import 'package:barristerkayserkamal/screens/complain_screen/complain_screen.dart';
+import 'package:barristerkayserkamal/screens/base_screen/faq_screen/faq_screen.dart';
+import 'package:barristerkayserkamal/screens/base_screen/privacy_policy_screen/privacy_policy_screen.dart';
+import 'package:barristerkayserkamal/screens/base_screen/terms_and_conditions_screen/terms_and_conditions_screen.dart';
+import 'package:barristerkayserkamal/screens/home_screen/home_screen.dart';
+import 'package:barristerkayserkamal/screens/news_screen/news_screen.dart';
+import 'package:barristerkayserkamal/screens/photo_gallery_screen/photo_gallery_screen.dart';
+import 'package:barristerkayserkamal/screens/video_gallery_screen/video_gallery_screen.dart';
+import 'package:barristerkayserkamal/screens/blog_screen/blog_screen.dart';
+import 'package:barristerkayserkamal/screens/contact_screen/contact_screen.dart';
+import 'package:barristerkayserkamal/screens/appointment_screen/appointment_screen.dart';
+import 'package:barristerkayserkamal/screens/profile_screen/profile_screen.dart';
+import 'package:barristerkayserkamal/screens/splash_screen/splash_screen.dart';
+import 'package:barristerkayserkamal/screens/admin_screen/admin_dashboard_screen.dart';
+import 'package:barristerkayserkamal/utils/app_log.dart';
 import 'package:go_router/go_router.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -234,6 +235,11 @@ class AppRoutes {
         path: "/${AppRoutesKey.instance.profileScreen}",
         name: AppRoutesKey.instance.profileScreen,
         builder: (context, state) => const ProfileScreen(),
+      ),
+      GoRoute(
+        path: "/admin_dashboard_screen",
+        name: AppRoutesKey.instance.adminDashboardScreen,
+        builder: (context, state) => const AdminDashboardScreen(),
       ),
     ],
     errorBuilder: (context, state) {

@@ -1,16 +1,16 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod_template/constant/app_colors.dart';
-import 'package:flutter_riverpod_template/models/location_models.dart';
-import 'package:flutter_riverpod_template/screens/home_screen/widgets/custom_footer.dart';
-import 'package:flutter_riverpod_template/services/providers/api_providers.dart';
-import 'package:flutter_riverpod_template/services/repository/citizen_request_repository.dart';
-import 'package:flutter_riverpod_template/services/repository/home_repository.dart';
-import 'package:flutter_riverpod_template/utils/app_snack_bar.dart';
-import 'package:flutter_riverpod_template/utils/languages/language_provider.dart';
-import 'package:go_router/go_router.dart';
+import 'package:barristerkayserkamal/constant/app_colors.dart';
+import 'package:barristerkayserkamal/models/location_models.dart';
+import 'package:barristerkayserkamal/screens/app_navigation/widgets/app_drawer.dart';
+import 'package:barristerkayserkamal/screens/complain_screen/widgets/complain_form_card.dart';
+import 'package:barristerkayserkamal/screens/complain_screen/widgets/complain_header_banner.dart';
+import 'package:barristerkayserkamal/screens/complain_screen/widgets/complain_success_dialog.dart';
+import 'package:barristerkayserkamal/screens/home_screen/widgets/custom_footer.dart';
+import 'package:barristerkayserkamal/services/repository/citizen_request_repository.dart';
+import 'package:barristerkayserkamal/services/repository/home_repository.dart';
+import 'package:barristerkayserkamal/utils/app_snack_bar.dart';
+import 'package:barristerkayserkamal/utils/languages/language_provider.dart';
 
 class ComplainScreen extends ConsumerStatefulWidget {
   const ComplainScreen({super.key});
@@ -30,7 +30,7 @@ class _ComplainScreenState extends ConsumerState<ComplainScreen> {
   final _villageController = TextEditingController();
   final _messageController = TextEditingController();
 
-  String _selectedType = 'local'; // 'local' or 'nrb'
+  String _selectedType = 'local';
   DivisionModel? _selectedDivision;
   DistrictModel? _selectedDistrict;
   UpazilaModel? _selectedUpazila;
@@ -117,85 +117,12 @@ class _ComplainScreenState extends ConsumerState<ComplainScreen> {
       if (!mounted) return;
 
       if (result != null) {
-        _showSuccessDialog(result.trackingNo ?? 'Submitted');
+        ComplainSuccessDialog.show(context, result.trackingNo ?? 'Submitted', tr);
         _discard();
       }
     } finally {
       if (mounted) setState(() => _isSubmitting = false);
     }
-  }
-
-  void _showSuccessDialog(String trackingNo) {
-    final isBangla = ref.read(isBanglaProvider);
-    final tr = AppTranslations.of(isBangla);
-
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title: Row(
-            children: [
-              const Icon(Icons.check_circle, color: Color(0xFF0C4B33), size: 28),
-              const SizedBox(width: 8),
-              Text(tr.complaintSubmittedTitle, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            ],
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                tr.complaintSubmittedMessage,
-                style: const TextStyle(fontSize: 14, color: Colors.black87),
-              ),
-              const SizedBox(height: 16),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF0FDF4),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: const Color(0xFF0C4B33), width: 1.5),
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: SelectableText(
-                        trackingNo,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF0C4B33),
-                        ),
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.copy, size: 20, color: Color(0xFF0C4B33)),
-                      onPressed: () {
-                        Clipboard.setData(ClipboardData(text: trackingNo));
-                        AppSnackBar.instance.success(tr.trackingCopied);
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () => Navigator.of(context).pop(),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF0C4B33),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-              ),
-              child: Text(tr.done, style: const TextStyle(color: Colors.white)),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override
@@ -204,566 +131,68 @@ class _ComplainScreenState extends ConsumerState<ComplainScreen> {
     final tr = AppTranslations.of(isBangla);
     final primaryGreen = AppColors.instance.primaryGreen;
 
-    // Location Cascade
-    final divisionsAsync = ref.watch(divisionsProvider);
-    final districtsAsync = _selectedDivision?.id != null
-        ? ref.watch(districtsProvider(_selectedDivision!.id))
-        : null;
-    final upazilasAsync = _selectedDistrict?.id != null
-        ? ref.watch(upazilasProvider(_selectedDistrict!.id))
-        : null;
-    final unionsAsync = _selectedUpazila?.id != null
-        ? ref.watch(unionsProvider(_selectedUpazila!.id))
-        : null;
-
-    final todayVisits = (_visitStats?['today_visits']?.toString() ?? '1').toBanglaDigits(isBangla);
-    final totalVisits = (_visitStats?['total_visits']?.toString() ?? '288').toBanglaDigits(isBangla);
-
     return Scaffold(
       backgroundColor: Colors.white,
+      drawer: const AppDrawer(),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Top Green Banner
-            Container(
-              width: double.infinity,
-              color: primaryGreen,
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 32.0),
-              child: Column(
-                children: [
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          tr.complainBannerTitle,
-                          style: const TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: IconButton(
-                          icon: const Icon(Icons.arrow_back, color: Colors.white),
-                          onPressed: () {
-                            if (Navigator.canPop(context)) {
-                              Navigator.pop(context);
-                            } else {
-                              context.goNamed('homeScreen');
-                            }
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    tr.complainBannerSubtitle,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.white, fontSize: 14, height: 1.4),
-                  ),
-                  const SizedBox(height: 24),
-                  // Visitor Stats
-                  Container(
-                    width: 250,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _buildStatItem(tr.todayVisitor, todayVisits),
-                        Container(
-                          width: 1,
-                          height: 30,
-                          color: Colors.white30,
-                          margin: const EdgeInsets.symmetric(horizontal: 24),
-                        ),
-                        _buildStatItem(tr.totalVisitor, totalVisits),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+            ComplainHeaderBanner(
+              primaryGreen: primaryGreen,
+              tr: tr,
+              visitStats: _visitStats,
+              isBangla: isBangla,
             ),
-
             const SizedBox(height: 32),
-
-            // Form Section
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: primaryGreen, width: 1.5),
-                boxShadow: [
-                  BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10, offset: const Offset(0, 4)),
-                ],
-              ),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      tr.personalInfoSection,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Name
-                    _buildTextFormField(
-                      label: tr.fullNameLabel,
-                      hint: tr.fullNameHint,
-                      controller: _nameController,
-                      validator: (val) => val == null || val.trim().isEmpty
-                          ? tr.fullNameRequired
-                          : null,
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Mobile
-                    _buildTextFormField(
-                      label: tr.mobileLabel,
-                      hint: tr.mobileHint,
-                      controller: _mobileController,
-                      keyboardType: TextInputType.phone,
-                      validator: (val) => val == null || val.trim().isEmpty
-                          ? tr.mobileRequired
-                          : null,
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Email
-                    _buildTextFormField(
-                      label: tr.emailOptionalLabel,
-                      hint: "e.g. user@example.com",
-                      controller: _emailController,
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Type (local vs nrb)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          tr.citizenTypeLabel,
-                          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black87),
-                        ),
-                        const SizedBox(height: 8),
-                        RadioGroup<String>(
-                          groupValue: _selectedType,
-                          onChanged: (val) {
-                            if (val != null) setState(() => _selectedType = val);
-                          },
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: RadioListTile<String>(
-                                  title: Text(tr.citizenLocal, style: const TextStyle(fontSize: 14, color: Colors.black87)),
-                                  value: 'local',
-                                  contentPadding: EdgeInsets.zero,
-                                  activeColor: primaryGreen,
-                                ),
-                              ),
-                              Expanded(
-                                child: RadioListTile<String>(
-                                  title: Text(tr.citizenForeignNrb, style: const TextStyle(fontSize: 14, color: Colors.black87)),
-                                  value: 'nrb',
-                                  contentPadding: EdgeInsets.zero,
-                                  activeColor: primaryGreen,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 24),
-                    Text(
-                      tr.addressDetailsSection,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Division Dropdown
-                    divisionsAsync.when(
-                      data: (divisions) => _buildDropdown<DivisionModel>(
-                        label: tr.divisionLabel,
-                        hint: tr.divisionHint,
-                        items: divisions,
-                        value: _selectedDivision,
-                        itemLabel: (item) => item.localizedName(isBangla),
-                        onChanged: (division) {
-                          setState(() {
-                            _selectedDivision = division;
-                            _selectedDistrict = null;
-                            _selectedUpazila = null;
-                            _selectedUnion = null;
-                          });
-                        },
-                      ),
-                      loading: () => _buildDropdownLoading(tr.divisionLabel),
-                      error: (err, stack) => _buildDropdownError(tr.divisionLabel, tr.loadDivisionsError),
-                    ),
-                    const SizedBox(height: 16),
-
-                    // District Dropdown
-                    if (districtsAsync != null)
-                      districtsAsync.when(
-                        data: (districts) => _buildDropdown<DistrictModel>(
-                          label: tr.districtLabel,
-                          hint: tr.districtHint,
-                          items: districts,
-                          value: _selectedDistrict,
-                          itemLabel: (item) => item.localizedName(isBangla),
-                          onChanged: (district) {
-                            setState(() {
-                              _selectedDistrict = district;
-                              _selectedUpazila = null;
-                              _selectedUnion = null;
-                            });
-                          },
-                        ),
-                        loading: () => _buildDropdownLoading(tr.districtLabel),
-                        error: (err, stack) => _buildDropdownError(tr.districtLabel, tr.loadDistrictsError),
-                      )
-                    else
-                      _buildDisabledDropdown(tr.districtLabel, tr.selectDivisionFirst),
-                    const SizedBox(height: 16),
-
-                    // Upazila Dropdown
-                    if (upazilasAsync != null)
-                      upazilasAsync.when(
-                        data: (upazilas) => _buildDropdown<UpazilaModel>(
-                          label: tr.upazilaLabel,
-                          hint: tr.upazilaHint,
-                          items: upazilas,
-                          value: _selectedUpazila,
-                          itemLabel: (item) => item.localizedName(isBangla),
-                          onChanged: (upazila) {
-                            setState(() {
-                              _selectedUpazila = upazila;
-                              _selectedUnion = null;
-                            });
-                          },
-                        ),
-                        loading: () => _buildDropdownLoading(tr.upazilaLabel),
-                        error: (err, stack) => _buildDropdownError(tr.upazilaLabel, tr.loadUpazilasError),
-                      )
-                    else
-                      _buildDisabledDropdown(tr.upazilaLabel, tr.selectDistrictFirst),
-                    const SizedBox(height: 16),
-
-                    // Union Dropdown
-                    if (unionsAsync != null)
-                      unionsAsync.when(
-                        data: (unions) => _buildDropdown<UnionModel>(
-                          label: tr.unionLabel,
-                          hint: tr.unionHint,
-                          items: unions,
-                          value: _selectedUnion,
-                          itemLabel: (item) => item.localizedName(isBangla),
-                          onChanged: (union) {
-                            setState(() => _selectedUnion = union);
-                          },
-                        ),
-                        loading: () => _buildDropdownLoading(tr.unionLabel),
-                        error: (err, stack) => _buildDropdownError(tr.unionLabel, tr.loadUnionsError),
-                      )
-                    else
-                      _buildDisabledDropdown(tr.unionLabel, tr.selectUpazilaFirst),
-                    const SizedBox(height: 16),
-
-                    // Ward & Village
-                    _buildTextFormField(
-                      label: tr.wardLabel,
-                      hint: tr.wardHint,
-                      controller: _wardController,
-                    ),
-                    const SizedBox(height: 16),
-
-                    _buildTextFormField(
-                      label: tr.villageLabel,
-                      hint: tr.villageHint,
-                      controller: _villageController,
-                    ),
-                    const SizedBox(height: 24),
-
-                    Text(
-                      tr.complaintDetailsSection,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Subject
-                    _buildTextFormField(
-                      label: tr.complaintSubjectLabel,
-                      hint: tr.complaintSubjectHint,
-                      controller: _subjectController,
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Message
-                    _buildTextFormField(
-                      label: tr.complaintMessageLabel,
-                      hint: tr.complaintMessageHint,
-                      controller: _messageController,
-                      maxLines: 5,
-                      validator: (val) => val == null || val.trim().isEmpty
-                          ? tr.complaintMessageRequired
-                          : null,
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    // Action Buttons
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: SizedBox(
-                            height: 48,
-                            child: ElevatedButton.icon(
-                              onPressed: _isSubmitting ? null : _discard,
-                              icon: const Icon(Icons.close_rounded, size: 18),
-                              label: Text(
-                                tr.discardBtn,
-                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.red[600],
-                                foregroundColor: Colors.white,
-                                elevation: 1,
-                                padding: EdgeInsets.zero,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          flex: 3,
-                          child: SizedBox(
-                            height: 48,
-                            child: ElevatedButton.icon(
-                              onPressed: _isSubmitting ? null : _submitComplaint,
-                              icon: _isSubmitting ? null : const Icon(Icons.send_rounded, size: 18),
-                              label: _isSubmitting
-                                  ? const SizedBox(
-                                      width: 20,
-                                      height: 20,
-                                      child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
-                                    )
-                                  : FittedBox(
-                                      fit: BoxFit.scaleDown,
-                                      child: Text(
-                                        tr.submitComplaintBtn,
-                                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                                      ),
-                                    ),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF0C4B33),
-                                foregroundColor: Colors.white,
-                                elevation: 1.5,
-                                padding: const EdgeInsets.symmetric(horizontal: 12),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+            ComplainFormCard(
+              formKey: _formKey,
+              nameController: _nameController,
+              mobileController: _mobileController,
+              emailController: _emailController,
+              subjectController: _subjectController,
+              wardController: _wardController,
+              villageController: _villageController,
+              messageController: _messageController,
+              selectedType: _selectedType,
+              onTypeChanged: (type) => setState(() => _selectedType = type),
+              selectedDivision: _selectedDivision,
+              selectedDistrict: _selectedDistrict,
+              selectedUpazila: _selectedUpazila,
+              selectedUnion: _selectedUnion,
+              onDivisionChanged: (div) {
+                setState(() {
+                  _selectedDivision = div;
+                  _selectedDistrict = null;
+                  _selectedUpazila = null;
+                  _selectedUnion = null;
+                });
+              },
+              onDistrictChanged: (dist) {
+                setState(() {
+                  _selectedDistrict = dist;
+                  _selectedUpazila = null;
+                  _selectedUnion = null;
+                });
+              },
+              onUpazilaChanged: (upz) {
+                setState(() {
+                  _selectedUpazila = upz;
+                  _selectedUnion = null;
+                });
+              },
+              onUnionChanged: (uni) => setState(() => _selectedUnion = uni),
+              isSubmitting: _isSubmitting,
+              onDiscard: _discard,
+              onSubmit: _submitComplaint,
+              primaryGreen: primaryGreen,
+              isBangla: isBangla,
+              tr: tr,
             ),
-
             const SizedBox(height: 48),
-
-            // Footer
             const CustomFooter(),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildStatItem(String label, String value) {
-    return Column(
-      children: [
-        Text(label, style: const TextStyle(color: Colors.white70, fontSize: 12)),
-        const SizedBox(height: 4),
-        Text(
-          value,
-          style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildTextFormField({
-    required String label,
-    required String hint,
-    required TextEditingController controller,
-    int maxLines = 1,
-    TextInputType? keyboardType,
-    String? Function(String?)? validator,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black),
-        ),
-        const SizedBox(height: 8),
-        TextFormField(
-          style: const TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500),
-          controller: controller,
-          maxLines: maxLines,
-          keyboardType: keyboardType,
-          validator: validator,
-          decoration: InputDecoration(
-            hintText: hint,
-            hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            filled: true,
-            fillColor: Colors.white,
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Colors.grey[300]!, width: 1),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: AppColors.instance.primaryGreen, width: 1.5),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDropdown<T>({
-    required String label,
-    required String hint,
-    required List<T> items,
-    required T? value,
-    required String Function(T) itemLabel,
-    required void Function(T?) onChanged,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black87),
-        ),
-        const SizedBox(height: 8),
-        DropdownButtonFormField2<T>(
-          isExpanded: true,
-          value: items.contains(value) ? value : null,
-          hint: Text(hint, style: TextStyle(color: Colors.grey[400], fontSize: 14)),
-          iconStyleData: IconStyleData(icon: Icon(Icons.keyboard_arrow_down, color: Colors.grey[600])),
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            filled: true,
-            fillColor: Colors.white,
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Colors.grey[300]!, width: 1),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: AppColors.instance.primaryGreen, width: 1.5),
-            ),
-          ),
-          dropdownStyleData: DropdownStyleData(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            maxHeight: 280,
-          ),
-          items: items.map((item) {
-            return DropdownMenuItem<T>(
-              value: item,
-              child: Text(itemLabel(item), style: const TextStyle(fontSize: 14, color: Colors.black87)),
-            );
-          }).toList(),
-          onChanged: onChanged,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDropdownLoading(String label) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black87)),
-        const SizedBox(height: 8),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          decoration: BoxDecoration(
-            color: Colors.grey[100],
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Colors.grey[300]!),
-          ),
-          child: const Row(
-            children: [
-              SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)),
-              SizedBox(width: 12),
-              Text("Loading options...", style: TextStyle(color: Colors.grey, fontSize: 13)),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDisabledDropdown(String label, String placeholder) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black87)),
-        const SizedBox(height: 8),
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          decoration: BoxDecoration(
-            color: Colors.grey[100],
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Colors.grey[300]!),
-          ),
-          child: Text(placeholder, style: const TextStyle(color: Colors.grey, fontSize: 13)),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDropdownError(String label, String message) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.red)),
-        const SizedBox(height: 8),
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          decoration: BoxDecoration(
-            color: Colors.red[50],
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Colors.red[200]!),
-          ),
-          child: Text(message, style: const TextStyle(color: Colors.red, fontSize: 13)),
-        ),
-      ],
     );
   }
 }

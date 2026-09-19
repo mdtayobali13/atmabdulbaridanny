@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod_template/constant/app_colors.dart';
-import 'package:flutter_riverpod_template/screens/auth_screen/sign_up_verify_screen/provider/otp_verify_provider.dart';
-import 'package:flutter_riverpod_template/utils/app_log.dart';
-import 'package:flutter_riverpod_template/utils/app_size.dart';
-import 'package:flutter_riverpod_template/utils/app_snack_bar.dart';
-import 'package:flutter_riverpod_template/utils/gap.dart';
-import 'package:flutter_riverpod_template/widgets/buttons/app_button.dart';
-import 'package:flutter_riverpod_template/widgets/inputs/app_input_widget_tow.dart';
+import 'package:barristerkayserkamal/constant/app_colors.dart';
+import 'package:barristerkayserkamal/screens/auth_screen/sign_up_verify_screen/provider/otp_verify_provider.dart';
+import 'package:barristerkayserkamal/utils/app_log.dart';
+import 'package:barristerkayserkamal/utils/app_size.dart';
+import 'package:barristerkayserkamal/utils/app_snack_bar.dart';
+import 'package:barristerkayserkamal/utils/gap.dart';
+import 'package:barristerkayserkamal/widgets/buttons/app_button.dart';
+import 'package:barristerkayserkamal/widgets/inputs/app_input_widget_tow.dart';
 
 import '../../../constant/app_asserts_image_path.dart';
 import '../../../routes/app_routes.dart';

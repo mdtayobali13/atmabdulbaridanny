@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod_template/constant/app_colors.dart';
-import 'package:flutter_riverpod_template/routes/app_routes.dart';
-import 'package:flutter_riverpod_template/routes/app_routes_key.dart';
-import 'package:flutter_riverpod_template/screens/auth_screen/sign_up_screen/provider/sign_up_provider.dart';
-import 'package:flutter_riverpod_template/utils/gap.dart';
-import 'package:flutter_riverpod_template/utils/app_snack_bar.dart';
+import 'package:barristerkayserkamal/constant/app_colors.dart';
+import 'package:barristerkayserkamal/routes/app_routes.dart';
+import 'package:barristerkayserkamal/routes/app_routes_key.dart';
+import 'package:barristerkayserkamal/screens/auth_screen/sign_up_screen/provider/sign_up_provider.dart';
+import 'package:barristerkayserkamal/utils/gap.dart';
+import 'package:barristerkayserkamal/utils/app_snack_bar.dart';
 
 class SignUpScreen extends ConsumerStatefulWidget {
   const SignUpScreen({super.key});

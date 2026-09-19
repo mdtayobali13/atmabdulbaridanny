@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:flutter_riverpod_template/utils/app_log.dart';
+import 'package:barristerkayserkamal/utils/app_log.dart';
 
 import '../../../../../services/repository/auth_repository.dart';
 

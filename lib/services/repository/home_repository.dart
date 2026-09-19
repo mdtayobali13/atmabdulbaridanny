@@ -1,7 +1,7 @@
-import 'package:flutter_riverpod_template/constant/app_api_url.dart';
-import 'package:flutter_riverpod_template/models/home_data_model.dart';
-import 'package:flutter_riverpod_template/services/api/api_services.dart';
-import 'package:flutter_riverpod_template/utils/app_log.dart';
+import 'package:barristerkayserkamal/constant/app_api_url.dart';
+import 'package:barristerkayserkamal/models/home_data_model.dart';
+import 'package:barristerkayserkamal/services/api/api_services.dart';
+import 'package:barristerkayserkamal/utils/app_log.dart';
 
 class HomeRepository {
   HomeRepository._privateConstructor();
@@ -24,15 +24,34 @@ class HomeRepository {
     return null;
   }
 
-  /// Record a page visit (e.g. path: '/home')
+  final Set<String> _recordedPathsInSession = {};
+  final Map<String, Map<String, dynamic>> _cachedVisitStats = {};
+
+  /// Record a page visit (e.g. path: 'home' or 'about-me')
   Future<Map<String, dynamic>?> recordVisit(String path) async {
     try {
+      final cleanPath = path.startsWith('/') ? path.substring(1) : path;
+      // If already recorded in this session, return cached stats
+      if (_recordedPathsInSession.contains(cleanPath) && _cachedVisitStats.containsKey(cleanPath)) {
+        return _cachedVisitStats[cleanPath];
+      }
+
+      final getResponse = await _apiServices.getServices(_api.visitStats(cleanPath));
+      if (getResponse != null && getResponse is Map) {
+        final result = Map<String, dynamic>.from(getResponse);
+        _recordedPathsInSession.add(cleanPath);
+        _cachedVisitStats[cleanPath] = result;
+        return result;
+      }
       final response = await _apiServices.postServices(
         url: _api.visit,
         body: {'path': path},
       );
       if (response != null && response is Map) {
-        return Map<String, dynamic>.from(response);
+        final result = Map<String, dynamic>.from(response);
+        _recordedPathsInSession.add(cleanPath);
+        _cachedVisitStats[cleanPath] = result;
+        return result;
       }
     } catch (e) {
       errorLog("recordVisit repo error", e);

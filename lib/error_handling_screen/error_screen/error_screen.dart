@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod_template/routes/app_routes.dart';
-import 'package:flutter_riverpod_template/routes/app_routes_key.dart';
-import 'package:flutter_riverpod_template/utils/app_size.dart';
-import 'package:flutter_riverpod_template/utils/gap.dart';
-import 'package:flutter_riverpod_template/widgets/app_image/app_image.dart';
-import 'package:flutter_riverpod_template/widgets/buttons/app_button.dart';
-import 'package:flutter_riverpod_template/widgets/texts/app_text.dart';
+import 'package:barristerkayserkamal/routes/app_routes.dart';
+import 'package:barristerkayserkamal/routes/app_routes_key.dart';
+import 'package:barristerkayserkamal/utils/app_size.dart';
+import 'package:barristerkayserkamal/utils/gap.dart';
+import 'package:barristerkayserkamal/widgets/app_image/app_image.dart';
+import 'package:barristerkayserkamal/widgets/buttons/app_button.dart';
+import 'package:barristerkayserkamal/widgets/texts/app_text.dart';
 
 class ErrorScreen extends StatelessWidget {
   const ErrorScreen({super.key});

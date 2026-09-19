@@ -1,6 +1,6 @@
-import 'package:flutter_riverpod_template/constant/app_api_url.dart';
-import 'package:flutter_riverpod_template/services/storage/storage_services.dart';
-import 'package:flutter_riverpod_template/utils/app_log.dart';
+import 'package:barristerkayserkamal/constant/app_api_url.dart';
+import 'package:barristerkayserkamal/services/storage/storage_services.dart';
+import 'package:barristerkayserkamal/utils/app_log.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class AppSocketAllOperation {

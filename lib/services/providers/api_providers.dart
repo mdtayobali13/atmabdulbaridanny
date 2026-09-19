@@ -1,16 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod_template/models/admin_dashboard_model.dart';
-import 'package:flutter_riverpod_template/models/auth_user_model.dart';
-import 'package:flutter_riverpod_template/models/content_models.dart';
-import 'package:flutter_riverpod_template/models/gallery_and_media_models.dart';
-import 'package:flutter_riverpod_template/models/home_data_model.dart';
-import 'package:flutter_riverpod_template/models/location_models.dart';
-import 'package:flutter_riverpod_template/models/service_and_development_models.dart';
-import 'package:flutter_riverpod_template/services/repository/admin_repository.dart';
-import 'package:flutter_riverpod_template/services/repository/auth_repository.dart';
-import 'package:flutter_riverpod_template/services/repository/content_repository.dart';
-import 'package:flutter_riverpod_template/services/repository/home_repository.dart';
-import 'package:flutter_riverpod_template/services/repository/location_repository.dart';
+import 'package:barristerkayserkamal/models/admin_dashboard_model.dart';
+import 'package:barristerkayserkamal/models/auth_user_model.dart';
+import 'package:barristerkayserkamal/models/content_models.dart';
+import 'package:barristerkayserkamal/models/gallery_and_media_models.dart';
+import 'package:barristerkayserkamal/models/home_data_model.dart';
+import 'package:barristerkayserkamal/models/location_models.dart';
+import 'package:barristerkayserkamal/models/service_and_development_models.dart';
+import 'package:barristerkayserkamal/services/repository/admin_repository.dart';
+import 'package:barristerkayserkamal/services/repository/auth_repository.dart';
+import 'package:barristerkayserkamal/services/repository/content_repository.dart';
+import 'package:barristerkayserkamal/services/repository/home_repository.dart';
+import 'package:barristerkayserkamal/services/repository/location_repository.dart';
 
 // ─────────────────────────────────────────────────────────────
 // Home Provider
@@ -43,7 +43,19 @@ final sliderListProvider = FutureProvider<List<SliderModel>>((ref) async {
 });
 
 final aboutMeProvider = FutureProvider<AboutMeModel?>((ref) async {
-  return ContentRepository.instance.getAboutMe();
+  final aboutMe = await ContentRepository.instance.getAboutMe();
+  if (aboutMe != null &&
+      ((aboutMe.contentEn?.isNotEmpty ?? false) ||
+          (aboutMe.contentBn?.isNotEmpty ?? false))) {
+    return aboutMe;
+  }
+  try {
+    final homeData = await ref.watch(homeDataProvider.future);
+    if (homeData != null && homeData.aboutMe.isNotEmpty) {
+      return homeData.aboutMe.first;
+    }
+  } catch (_) {}
+  return aboutMe;
 });
 
 final aboutProvider = FutureProvider<AboutModel?>((ref) async {

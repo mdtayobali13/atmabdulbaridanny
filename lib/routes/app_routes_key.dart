@@ -32,4 +32,5 @@ class AppRoutesKey {
   final String profileScreen = "profileScreen";
   final String complainScreen = "complainScreen";
   final String appointmentScreen = "appointmentScreen";
+  final String adminDashboardScreen = "adminDashboardScreen";
 }

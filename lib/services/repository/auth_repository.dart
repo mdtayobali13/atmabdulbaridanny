@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_riverpod_template/constant/app_api_url.dart';
-import 'package:flutter_riverpod_template/models/auth_user_model.dart';
-import 'package:flutter_riverpod_template/services/api/api_services.dart';
-import 'package:flutter_riverpod_template/services/storage/storage_services.dart';
-import 'package:flutter_riverpod_template/utils/app_log.dart';
+import 'package:barristerkayserkamal/constant/app_api_url.dart';
+import 'package:barristerkayserkamal/models/auth_user_model.dart';
+import 'package:barristerkayserkamal/services/api/api_services.dart';
+import 'package:barristerkayserkamal/services/storage/storage_services.dart';
+import 'package:barristerkayserkamal/utils/app_log.dart';
 
 class AuthRepository {
   AuthRepository._privateConstructor();
@@ -145,15 +145,34 @@ class AuthRepository {
   /// Get currently authenticated user details
   Future<AuthUserModel?> getMe() async {
     try {
+      final token = await _storage.getToken();
+      if (token.isEmpty) {
+        return null;
+      }
       final response = await _apiServices.getServices(_api.me);
       if (response != null && response is Map) {
-        final user = AuthUserModel.fromJson(Map<String, dynamic>.from(response));
-        await _storage.setUserData(user.toJson());
-        await _storage.setPermissions(user.permissions);
-        return user;
+        final data = response['data'] is Map
+            ? response['data'] as Map
+            : response['user'] is Map
+                ? response['user'] as Map
+                : response;
+        final user = AuthUserModel.fromJson(Map<String, dynamic>.from(data));
+        if (user.id != null) {
+          await _storage.setUserData(user.toJson());
+          await _storage.setPermissions(user.permissions);
+          return user;
+        }
+      }
+      final localData = await _storage.getUserData();
+      if (localData.isNotEmpty) {
+        return AuthUserModel.fromJson(localData);
       }
     } catch (e) {
       errorLog("getMe repo error", e);
+      final localData = await _storage.getUserData();
+      if (localData.isNotEmpty) {
+        return AuthUserModel.fromJson(localData);
+      }
     }
     return null;
   }
@@ -252,19 +271,68 @@ class AuthRepository {
     }
   }
 
-  Future<bool> changePassword({
-    required String currentPassword,
-    required String newPassword,
-    required String confirmPassword,
+  Future<bool> updateProfile({
+    required int userId,
+    required String name,
+    required String email,
   }) async {
     try {
+      final body = <String, dynamic>{
+        'name': name.trim(),
+        'email': email.trim().toLowerCase(),
+      };
+      final response = await _apiServices.putServices(
+        url: _api.adminUserById(userId),
+        body: body,
+        options: Options(contentType: Headers.formUrlEncodedContentType),
+      );
+      if (response != null) {
+        final currentData = await _storage.getUserData();
+        currentData['name'] = name.trim();
+        currentData['email'] = email.trim().toLowerCase();
+        await _storage.setUserData(currentData);
+        return true;
+      }
+    } catch (e) {
+      errorLog("updateProfile repo error", e);
+    }
+    return false;
+  }
+
+  Future<bool> changePassword({
+    String? currentPassword,
+    required String newPassword,
+    String? confirmPassword,
+    int? userId,
+    String? name,
+    String? email,
+  }) async {
+    try {
+      // 1. If userId is available, update via the validated admin/user PUT endpoint
+      if (userId != null) {
+        final body = <String, dynamic>{
+          if (name != null && name.isNotEmpty) 'name': name.trim(),
+          if (email != null && email.isNotEmpty) 'email': email.trim().toLowerCase(),
+          'password': newPassword.trim(),
+        };
+        final response = await _apiServices.putServices(
+          url: _api.adminUserById(userId),
+          body: body,
+          options: Options(contentType: Headers.formUrlEncodedContentType),
+        );
+        return response != null;
+      }
+
+      // 2. Fallback to legacy endpoint if userId not supplied
+      final fallbackBody = <String, dynamic>{
+        "newPassword": newPassword,
+      };
+      if (currentPassword != null) fallbackBody["currentPassword"] = currentPassword;
+      if (confirmPassword != null) fallbackBody["confirmPassword"] = confirmPassword;
+
       final response = await _apiServices.postServices(
         url: _api.changePassword,
-        body: {
-          "currentPassword": currentPassword,
-          "newPassword": newPassword,
-          "confirmPassword": confirmPassword,
-        },
+        body: fallbackBody,
       );
       return response != null;
     } catch (e) {

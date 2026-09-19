@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_riverpod_template/constant/app_colors.dart';
-import 'package:flutter_riverpod_template/models/content_models.dart';
-import 'package:flutter_riverpod_template/services/providers/api_providers.dart';
-import 'package:flutter_riverpod_template/utils/languages/language_provider.dart';
+import 'package:barristerkayserkamal/constant/app_colors.dart';
+import 'package:barristerkayserkamal/models/content_models.dart';
+import 'package:barristerkayserkamal/services/providers/api_providers.dart';
+import 'package:barristerkayserkamal/utils/languages/language_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CustomFooter extends ConsumerWidget {

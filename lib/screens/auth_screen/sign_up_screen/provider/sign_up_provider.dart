@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:flutter_riverpod_template/screens/auth_screen/sign_up_screen/provider/sign_up_provider_state.dart';
-import 'package:flutter_riverpod_template/services/repository/auth_repository.dart';
-import 'package:flutter_riverpod_template/utils/app_log.dart';
+import 'package:barristerkayserkamal/screens/auth_screen/sign_up_screen/provider/sign_up_provider_state.dart';
+import 'package:barristerkayserkamal/services/repository/auth_repository.dart';
+import 'package:barristerkayserkamal/utils/app_log.dart';
 
 final signUpProvider = StateNotifierProvider<_SignUpProvider, SignUpProviderState>((ref) => _SignUpProvider());
 

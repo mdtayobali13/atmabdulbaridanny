@@ -1,11 +1,10 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod_template/constant/app_api_url.dart';
-import 'package:flutter_riverpod_template/routes/app_routes.dart';
-import 'package:flutter_riverpod_template/routes/app_routes_key.dart';
-import 'package:flutter_riverpod_template/services/storage/storage_services.dart';
-import 'package:flutter_riverpod_template/utils/app_log.dart';
+import 'package:barristerkayserkamal/constant/app_api_url.dart';
+import 'package:barristerkayserkamal/routes/app_routes.dart';
+import 'package:barristerkayserkamal/services/storage/storage_services.dart';
+import 'package:barristerkayserkamal/utils/app_log.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 class AppApi {
@@ -89,6 +88,12 @@ class AppApi {
         return handler.next(error);
       }
 
+      final currentToken = await _storage.getToken();
+      if (currentToken.isEmpty) {
+        // Guest user - not logged in, no need to refresh or force logout
+        return handler.next(error);
+      }
+
       try {
         final newToken = await _refreshAccessToken();
         if (newToken != null && newToken.isNotEmpty) {
@@ -101,7 +106,7 @@ class AppApi {
         errorLog('token refresh failed', e);
       }
 
-      // Refresh failed — logout and redirect
+      // Refresh failed — clear invalid auth credentials without redirecting to splash!
       await _forceLogout();
       return handler.next(error);
     }
@@ -157,10 +162,9 @@ class AppApi {
     return newToken;
   }
 
-  // Clear auth header before redirect so it cannot leak
+  // Clear auth header on expired session without disrupting navigation
   Future<void> _forceLogout() async {
     _dio.options.headers.remove('Authorization');
     await StorageServices.instance.logout();
-    AppRoutes.instance.pushReplacement(AppRoutesKey.instance.splash);
   }
 }
