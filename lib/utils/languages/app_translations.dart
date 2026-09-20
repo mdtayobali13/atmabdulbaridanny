@@ -11,9 +11,10 @@ class AppTranslations {
   // -------------------------------------------------------------
   // Common & Generic
   // -------------------------------------------------------------
-  String get appTitle => isBangla ? "ব্যারিস্টার কায়সার কামাল" : "Barrister Kayser Kamal";
+  String get appTitle => isBangla ? "ব্যারিস্টার কায়সার কামাল, এমপি" : "Barrister Kayser Kamal, MP";
   String get todayVisitor => isBangla ? "আজকের ভিজিটর" : "Today Visitor";
   String get totalVisitor => isBangla ? "মোট ভিজিটর" : "Total Visitor";
+  String get totalVisitsTitle => isBangla ? "মোট ভিজিট" : "Total Visits";
   String get readMore => isBangla ? "বিস্তারিত পড়ুন" : "Read More";
   String get seeMore => isBangla ? "আরও দেখুন" : "See More";
   String get failedToLoad => isBangla ? "লোড করতে ব্যর্থ হয়েছে" : "Failed to load";
@@ -24,6 +25,18 @@ class AppTranslations {
   String get pleaseWait => isBangla ? "অনুগ্রহ করে অপেক্ষা করুন..." : "Please wait...";
 
   // -------------------------------------------------------------
+  // Profile Card & Official Details
+  // -------------------------------------------------------------
+  String get profileNameMp => isBangla ? "ব্যারিস্টার কায়সার কামাল, এমপি" : "Barrister Kayser Kamal, MP";
+  String get profileConstituency => isBangla ? "নেত্রকোনা-১ (দুর্গাপুর-কলমাকান্দা)" : "Netrokona-1 (Durgapur-Kalmakanda)";
+  String get profileDeputySpeaker => isBangla ? "ডেপুটি স্পিকার" : "Deputy Speaker";
+  String get profileParliament => isBangla ? "বাংলাদেশ জাতীয় সংসদ" : "Bangladesh Parliament";
+  String get profileMobileLabel => isBangla ? "মোবাইলঃ" : "Mobile:";
+  String get profileMobileNumber => isBangla ? "০১৭১৩০৪৬৭৮৩" : "01713046783";
+  String get profileEmailLabel => isBangla ? "ইমেইলঃ" : "Email:";
+  String get profileEmailAddress => "netrokona.1@parliament.gov.bd";
+
+  // -------------------------------------------------------------
   // Navigation & Drawer
   // -------------------------------------------------------------
   String get navHome => isBangla ? "হোম" : "Home";
@@ -32,9 +45,11 @@ class AppTranslations {
   String get navContact => isBangla ? "যোগাযোগ" : "Contact";
   String get navProfile => isBangla ? "প্রোফাইল" : "Profile";
 
+  String get menuAboutUs => isBangla ? "আমাদের সম্পর্কে" : "About Us";
   String get menuAboutMe => isBangla ? "আমার সম্পর্কে" : "About Me";
-  String get menuBiography => isBangla ? "জীবনী" : "Biography";
+  String get menuBiography => isBangla ? "জীবনবৃত্তান্ত" : "Biography";
   String get menuHistory => isBangla ? "জীবন ও সংগ্রাম" : "History";
+  String get menuHistoryOfLifeAndStruggle => isBangla ? "জীবন ও সংগ্রামের ইতিহাস" : "History of Life and Struggle";
   String get menuAchievement => isBangla ? "অর্জন" : "Achievement";
   String get menuJourney => isBangla ? "যাত্রা ও পথচলা" : "Journey";
   String get menuPhotoGallery => isBangla ? "ফটো গ্যালারি" : "Photo Gallery";
@@ -63,19 +78,19 @@ class AppTranslations {
   String get submitComplaintBtn => isBangla ? "অভিযোগ দাখিল করুন" : "Submit Complaint";
 
   String get defaultAddress => isBangla
-      ? "বাংলাদেশ সুপ্রিম কোর্ট আইনজীবী সমিতি, ঢাকা, বাংলাদেশ"
-      : "Supreme Court Bar Association, Dhaka, Bangladesh";
+      ? "বাংলাদেশ জাতীয় সংসদ, শের-ই-বাংলা নগর, ঢাকা-১২০৭"
+      : "Bangladesh Parliament, Sher-e-Bangla Nagar, Dhaka-1207";
   String get viewOnGoogleMaps => isBangla ? "গুগল ম্যাপে দেখুন" : "View on Google Maps";
 
   String get profileDesignation => isBangla
-      ? "আইনজীবী, বাংলাদেশ সুপ্রিম কোর্ট\nও আইন বিষয়ক সম্পাদক, বাংলাদেশ জাতীয়তাবাদী দল (বিএনপি)"
-      : "Advocate, Supreme Court of Bangladesh\n& Legal Affairs Secretary, Bangladesh Nationalist Party (BNP)";
+      ? "ডেপুটি স্পিকার\nবাংলাদেশ জাতীয় সংসদ\nনেত্রকোনা-১ (দুর্গাপুর-কলমাকান্দা)"
+      : "Deputy Speaker\nBangladesh Parliament\nNetrokona-1 (Durgapur-Kalmakanda)";
   String get importantLinks => isBangla ? "গুরুত্বপূর্ণ লিংকসমূহ" : "Important Links";
   String get facebookPage => isBangla ? "ফেসবুক পেইজ" : "Facebook Page";
   String get followUs => isBangla ? "অনুসরণ করুন" : "Follow";
   String get copyrightText => isBangla
-      ? "কপিরাইট © ২০২৬ ব্যারিস্টার কায়সার কামাল। সর্বস্বত্ব সংরক্ষিত।"
-      : "Copyright © 2026 Barrister Kayser Kamal. All rights reserved.";
+      ? "কপিরাইট © ২০২৬ ব্যারিস্টার কায়সার কামাল, এমপি। সর্বস্বত্ব সংরক্ষিত।"
+      : "Copyright © 2026 Barrister Kayser Kamal, MP. All rights reserved.";
 
   // -------------------------------------------------------------
   // Biography, Journey, History & Achievements

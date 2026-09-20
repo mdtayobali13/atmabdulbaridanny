@@ -41,9 +41,15 @@ class _ContactScreenState extends ConsumerState<ContactScreen> {
     final isBangla = ref.watch(isBanglaProvider);
     final tr = AppTranslations.of(isBangla);
 
-    final phone = setting?.mobile ?? "01713004673";
-    final email = setting?.email ?? "info@barristerkayserkamal.info";
-    final address = setting?.address ?? tr.parliamentAddress;
+    final hasBengaliAddress = setting?.address != null &&
+        RegExp(r'[\u0980-\u09FF]').hasMatch(setting!.address!);
+    final address = (isBangla || !hasBengaliAddress) && setting?.address?.isNotEmpty == true
+        ? setting!.address!
+        : tr.parliamentAddress;
+
+    final rawPhone = setting?.mobile ?? "01713046783";
+    final phone = isBangla ? rawPhone.toBanglaDigits(true) : rawPhone;
+    final email = setting?.email ?? "netrokona.1@parliament.gov.bd";
 
     return Scaffold(
       backgroundColor: Colors.white,

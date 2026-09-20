@@ -46,39 +46,65 @@ class DrawerNavList extends StatelessWidget {
           ),
         _buildItem(
           context: context,
-          icon: CupertinoIcons.info_circle,
-          title: isBangla ? "আমার সম্পর্কে" : "About Me",
-          onTap: () => _navigateTo(context, '/${AppRoutesKey.instance.aboutScreen}'),
+          icon: CupertinoIcons.house_fill,
+          title: isBangla ? "হোম" : "Home",
+          onTap: () => _navigateTo(context, '/${AppRoutesKey.instance.homeScreen}'),
+        ),
+        _buildDropdown(
+          context: context,
+          icon: CupertinoIcons.person_2_fill,
+          title: isBangla ? "আমাদের সম্পর্কে" : "About Us",
+          children: [
+            _buildSubItem(
+              context: context,
+              title: isBangla ? "আমার সম্পর্কে" : "About Me",
+              onTap: () => _navigateTo(context, '/${AppRoutesKey.instance.aboutScreen}'),
+            ),
+            _buildSubItem(
+              context: context,
+              title: isBangla ? "জীবনবৃত্তান্ত" : "Biography",
+              onTap: () => _navigateTo(context, '/biography_screen'),
+            ),
+            _buildSubItem(
+              context: context,
+              title: isBangla ? "জীবন ও সংগ্রামের ইতিহাস" : "History of Life and Struggle",
+              onTap: () => _navigateTo(context, '/history_of_life_screen'),
+            ),
+            _buildSubItem(
+              context: context,
+              title: isBangla ? "অর্জন" : "Achievement",
+              onTap: () => _navigateTo(context, '/achievement_screen'),
+            ),
+            _buildSubItem(
+              context: context,
+              title: isBangla ? "যাত্রা ও পথচলা" : "Journey",
+              onTap: () => _navigateTo(context, '/journey_screen'),
+            ),
+          ],
         ),
         _buildItem(
           context: context,
-          icon: CupertinoIcons.book,
-          title: isBangla ? "জীবনবৃত্তান্ত" : "Biography",
-          onTap: () => _navigateTo(context, '/biography_screen'),
+          icon: CupertinoIcons.news_solid,
+          title: isBangla ? "সংবাদ" : "News",
+          onTap: () => _navigateTo(context, '/news_screen'),
         ),
         _buildItem(
           context: context,
-          icon: CupertinoIcons.time,
-          title: isBangla ? "জীবন ও সংগ্রামের ইতিহাস" : "History of Life & Struggle",
-          onTap: () => _navigateTo(context, '/history_of_life_screen'),
+          icon: CupertinoIcons.book_fill,
+          title: isBangla ? "ব্লগ" : "Blog",
+          onTap: () => _navigateTo(context, '/blog_screen'),
         ),
         _buildItem(
           context: context,
-          icon: CupertinoIcons.phone,
-          title: isBangla ? "যোগাযোগ" : "Contact",
-          onTap: () => _navigateTo(context, '/contact_screen'),
+          icon: CupertinoIcons.photo_fill_on_rectangle_fill,
+          title: isBangla ? "ফটো গ্যালারি" : "Photo Gallery",
+          onTap: () => _navigateTo(context, '/photo_gallery_screen'),
         ),
         _buildItem(
           context: context,
-          icon: CupertinoIcons.calendar,
-          title: isBangla ? "সাক্ষাৎকার" : "Appointment",
-          onTap: () => _navigateTo(context, '/appointment_screen', isPush: true),
-        ),
-        _buildItem(
-          context: context,
-          icon: CupertinoIcons.exclamationmark_bubble,
-          title: isBangla ? "অভিযোগ" : "Complaint",
-          onTap: () => _navigateTo(context, '/complain_screen', isPush: true),
+          icon: CupertinoIcons.play_rectangle_fill,
+          title: isBangla ? "ভিডিও গ্যালারি" : "Video Gallery",
+          onTap: () => _navigateTo(context, '/video_gallery_screen'),
         ),
         _buildDropdown(
           context: context,
@@ -104,7 +130,7 @@ class DrawerNavList extends StatelessWidget {
         ),
         _buildDropdown(
           context: context,
-          icon: CupertinoIcons.news,
+          icon: CupertinoIcons.tv_fill,
           title: isBangla ? "মিডিয়া" : "Media",
           children: [
             _buildSubItem(
@@ -118,6 +144,24 @@ class DrawerNavList extends StatelessWidget {
               onTap: () => _navigateTo(context, '/electronic_media_screen'),
             ),
           ],
+        ),
+        _buildItem(
+          context: context,
+          icon: CupertinoIcons.calendar,
+          title: isBangla ? "সাক্ষাৎকার" : "Appointment",
+          onTap: () => _navigateTo(context, '/appointment_screen', isPush: true),
+        ),
+        _buildItem(
+          context: context,
+          icon: CupertinoIcons.exclamationmark_bubble,
+          title: isBangla ? "অভিযোগ" : "Complaint",
+          onTap: () => _navigateTo(context, '/complain_screen', isPush: true),
+        ),
+        _buildItem(
+          context: context,
+          icon: CupertinoIcons.phone_fill,
+          title: isBangla ? "যোগাযোগ" : "Contact",
+          onTap: () => _navigateTo(context, '/contact_screen'),
         ),
         _buildItem(
           context: context,

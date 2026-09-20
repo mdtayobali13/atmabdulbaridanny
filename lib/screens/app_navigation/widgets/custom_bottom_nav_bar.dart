@@ -137,7 +137,7 @@ class _CustomBottomNavBarState extends ConsumerState<CustomBottomNavBar> {
                       items: <PopupMenuEntry<String>>[
                         _buildPopupMenuItem("About Me", tr.menuAboutMe),
                         _buildPopupMenuItem("Biography", tr.menuBiography),
-                        _buildPopupMenuItem("History", tr.menuHistory),
+                        _buildPopupMenuItem("History", tr.menuHistoryOfLifeAndStruggle),
                         _buildPopupMenuItem("Achievement", tr.menuAchievement),
                         _buildPopupMenuItem("Journey", tr.menuJourney),
                       ],

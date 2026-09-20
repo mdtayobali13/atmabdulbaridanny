@@ -75,36 +75,66 @@ class DrawerHeaderCard extends StatelessWidget {
           const SizedBox(height: 24),
           CircleAvatar(
             backgroundColor: Colors.white,
-            radius: 30,
+            radius: 32,
             backgroundImage: AssetImage(AppAssertsImagePath.instance.barristerKayserKamal),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 14),
           Text(
-            isBangla ? "ব্যারিস্টার কায়সার কামাল" : "Barrister Kayser Kamal",
-            style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+            isBangla ? "ব্যারিস্টার কায়সার কামাল, এমপি" : "Barrister Kayser Kamal, MP",
+            style: const TextStyle(color: Colors.white, fontSize: 18.5, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            isBangla ? "নেত্রকোনা-১ (দুর্গাপুর-কলমাকান্দা)" : "Netrokona-1 (Durgapur-Kalmakanda)",
+            style: TextStyle(
+              color: AppColors.instance.goldenColor,
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+            ),
           ),
           const SizedBox(height: 8),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(20),
+              color: Colors.black.withValues(alpha: 0.25),
+              borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: AppColors.instance.goldenColor.withValues(alpha: 0.4),
+                color: AppColors.instance.goldenColor.withValues(alpha: 0.5),
                 width: 1,
               ),
             ),
             child: Text(
               isBangla
-                  ? "অ্যাডভোকেট, বাংলাদেশ সুপ্রিম কোর্ট"
-                  : "Advocate, Supreme Court of Bangladesh",
+                  ? "ডেপুটি স্পিকার, বাংলাদেশ জাতীয় সংসদ"
+                  : "Deputy Speaker, Bangladesh Parliament",
               style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.9),
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
+                color: Colors.white.withValues(alpha: 0.95),
+                fontSize: 11.5,
+                fontWeight: FontWeight.w600,
                 letterSpacing: 0.2,
               ),
             ),
+          ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Icon(Icons.phone, size: 12, color: Colors.white.withValues(alpha: 0.75)),
+              const SizedBox(width: 5),
+              Text(
+                isBangla ? "০১৭১৩০৪৬৭৮৩" : "01713046783",
+                style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 11.5),
+              ),
+              const SizedBox(width: 12),
+              Icon(Icons.email, size: 12, color: Colors.white.withValues(alpha: 0.75)),
+              const SizedBox(width: 5),
+              Expanded(
+                child: Text(
+                  "netrokona.1@parliament.gov.bd",
+                  style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 10.5),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
           ),
         ],
       ),

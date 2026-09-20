@@ -19,6 +19,10 @@ final homeDataProvider = FutureProvider<HomeDataModel?>((ref) async {
   return HomeRepository.instance.getHomeData();
 });
 
+final homeVisitStatsProvider = FutureProvider<Map<String, dynamic>?>((ref) async {
+  return HomeRepository.instance.getVisitStats('home');
+});
+
 // ─────────────────────────────────────────────────────────────
 // Content Providers
 // ─────────────────────────────────────────────────────────────

@@ -14,6 +14,7 @@ import 'package:barristerkayserkamal/screens/home_screen/widgets/horizontal_list
 import 'package:barristerkayserkamal/screens/home_screen/widgets/map_section.dart';
 import 'package:barristerkayserkamal/screens/home_screen/widgets/news_item.dart';
 import 'package:barristerkayserkamal/screens/home_screen/widgets/photo_gallery.dart';
+import 'package:barristerkayserkamal/screens/home_screen/widgets/profile_identity_card.dart';
 import 'package:barristerkayserkamal/screens/home_screen/widgets/section_title.dart';
 import 'package:barristerkayserkamal/screens/home_screen/widgets/video_gallery.dart';
 import 'package:barristerkayserkamal/screens/life_history_screen/life_history_screen.dart';
@@ -109,7 +110,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               error: (err, stack) => _buildApiBanner(websiteSettingAsync),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 12),
+
+            // ─────────────────────────────────────────────────────────────
+            // Official Profile Identity Card
+            // ─────────────────────────────────────────────────────────────
+            const ProfileIdentityCard(),
+
+            const SizedBox(height: 16),
 
             // ─────────────────────────────────────────────────────────────
             // 2. Life & Success Records (Live API)

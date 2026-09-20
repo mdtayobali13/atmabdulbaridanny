@@ -1,11 +1,13 @@
+import 'package:barristerkayserkamal/services/repository/home_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:barristerkayserkamal/constant/app_asserts_image_path.dart';
 import 'package:barristerkayserkamal/constant/app_colors.dart';
 import 'package:barristerkayserkamal/screens/home_screen/widgets/custom_footer.dart';
 import 'package:barristerkayserkamal/services/providers/api_providers.dart';
-import 'package:barristerkayserkamal/services/repository/home_repository.dart';
 import 'package:barristerkayserkamal/utils/languages/language_provider.dart';
+
 
 class BiographyScreen extends ConsumerStatefulWidget {
   const BiographyScreen({super.key});
@@ -33,6 +35,7 @@ class _BiographyScreenState extends ConsumerState<BiographyScreen> {
   @override
   Widget build(BuildContext context) {
     final primaryGreen = AppColors.instance.primaryGreen;
+    final goldenColor = AppColors.instance.goldenColor;
     final bioAsync = ref.watch(biographyListProvider);
     final aboutMeAsync = ref.watch(aboutMeProvider);
     final isBangla = ref.watch(isBanglaProvider);
@@ -78,7 +81,7 @@ class _BiographyScreenState extends ConsumerState<BiographyScreen> {
               ),
             ),
 
-            // 2. About Me Section (if available)
+            // 2. About Me Section (Full Uncropped Picture & Elegant Card)
             aboutMeAsync.when(
               data: (aboutMe) {
                 if (aboutMe == null) return const SizedBox.shrink();
@@ -86,41 +89,160 @@ class _BiographyScreenState extends ConsumerState<BiographyScreen> {
                 if (content.isEmpty) return const SizedBox.shrink();
 
                 return Container(
-                  margin: const EdgeInsets.all(16),
+                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: goldenColor.withValues(alpha: 0.35), width: 1.2),
                     boxShadow: [
-                      BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 6, spreadRadius: 1),
+                      BoxShadow(
+                        color: primaryGreen.withValues(alpha: 0.08),
+                        blurRadius: 16,
+                        spreadRadius: 1,
+                        offset: const Offset(0, 4),
+                      ),
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.03),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
+                      ),
                     ],
                   ),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      if (aboutMe.fullImageUrl.isNotEmpty) ...[
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: CachedNetworkImage(
-                            imageUrl: aboutMe.fullImageUrl,
-                            height: 200,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) =>
-                                const SizedBox(height: 200, child: Center(child: CircularProgressIndicator(strokeWidth: 2))),
-                            errorWidget: (context, url, error) => const SizedBox.shrink(),
+                      // Full Uncropped Picture in Luxury Frame
+                      Center(
+                        child: Container(
+                          constraints: const BoxConstraints(maxHeight: 280),
+                          padding: const EdgeInsets.all(3.5),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                goldenColor,
+                                const Color(0xFFFFF4BF),
+                                const Color(0xFFAA771C),
+                                goldenColor,
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(18),
+                            boxShadow: [
+                              BoxShadow(
+                                color: goldenColor.withValues(alpha: 0.3),
+                                blurRadius: 12,
+                                spreadRadius: 1,
+                                offset: const Offset(0, 4),
+                              ),
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.1),
+                                blurRadius: 8,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(14.5),
+                            child: Container(
+                              color: Colors.grey.shade50,
+                              child: aboutMe.fullImageUrl.isNotEmpty
+                                  ? CachedNetworkImage(
+                                      imageUrl: aboutMe.fullImageUrl,
+                                      fit: BoxFit.contain, // FULL PICTURE VISIBLE - NO CROPPING
+                                      placeholder: (context, url) => const SizedBox(
+                                        height: 220,
+                                        width: 200,
+                                        child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
+                                      ),
+                                      errorWidget: (context, url, error) => Image.asset(
+                                        AppAssertsImagePath.instance.barristerKayserKamal,
+                                        fit: BoxFit.contain,
+                                        height: 220,
+                                      ),
+                                    )
+                                  : Image.asset(
+                                      AppAssertsImagePath.instance.barristerKayserKamal,
+                                      fit: BoxFit.contain,
+                                      height: 220,
+                                    ),
+                            ),
                           ),
                         ),
-                        const SizedBox(height: 16),
-                      ],
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // Name
                       Text(
-                        isBangla ? "ব্যারিস্টার কায়সার কামাল সম্পর্কে" : "About Barrister Kayser Kamal",
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
+                        isBangla ? "ব্যারিস্টার কায়সার কামাল, এমপি" : "Barrister Kayser Kamal, MP",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: primaryGreen,
+                          letterSpacing: 0.2,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+
+                      // Badge
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: goldenColor.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: goldenColor.withValues(alpha: 0.4), width: 1),
+                        ),
+                        child: Text(
+                          isBangla ? "ডেপুটি স্পিকার, বাংলাদেশ জাতীয় সংসদ" : "Deputy Speaker, Bangladesh Parliament",
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: primaryGreen,
+                          ),
+                        ),
+                      ),
+
+                      // Decorative Divider
+                      Container(
+                        margin: const EdgeInsets.symmetric(vertical: 16),
+                        height: 1.5,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.transparent,
+                              goldenColor.withValues(alpha: 0.5),
+                              Colors.transparent,
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      // Content Section
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          isBangla ? "ব্যারিস্টার কায়সার কামাল সম্পর্কে" : "About Barrister Kayser Kamal",
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            color: primaryGreen,
+                          ),
+                        ),
                       ),
                       const SizedBox(height: 10),
                       Text(
                         content.replaceAll(RegExp(r'<[^>]*>'), '').trim(),
-                        style: const TextStyle(fontSize: 14, height: 1.6, color: Colors.black87),
+                        style: const TextStyle(
+                          fontSize: 14.5,
+                          height: 1.7,
+                          color: Colors.black87,
+                          letterSpacing: 0.15,
+                        ),
+                        textAlign: TextAlign.justify,
                       ),
                     ],
                   ),

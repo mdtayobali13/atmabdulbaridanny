@@ -228,7 +228,6 @@ class _AboutUsScreenState extends ConsumerState<AboutUsScreen> {
       ),
     );
   }
-
   Widget _buildProfileDetails({
     required Color primaryGreen,
     required bool isBangla,
@@ -238,8 +237,17 @@ class _AboutUsScreenState extends ConsumerState<AboutUsScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          isBangla ? "ব্যারিস্টার কায়সার কামাল" : "Barrister Kayser Kamal",
+          isBangla ? "ব্যারিস্টার কায়সার কামাল, এমপি" : "Barrister Kayser Kamal, MP",
           style: TextStyle(color: primaryGreen, fontSize: 22, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          isBangla ? "নেত্রকোনা-১ (দুর্গাপুর-কলমাকান্দা)" : "Netrokona-1 (Durgapur-Kalmakanda)",
+          style: TextStyle(
+            color: AppColors.instance.primaryGreen.withValues(alpha: 0.85),
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+          ),
         ),
         const SizedBox(height: 8),
         Container(
@@ -253,13 +261,34 @@ class _AboutUsScreenState extends ConsumerState<AboutUsScreen> {
             ),
           ),
           child: Text(
-            isBangla ? "অ্যাডভোকেট, বাংলাদেশ সুপ্রিম কোর্ট" : "Advocate, Supreme Court of Bangladesh",
+            isBangla ? "ডেপুটি স্পিকার, বাংলাদেশ জাতীয় সংসদ" : "Deputy Speaker, Bangladesh Parliament",
             style: TextStyle(
               color: AppColors.instance.primaryGreen,
               fontSize: 12,
               fontWeight: FontWeight.w600,
             ),
           ),
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            const Icon(Icons.phone, size: 14, color: Colors.black54),
+            const SizedBox(width: 4),
+            Text(
+              isBangla ? "০১৭১৩০৪৬৭৮৩" : "01713046783",
+              style: const TextStyle(fontSize: 12.5, color: Colors.black87),
+            ),
+            const SizedBox(width: 12),
+            const Icon(Icons.email, size: 14, color: Colors.black54),
+            const SizedBox(width: 4),
+            const Flexible(
+              child: Text(
+                "netrokona.1@parliament.gov.bd",
+                style: TextStyle(fontSize: 12, color: Colors.black87),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: 16),
         Text(

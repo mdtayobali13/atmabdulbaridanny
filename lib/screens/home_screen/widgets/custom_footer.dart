@@ -30,6 +30,7 @@ class CustomFooter extends ConsumerWidget {
     final primaryGreen = AppColors.instance.primaryGreen;
     final setting = ref.watch(websiteSettingProvider).asData?.value;
     final footerLinks = ref.watch(footerLinksProvider).asData?.value ?? [];
+    final visitStats = ref.watch(homeVisitStatsProvider).asData?.value;
     final isBangla = ref.watch(isBanglaProvider);
     final tr = AppTranslations.of(isBangla);
 
@@ -50,6 +51,10 @@ class CustomFooter extends ConsumerWidget {
 
           // Section 3: Facebook Page Section
           _buildFacebookCard(setting, isBangla, tr),
+          const SizedBox(height: 32),
+
+          // Section 4: Total Visits (Visitor Stats)
+          _buildVisitorStats(visitStats, isBangla, tr),
           const SizedBox(height: 32),
 
           // Copyright
@@ -78,9 +83,32 @@ class CustomFooter extends ConsumerWidget {
         ? (setting?.titleBn?.isNotEmpty == true ? setting!.titleBn! : tr.appTitle)
         : (setting?.titleEn?.isNotEmpty == true ? setting!.titleEn! : tr.appTitle);
 
-    final address = setting?.address?.isNotEmpty == true
-        ? setting!.address!
-        : tr.profileDesignation;
+    final hasBengaliInAddress = setting?.address != null &&
+        RegExp(r'[\u0980-\u09FF]').hasMatch(setting!.address!);
+
+    final String address;
+    if (isBangla) {
+      if (setting?.address?.isNotEmpty == true) {
+        address = setting!.address!.replaceAll(RegExp(r'।?\s*মোবাইল[ঃ:].*'), '').trim();
+      } else {
+        address = tr.profileDesignation;
+      }
+    } else {
+      if (setting?.address?.isNotEmpty == true && !hasBengaliInAddress) {
+        address = setting!.address!;
+      } else {
+        address = "Deputy Speaker, Bangladesh Parliament\nNetrokona-1 (Durgapur-Kalmakanda)";
+      }
+    }
+
+    final rawPhone = setting?.mobile?.isNotEmpty == true
+        ? setting!.mobile!
+        : tr.profileMobileNumber;
+    final phone = isBangla ? rawPhone.toBanglaDigits(true) : rawPhone;
+
+    final email = setting?.email?.isNotEmpty == true
+        ? setting!.email!
+        : tr.profileEmailAddress;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -122,24 +150,20 @@ class CustomFooter extends ConsumerWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          if (setting?.mobile != null && setting!.mobile!.isNotEmpty) ...[
-            const SizedBox(height: 12),
-            Center(
-              child: Text(
-                "${isBangla ? 'ফোন: ' : 'Phone: '}${setting.mobile}",
-                style: const TextStyle(color: Colors.white70, fontSize: 13),
-              ),
+          const SizedBox(height: 12),
+          Center(
+            child: Text(
+              "${isBangla ? 'ফোন: ' : 'Phone: '}$phone",
+              style: const TextStyle(color: Colors.white70, fontSize: 13),
             ),
-          ],
-          if (setting?.email != null && setting!.email!.isNotEmpty) ...[
-            const SizedBox(height: 4),
-            Center(
-              child: Text(
-                "${isBangla ? 'ইমেইল: ' : 'Email: '}${setting.email}",
-                style: const TextStyle(color: Colors.white70, fontSize: 12),
-              ),
+          ),
+          const SizedBox(height: 4),
+          Center(
+            child: Text(
+              "${isBangla ? 'ইমেইল: ' : 'Email: '}$email",
+              style: const TextStyle(color: Colors.white70, fontSize: 12),
             ),
-          ],
+          ),
           const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -320,6 +344,94 @@ class CustomFooter extends ConsumerWidget {
               ],
             ),
           )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildVisitorStats(Map<String, dynamic>? visitStats, bool isBangla, AppTranslations tr) {
+    final todayVisits = (visitStats?['today_visits']?.toString() ?? '2').toBanglaDigits(isBangla);
+    final totalVisits = (visitStats?['total_visits']?.toString() ?? '192').toBanglaDigits(isBangla);
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.analytics_outlined, color: AppColors.instance.goldenColor, size: 20),
+              const SizedBox(width: 8),
+              Text(
+                tr.totalVisitsTitle,
+                style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+            decoration: BoxDecoration(
+              color: Colors.black.withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Expanded(
+                  child: Column(
+                    children: [
+                      Text(
+                        tr.todayVisitor,
+                        style: const TextStyle(color: Colors.white70, fontSize: 13),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        todayVisits,
+                        style: TextStyle(
+                          color: AppColors.instance.goldenColor,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: 1,
+                  height: 38,
+                  color: Colors.white24,
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Text(
+                        tr.totalVisitor,
+                        style: const TextStyle(color: Colors.white70, fontSize: 13),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        totalVisits,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
