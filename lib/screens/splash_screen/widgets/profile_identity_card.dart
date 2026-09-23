@@ -26,11 +26,12 @@ class ProfileIdentityCard extends ConsumerWidget {
     final setting = ref.watch(websiteSettingProvider).asData?.value;
 
     final name = isBangla ? tr.profileNameMp : "ATM Abdul Bari Danny";
-    final constituency = isBangla ? tr.profileConstituency : "BIWTC, Dhaka";
+    final constituency = isBangla
+        ? "২৪ কাজী নজরুল ইসলাম এভিনিউ, ঢাকা-১০০০"
+        : "24 Kazi Nazrul Islam Avenue, Dhaka-1000";
     final deputySpeaker = isBangla ? tr.profileDeputySpeaker : "Chairman";
     final parliament = isBangla ? tr.profileParliament : "BIWTC";
-    final rawMobile = setting?.mobile?.isNotEmpty == true ? setting!.mobile! : tr.profileMobileNumber;
-    final mobileNumber = isBangla ? rawMobile.toBanglaDigits(true) : rawMobile;
+    final mobileNumber = isBangla ? "০২২২৩৩৬০৬৭১ (অফিস)" : "02223360671 (Office)";
     final emailAddress = setting?.email?.isNotEmpty == true ? setting!.email! : tr.profileEmailAddress;
 
     final primaryGreen = AppColors.instance.primaryGreen;
@@ -322,7 +323,7 @@ class ProfileIdentityCard extends ConsumerWidget {
                     value: mobileNumber,
                     actionText: isBangla ? "কল করুন" : "Call",
                     actionColor: primaryGreen,
-                    onTap: () => _launchUrl('tel:${mobileNumber.replaceAll(RegExp(r'[^0-9+]'), '')}'),
+                    onTap: () => _launchUrl('tel:02223360671'),
                   ),
                   const SizedBox(height: 8),
 

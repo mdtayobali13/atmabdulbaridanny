@@ -242,7 +242,7 @@ class _AboutUsScreenState extends ConsumerState<AboutUsScreen> {
         ),
         const SizedBox(height: 4),
         Text(
-          isBangla ? "বিআইডব্লিউটিসি, ঢাকা" : "BIWTC, Dhaka",
+          isBangla ? "২৪ কাজী নজরুল ইসলাম এভিনিউ, ঢাকা-১০০০" : "24 Kazi Nazrul Islam Avenue, Dhaka-1000",
           style: TextStyle(
             color: AppColors.instance.primaryGreen.withValues(alpha: 0.85),
             fontSize: 14,
@@ -275,7 +275,7 @@ class _AboutUsScreenState extends ConsumerState<AboutUsScreen> {
             const Icon(Icons.phone, size: 14, color: Colors.black54),
             const SizedBox(width: 4),
             Text(
-              isBangla ? "+৮৮-০২৪৭৮৮০১০৩০" : "+88-02478801030",
+              isBangla ? "০২২২৩৩৬০৬৭১ (অফিস)" : "02223360671 (Office)",
               style: const TextStyle(fontSize: 12.5, color: Colors.black87),
             ),
             const SizedBox(width: 12),

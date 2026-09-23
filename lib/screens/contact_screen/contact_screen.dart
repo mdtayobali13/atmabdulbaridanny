@@ -47,8 +47,7 @@ class _ContactScreenState extends ConsumerState<ContactScreen> {
         ? setting!.address!
         : tr.parliamentAddress;
 
-    final rawPhone = setting?.mobile?.isNotEmpty == true ? setting!.mobile! : tr.profileMobileNumber;
-    final phone = isBangla ? rawPhone.toBanglaDigits(true) : rawPhone;
+    final phone = tr.profileMobileNumber;
     final email = setting?.email?.isNotEmpty == true ? setting!.email! : tr.profileEmailAddress;
 
     return Scaffold(

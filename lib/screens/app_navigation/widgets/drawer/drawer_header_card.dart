@@ -53,11 +53,10 @@ class DrawerHeaderCard extends ConsumerWidget {
         ? "চেয়ারম্যান, বিআইডব্লিউটিসি"
         : "Chairman, BIWTC";
     final addressText = isBangla
-        ? (setting?.address?.isNotEmpty == true ? "বিআইডব্লিউটিসি, ঢাকা" : tr.profileConstituency)
-        : (tr.profileConstituency);
+        ? "২৪ কাজী নজরুল ইসলাম এভিনিউ, ঢাকা-১০০০"
+        : "24 Kazi Nazrul Islam Avenue, Dhaka-1000";
 
-    final rawPhone = setting?.mobile?.isNotEmpty == true ? setting!.mobile! : tr.profileMobileNumber;
-    final phone = isBangla ? rawPhone.toBanglaDigits(true) : rawPhone;
+    final phone = isBangla ? "০২২২৩৩৬০৬৭১ (অফিস)" : "02223360671 (Office)";
     final email = setting?.email?.isNotEmpty == true ? setting!.email! : tr.profileEmailAddress;
 
     return Container(

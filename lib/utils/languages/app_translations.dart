@@ -28,11 +28,11 @@ class AppTranslations {
   // Profile Card & Official Details
   // -------------------------------------------------------------
   String get profileNameMp => isBangla ? "এ টি এম আব্দুল বারী ড্যানী" : "ATM Abdul Bari Danny";
-  String get profileConstituency => isBangla ? "বিআইডব্লিউটিসি, ঢাকা" : "BIWTC, Dhaka";
+  String get profileConstituency => isBangla ? "২৪ কাজী নজরুল ইসলাম এভিনিউ, ঢাকা-১০০০" : "24 Kazi Nazrul Islam Avenue, Dhaka-1000";
   String get profileDeputySpeaker => isBangla ? "চেয়ারম্যান" : "Chairman";
   String get profileParliament => isBangla ? "বিআইডব্লিউটিসি" : "BIWTC";
   String get profileMobileLabel => isBangla ? "ফোন/মোবাইলঃ" : "Phone/Mobile:";
-  String get profileMobileNumber => isBangla ? "+৮৮-০২৪৭৮৮০১০৩০" : "+88-02478801030";
+  String get profileMobileNumber => isBangla ? "০২২২৩৩৬০৬৭১ (অফিস)" : "02223360671 (Office)";
   String get profileEmailLabel => isBangla ? "ইমেইলঃ" : "Email:";
   String get profileEmailAddress => "chairman@biwtc.gov.bd";
 
@@ -267,7 +267,7 @@ class AppTranslations {
   String get messageSentSuccess => isBangla ? "আপনার বার্তা সফলভাবে পাঠানো হয়েছে!" : "Your message has been sent successfully!";
 
   String get addressLabel => isBangla ? "ঠিকানা" : "Address";
-  String get parliamentAddress => isBangla ? "বাংলাদেশ জাতীয় সংসদ ভবন, ঢাকা" : "Bangladesh Parliament Building, Dhaka";
+  String get parliamentAddress => isBangla ? "২৪ কাজী নজরুল ইসলাম এভিনিউ, ঢাকা-১০০০" : "24 Kazi Nazrul Islam Avenue, Dhaka-1000";
   String get yourNameLabel => isBangla ? "আপনার নাম *" : "Your Name *";
   String get nameRequired => isBangla ? "নাম আবশ্যক" : "Name is required";
   String get phoneNumberLabel => isBangla ? "ফোন নম্বর" : "Phone Number";
