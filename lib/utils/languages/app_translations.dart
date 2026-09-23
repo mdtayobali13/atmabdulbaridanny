@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:barristerkayserkamal/utils/languages/language_provider.dart';
+import 'package:atmabdulbaridanny/utils/languages/language_provider.dart';
 
 class AppTranslations {
   final bool isBangla;
@@ -11,7 +11,7 @@ class AppTranslations {
   // -------------------------------------------------------------
   // Common & Generic
   // -------------------------------------------------------------
-  String get appTitle => isBangla ? "ব্যারিস্টার কায়সার কামাল, এমপি" : "Barrister Kayser Kamal, MP";
+  String get appTitle => isBangla ? "এ টি এম আব্দুল বারী ড্যানী" : "ATM Abdul Bari Danny";
   String get todayVisitor => isBangla ? "আজকের ভিজিটর" : "Today Visitor";
   String get totalVisitor => isBangla ? "মোট ভিজিটর" : "Total Visitor";
   String get totalVisitsTitle => isBangla ? "মোট ভিজিট" : "Total Visits";
@@ -27,14 +27,14 @@ class AppTranslations {
   // -------------------------------------------------------------
   // Profile Card & Official Details
   // -------------------------------------------------------------
-  String get profileNameMp => isBangla ? "ব্যারিস্টার কায়সার কামাল, এমপি" : "Barrister Kayser Kamal, MP";
-  String get profileConstituency => isBangla ? "নেত্রকোনা-১ (দুর্গাপুর-কলমাকান্দা)" : "Netrokona-1 (Durgapur-Kalmakanda)";
-  String get profileDeputySpeaker => isBangla ? "ডেপুটি স্পিকার" : "Deputy Speaker";
-  String get profileParliament => isBangla ? "বাংলাদেশ জাতীয় সংসদ" : "Bangladesh Parliament";
-  String get profileMobileLabel => isBangla ? "মোবাইলঃ" : "Mobile:";
-  String get profileMobileNumber => isBangla ? "০১৭১৩০৪৬৭৮৩" : "01713046783";
+  String get profileNameMp => isBangla ? "এ টি এম আব্দুল বারী ড্যানী" : "ATM Abdul Bari Danny";
+  String get profileConstituency => isBangla ? "বিআইডব্লিউটিসি, ঢাকা" : "BIWTC, Dhaka";
+  String get profileDeputySpeaker => isBangla ? "চেয়ারম্যান" : "Chairman";
+  String get profileParliament => isBangla ? "বিআইডব্লিউটিসি" : "BIWTC";
+  String get profileMobileLabel => isBangla ? "ফোন/মোবাইলঃ" : "Phone/Mobile:";
+  String get profileMobileNumber => isBangla ? "+৮৮-০২৪৭৮৮০১০৩০" : "+88-02478801030";
   String get profileEmailLabel => isBangla ? "ইমেইলঃ" : "Email:";
-  String get profileEmailAddress => "netrokona.1@parliament.gov.bd";
+  String get profileEmailAddress => "chairman@biwtc.gov.bd";
 
   // -------------------------------------------------------------
   // Navigation & Drawer
@@ -78,33 +78,33 @@ class AppTranslations {
   String get submitComplaintBtn => isBangla ? "অভিযোগ দাখিল করুন" : "Submit Complaint";
 
   String get defaultAddress => isBangla
-      ? "বাংলাদেশ জাতীয় সংসদ, শের-ই-বাংলা নগর, ঢাকা-১২০৭"
-      : "Bangladesh Parliament, Sher-e-Bangla Nagar, Dhaka-1207";
+      ? "বিআইডব্লিউটিসি, ২৪ কাজী নজরুল ইসলাম এভিনিউ, ঢাকা-১০০০"
+      : "BIWTC, 24 Kazi Nazrul Islam Avenue, Dhaka-1000";
   String get viewOnGoogleMaps => isBangla ? "গুগল ম্যাপে দেখুন" : "View on Google Maps";
 
   String get profileDesignation => isBangla
-      ? "ডেপুটি স্পিকার\nবাংলাদেশ জাতীয় সংসদ\nনেত্রকোনা-১ (দুর্গাপুর-কলমাকান্দা)"
-      : "Deputy Speaker\nBangladesh Parliament\nNetrokona-1 (Durgapur-Kalmakanda)";
+      ? "চেয়ারম্যান\nবাংলাদেশ অভ্যন্তরীণ নৌপরিবহন করপোরেশন (বিআইডব্লিউটিসি)"
+      : "Chairman\nBangladesh Inland Water Transport Corporation (BIWTC)";
   String get importantLinks => isBangla ? "গুরুত্বপূর্ণ লিংকসমূহ" : "Important Links";
   String get facebookPage => isBangla ? "ফেসবুক পেইজ" : "Facebook Page";
   String get followUs => isBangla ? "অনুসরণ করুন" : "Follow";
   String get copyrightText => isBangla
-      ? "কপিরাইট © ২০২৬ ব্যারিস্টার কায়সার কামাল, এমপি। সর্বস্বত্ব সংরক্ষিত।"
-      : "Copyright © 2026 Barrister Kayser Kamal, MP. All rights reserved.";
+      ? "কপিরাইট © ২০২৬ এ টি এম আব্দুল বারী ড্যানী। সর্বস্বত্ব সংরক্ষিত।"
+      : "Copyright © 2026 ATM Abdul Bari Danny. All rights reserved.";
 
   // -------------------------------------------------------------
   // Biography, Journey, History & Achievements
   // -------------------------------------------------------------
   String get biographyTitle => isBangla ? "জীবনী" : "Biography";
   String get biographySubtitle => isBangla
-      ? "ব্যারিস্টার কায়সার কামালের জীবন, শিক্ষা, আইন পেশা ও রাজনৈতিক সংগ্রামের তথ্য।"
-      : "Life, education, legal career, and political journey of Barrister Kayser Kamal.";
+      ? "এ টি এম আব্দুল বারী ড্যানীর জীবন, শিক্ষা ও কর্মজীবনের তথ্য।"
+      : "Life, education, and career journey of ATM Abdul Bari Danny.";
   String get biographyEmpty => isBangla ? "জীবনী সংক্রান্ত কোনো তথ্য পাওয়া যায়নি" : "No biography content available";
 
   String get aboutMeTitle => isBangla ? "আমার সম্পর্কে" : "About Me";
   String get aboutMeSubtitle => isBangla
-      ? "ব্যারিস্টার কায়সার কামালের প্রাথমিক জীবন, শিক্ষা এবং কর্মজীবনের ভূমিকা।"
-      : "An introduction to Barrister Kayser Kamal's early life, vision, and legal career.";
+      ? "এ টি এম আব্দুল বারী ড্যানীর প্রাথমিক জীবন ও পরিচিতি।"
+      : "An introduction to ATM Abdul Bari Danny's early life and vision.";
 
   String get lifeHistoryTitle => isBangla ? "জীবন ও সংগ্রাম" : "History of Life";
   String get lifeHistorySubtitle => isBangla
@@ -307,7 +307,7 @@ class AppTranslations {
   // Account & Profile
   // -------------------------------------------------------------
   String get myAccount => isBangla ? "আমার অ্যাকাউন্ট" : "My Account";
-  String get welcomeApp => isBangla ? "কায়সার কামাল অ্যাপে স্বাগতম" : "Welcome to Kayser Kamal App";
+  String get welcomeApp => isBangla ? "এ টি এম আব্দুল বারী ড্যানী অ্যাপে স্বাগতম" : "Welcome to ATM Abdul Bari Danny App";
   String get welcomeAppSubtitle => isBangla
       ? "আপনার অভিযোগ ও সাক্ষাৎকারের তথ্য দেখতে এবং প্রোফাইল পরিচালনা করতে সাইন ইন করুন।"
       : "Sign in or create an account to track your complaints, book appointments, and manage profile settings.";
@@ -330,7 +330,7 @@ class AppTranslations {
   }
 
   static const Map<String, String> _bnMap = {
-    'app_title': "ব্যারিস্টার কায়সার কামাল",
+    'app_title': "এ টি এম আব্দুল বারী ড্যানী",
     'today_visitor': "আজকের ভিজিটর",
     'total_visitor': "মোট ভিজিটর",
     'read_more': "বিস্তারিত পড়ুন",
@@ -339,7 +339,7 @@ class AppTranslations {
   };
 
   static const Map<String, String> _enMap = {
-    'app_title': "Barrister Kayser Kamal",
+    'app_title': "ATM Abdul Bari Danny",
     'today_visitor': "Today Visitor",
     'total_visitor': "Total Visitor",
     'read_more': "Read More",

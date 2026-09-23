@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:barristerkayserkamal/constant/app_colors.dart';
-import 'package:barristerkayserkamal/constant/app_constant.dart';
+import 'package:atmabdulbaridanny/constant/app_colors.dart';
+import 'package:atmabdulbaridanny/constant/app_constant.dart';
 
 class AppThemeConfiguration {
   ////////////// constructor

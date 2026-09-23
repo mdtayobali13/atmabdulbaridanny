@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:barristerkayserkamal/utils/languages/language_provider.dart';
+import 'package:atmabdulbaridanny/utils/languages/language_provider.dart';
 
 class ContactHeaderBanner extends StatelessWidget {
   final Color primaryGreen;

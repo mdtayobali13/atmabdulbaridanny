@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:barristerkayserkamal/constant/app_colors.dart';
-import 'package:barristerkayserkamal/screens/base_screen/terms_and_conditions_screen/provider/terms_and_conditions_screen_provider.dart';
-import 'package:barristerkayserkamal/screens/base_screen/widgets/base_data_widget.dart';
-import 'package:barristerkayserkamal/screens/base_screen/widgets/coming_soon_widget.dart';
-import 'package:barristerkayserkamal/utils/languages/language_provider.dart';
+import 'package:atmabdulbaridanny/constant/app_colors.dart';
+import 'package:atmabdulbaridanny/screens/base_screen/terms_and_conditions_screen/provider/terms_and_conditions_screen_provider.dart';
+import 'package:atmabdulbaridanny/screens/base_screen/widgets/base_data_widget.dart';
+import 'package:atmabdulbaridanny/screens/base_screen/widgets/coming_soon_widget.dart';
+import 'package:atmabdulbaridanny/utils/languages/language_provider.dart';
 
 class TermsAndConditionsScreen extends ConsumerWidget {
   const TermsAndConditionsScreen({super.key});

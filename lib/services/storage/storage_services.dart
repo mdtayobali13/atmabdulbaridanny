@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:barristerkayserkamal/services/storage/storage_key.dart';
-import 'package:barristerkayserkamal/utils/app_log.dart';
+import 'package:atmabdulbaridanny/services/storage/storage_key.dart';
+import 'package:atmabdulbaridanny/utils/app_log.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

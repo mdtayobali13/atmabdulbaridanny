@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:barristerkayserkamal/services/repository/auth_repository.dart';
-import 'package:barristerkayserkamal/utils/app_log.dart';
+import 'package:atmabdulbaridanny/services/repository/auth_repository.dart';
+import 'package:atmabdulbaridanny/utils/app_log.dart';
 
 final signInProvider = StateNotifierProvider<_SignInProvider, bool>((ref) {
   return _SignInProvider();

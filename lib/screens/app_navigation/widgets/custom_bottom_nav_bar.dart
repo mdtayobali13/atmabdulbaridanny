@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
-import 'package:barristerkayserkamal/constant/app_colors.dart';
-import 'package:barristerkayserkamal/screens/app_navigation/widgets/nav_bar_item.dart';
-import 'package:barristerkayserkamal/utils/languages/language_provider.dart';
+import 'package:atmabdulbaridanny/constant/app_colors.dart';
+import 'package:atmabdulbaridanny/screens/app_navigation/widgets/nav_bar_item.dart';
+import 'package:atmabdulbaridanny/utils/languages/language_provider.dart';
 
 class CustomBottomNavBar extends ConsumerStatefulWidget {
   final int currentIndex;

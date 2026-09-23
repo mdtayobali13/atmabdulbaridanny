@@ -1,12 +1,12 @@
-import 'package:barristerkayserkamal/services/repository/home_repository.dart';
+import 'package:atmabdulbaridanny/services/repository/home_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:barristerkayserkamal/constant/app_asserts_image_path.dart';
-import 'package:barristerkayserkamal/constant/app_colors.dart';
-import 'package:barristerkayserkamal/screens/home_screen/widgets/custom_footer.dart';
-import 'package:barristerkayserkamal/services/providers/api_providers.dart';
-import 'package:barristerkayserkamal/utils/languages/language_provider.dart';
+import 'package:atmabdulbaridanny/constant/app_asserts_image_path.dart';
+import 'package:atmabdulbaridanny/constant/app_colors.dart';
+import 'package:atmabdulbaridanny/screens/home_screen/widgets/custom_footer.dart';
+import 'package:atmabdulbaridanny/services/providers/api_providers.dart';
+import 'package:atmabdulbaridanny/utils/languages/language_provider.dart';
 
 
 class BiographyScreen extends ConsumerStatefulWidget {
@@ -157,13 +157,13 @@ class _BiographyScreenState extends ConsumerState<BiographyScreen> {
                                         child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
                                       ),
                                       errorWidget: (context, url, error) => Image.asset(
-                                        AppAssertsImagePath.instance.barristerKayserKamal,
+                                        AppAssertsImagePath.instance.atmAdminLogo,
                                         fit: BoxFit.contain,
                                         height: 220,
                                       ),
                                     )
                                   : Image.asset(
-                                      AppAssertsImagePath.instance.barristerKayserKamal,
+                                      AppAssertsImagePath.instance.atmAdminLogo,
                                       fit: BoxFit.contain,
                                       height: 220,
                                     ),
@@ -176,7 +176,7 @@ class _BiographyScreenState extends ConsumerState<BiographyScreen> {
 
                       // Name
                       Text(
-                        isBangla ? "ব্যারিস্টার কায়সার কামাল, এমপি" : "Barrister Kayser Kamal, MP",
+                        isBangla ? "এ টি এম আব্দুল বারী ড্যানী" : "ATM Abdul Bari Danny",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 20,
@@ -225,7 +225,7 @@ class _BiographyScreenState extends ConsumerState<BiographyScreen> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          isBangla ? "ব্যারিস্টার কায়সার কামাল সম্পর্কে" : "About Barrister Kayser Kamal",
+                          isBangla ? "এ টি এম আব্দুল বারী ড্যানী সম্পর্কে" : "About ATM Abdul Bari Danny",
                           style: TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.bold,

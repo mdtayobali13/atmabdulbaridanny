@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:barristerkayserkamal/constant/app_colors.dart';
-import 'package:barristerkayserkamal/utils/app_size.dart';
-import 'package:barristerkayserkamal/widgets/texts/app_text.dart' show AppText;
+import 'package:atmabdulbaridanny/constant/app_colors.dart';
+import 'package:atmabdulbaridanny/utils/app_size.dart';
+import 'package:atmabdulbaridanny/widgets/texts/app_text.dart' show AppText;
 
 class AppButton extends StatelessWidget {
   const AppButton({

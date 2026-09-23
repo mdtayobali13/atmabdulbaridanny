@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:barristerkayserkamal/utils/app_snack_bar.dart';
-import 'package:barristerkayserkamal/utils/languages/language_provider.dart';
+import 'package:atmabdulbaridanny/utils/app_snack_bar.dart';
+import 'package:atmabdulbaridanny/utils/languages/language_provider.dart';
 
 class ComplainSuccessDialog {
   static void show(BuildContext context, String trackingNo, AppTranslations tr) {

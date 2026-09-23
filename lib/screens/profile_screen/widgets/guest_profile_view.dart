@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:barristerkayserkamal/routes/app_routes_key.dart';
-import 'package:barristerkayserkamal/utils/languages/language_provider.dart';
+import 'package:atmabdulbaridanny/routes/app_routes_key.dart';
+import 'package:atmabdulbaridanny/utils/languages/language_provider.dart';
 
 class GuestProfileView extends StatelessWidget {
   final Color primaryColor;

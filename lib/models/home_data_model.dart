@@ -1,6 +1,6 @@
-import 'package:barristerkayserkamal/models/content_models.dart';
-import 'package:barristerkayserkamal/models/gallery_and_media_models.dart';
-import 'package:barristerkayserkamal/models/service_and_development_models.dart';
+import 'package:atmabdulbaridanny/models/content_models.dart';
+import 'package:atmabdulbaridanny/models/gallery_and_media_models.dart';
+import 'package:atmabdulbaridanny/models/service_and_development_models.dart';
 
 class HomeDataModel {
   final List<NewsModel> news;

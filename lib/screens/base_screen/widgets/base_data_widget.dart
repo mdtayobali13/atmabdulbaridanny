@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:barristerkayserkamal/constant/app_colors.dart';
-import 'package:barristerkayserkamal/constant/app_constant.dart';
-import 'package:barristerkayserkamal/utils/app_size.dart';
-import 'package:barristerkayserkamal/widgets/texts/app_html_text.dart';
+import 'package:atmabdulbaridanny/constant/app_colors.dart';
+import 'package:atmabdulbaridanny/constant/app_constant.dart';
+import 'package:atmabdulbaridanny/utils/app_size.dart';
+import 'package:atmabdulbaridanny/widgets/texts/app_html_text.dart';
 
 class BaseDataWidget extends StatelessWidget {
   const BaseDataWidget({super.key, required this.data});

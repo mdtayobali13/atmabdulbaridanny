@@ -1,4 +1,4 @@
-import 'package:barristerkayserkamal/constant/app_api_url.dart';
+import 'package:atmabdulbaridanny/constant/app_api_url.dart';
 
 class GalleryCategoryModel {
   final int? id;

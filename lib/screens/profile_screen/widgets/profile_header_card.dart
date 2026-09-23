@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:barristerkayserkamal/screens/profile_screen/widgets/edit_profile_dialog.dart';
+import 'package:atmabdulbaridanny/screens/profile_screen/widgets/edit_profile_dialog.dart';
 
 class ProfileHeaderCard extends StatelessWidget {
   final dynamic user;

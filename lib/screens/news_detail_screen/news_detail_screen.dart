@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:barristerkayserkamal/constant/app_colors.dart';
-import 'package:barristerkayserkamal/screens/home_screen/widgets/custom_footer.dart';
-import 'package:barristerkayserkamal/utils/languages/language_provider.dart';
+import 'package:atmabdulbaridanny/constant/app_colors.dart';
+import 'package:atmabdulbaridanny/screens/home_screen/widgets/custom_footer.dart';
+import 'package:atmabdulbaridanny/utils/languages/language_provider.dart';
 
 class NewsDetailScreen extends ConsumerWidget {
   final String title;
@@ -28,12 +28,10 @@ class NewsDetailScreen extends ConsumerWidget {
 
     final displayDescription = (description == "No detailed description provided." || description.isEmpty)
         ? (isBangla
-            ? "ব্যারিস্টার কায়সার কামাল বলেন, আমি ভুল করার আগেই আপনারা আমাকে পরামর্শ দেবেন এবং সতর্ক করবেন। যাতে আমি কোনো ভুল বা অনিয়মে না জড়াই। আমি নিজে দুর্নীতি করব না, কাউকে দুর্নীতি করতেও দেব না।\n\n"
-              "নিজ নির্বাচনী এলাকায় সাধারণ মানুষের সাথে মতবিনিময় ও সহায়তা কর্মসূচি চলাকালে তিনি এসব কথা বলেন। তিনি সৎ নেতৃত্ব ও স্বচ্ছ সুশাসনের ওপর গুরুত্বারোপ করেন।\n\n"
-              "কায়সার কামাল উল্লেখ করেন যে, তিনি জনগণের সেবক হিসেবে দায়িত্ব পালন করছেন। এলাকার উন্নয়নমূলক প্রকল্পে যেকোনো প্রকার দুর্নীতি বা গাফিলতি বরদাস্ত করা হবে না।"
-            : "Barrister Kayser Kamal said, you have to advise me before I make a mistake. So that I can't do any corruption. I will not do corruption myself, nor will I let anyone do it.\n\n"
-              "He made these remarks during a discussion where he distributed various items among the people of his constituency. He emphasized the need for honest leadership and transparent governance.\n\n"
-              "Kayser Kamal mentioned that he is acting as a servant of the people. No irregularity or corruption will be tolerated in any development project. The laws will apply equally to everyone, regardless of their political affiliation.")
+            ? "জনাব এ টি এম আব্দুল বারী ড্যানী বলেন, সততা ও নিষ্ঠার সাথে জনগণের সেবায় কাজ করে যেতে হবে।\n\n"
+              "তিনি বিআইডব্লিউটিসি-এর কার্যক্রমকে আরও গতিশীল, স্বচ্ছ ও আধুনিক করার দৃঢ় প্রত্যয় ব্যক্ত করেন।"
+            : "Mr. ATM Abdul Bari Danny stated that everyone must work with dedication and integrity to serve the people.\n\n"
+              "He affirmed his commitment to making BIWTC operations more dynamic, transparent, and modernized.")
         : description;
 
     final displaySource = sourceScreenName == "News Details"

@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:barristerkayserkamal/constant/app_api_url.dart';
+import 'package:atmabdulbaridanny/constant/app_api_url.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 class NonAuthApi {

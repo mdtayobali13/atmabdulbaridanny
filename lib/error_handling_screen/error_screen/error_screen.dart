@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:barristerkayserkamal/routes/app_routes.dart';
-import 'package:barristerkayserkamal/routes/app_routes_key.dart';
-import 'package:barristerkayserkamal/utils/app_size.dart';
-import 'package:barristerkayserkamal/utils/gap.dart';
-import 'package:barristerkayserkamal/widgets/app_image/app_image.dart';
-import 'package:barristerkayserkamal/widgets/buttons/app_button.dart';
-import 'package:barristerkayserkamal/widgets/texts/app_text.dart';
+import 'package:atmabdulbaridanny/routes/app_routes.dart';
+import 'package:atmabdulbaridanny/routes/app_routes_key.dart';
+import 'package:atmabdulbaridanny/utils/app_size.dart';
+import 'package:atmabdulbaridanny/utils/gap.dart';
+import 'package:atmabdulbaridanny/widgets/app_image/app_image.dart';
+import 'package:atmabdulbaridanny/widgets/buttons/app_button.dart';
+import 'package:atmabdulbaridanny/widgets/texts/app_text.dart';
 
 class ErrorScreen extends StatelessWidget {
   const ErrorScreen({super.key});

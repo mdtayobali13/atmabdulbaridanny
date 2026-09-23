@@ -2,10 +2,10 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:barristerkayserkamal/constant/app_api_url.dart';
-import 'package:barristerkayserkamal/constant/app_asserts_image_path.dart';
-import 'package:barristerkayserkamal/constant/app_colors.dart';
-import 'package:barristerkayserkamal/utils/app_log.dart';
+import 'package:atmabdulbaridanny/constant/app_api_url.dart';
+import 'package:atmabdulbaridanny/constant/app_asserts_image_path.dart';
+import 'package:atmabdulbaridanny/constant/app_colors.dart';
+import 'package:atmabdulbaridanny/utils/app_log.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class AppImageCircular extends StatelessWidget {

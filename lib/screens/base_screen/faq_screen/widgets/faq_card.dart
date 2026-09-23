@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:barristerkayserkamal/constant/app_colors.dart';
-import 'package:barristerkayserkamal/screens/base_screen/faq_screen/models/f_a_q_screen_data_model.dart';
-import 'package:barristerkayserkamal/utils/app_size.dart';
-import 'package:barristerkayserkamal/utils/gap.dart';
-import 'package:barristerkayserkamal/widgets/texts/app_text.dart';
+import 'package:atmabdulbaridanny/constant/app_colors.dart';
+import 'package:atmabdulbaridanny/screens/base_screen/faq_screen/models/f_a_q_screen_data_model.dart';
+import 'package:atmabdulbaridanny/utils/app_size.dart';
+import 'package:atmabdulbaridanny/utils/gap.dart';
+import 'package:atmabdulbaridanny/widgets/texts/app_text.dart';
 
 class FaqCard extends StatelessWidget {
   const FaqCard({super.key, required this.onTap, required this.item});

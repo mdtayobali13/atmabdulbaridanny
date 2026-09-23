@@ -2,26 +2,25 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:barristerkayserkamal/constant/app_colors.dart';
-import 'package:barristerkayserkamal/models/content_models.dart';
-import 'package:barristerkayserkamal/routes/app_routes.dart';
-import 'package:barristerkayserkamal/screens/home_screen/widgets/appointment_form.dart';
-import 'package:barristerkayserkamal/screens/home_screen/widgets/card_item.dart';
-import 'package:barristerkayserkamal/screens/home_screen/widgets/complaint_form.dart';
-import 'package:barristerkayserkamal/screens/home_screen/widgets/custom_footer.dart';
-import 'package:barristerkayserkamal/screens/home_screen/widgets/grid_list.dart';
-import 'package:barristerkayserkamal/screens/home_screen/widgets/horizontal_list.dart';
-import 'package:barristerkayserkamal/screens/home_screen/widgets/map_section.dart';
-import 'package:barristerkayserkamal/screens/home_screen/widgets/news_item.dart';
-import 'package:barristerkayserkamal/screens/home_screen/widgets/photo_gallery.dart';
-import 'package:barristerkayserkamal/screens/home_screen/widgets/profile_identity_card.dart';
-import 'package:barristerkayserkamal/screens/home_screen/widgets/section_title.dart';
-import 'package:barristerkayserkamal/screens/home_screen/widgets/video_gallery.dart';
-import 'package:barristerkayserkamal/screens/life_history_screen/life_history_screen.dart';
-import 'package:barristerkayserkamal/screens/print_media_screen/print_media_screen.dart';
-import 'package:barristerkayserkamal/services/providers/api_providers.dart';
-import 'package:barristerkayserkamal/services/repository/home_repository.dart';
-import 'package:barristerkayserkamal/utils/languages/language_provider.dart';
+import 'package:atmabdulbaridanny/constant/app_colors.dart';
+import 'package:atmabdulbaridanny/models/content_models.dart';
+import 'package:atmabdulbaridanny/routes/app_routes.dart';
+import 'package:atmabdulbaridanny/screens/home_screen/widgets/appointment_form.dart';
+import 'package:atmabdulbaridanny/screens/home_screen/widgets/card_item.dart';
+import 'package:atmabdulbaridanny/screens/home_screen/widgets/complaint_form.dart';
+import 'package:atmabdulbaridanny/screens/home_screen/widgets/custom_footer.dart';
+import 'package:atmabdulbaridanny/screens/home_screen/widgets/grid_list.dart';
+import 'package:atmabdulbaridanny/screens/home_screen/widgets/horizontal_list.dart';
+import 'package:atmabdulbaridanny/screens/home_screen/widgets/map_section.dart';
+import 'package:atmabdulbaridanny/screens/home_screen/widgets/news_item.dart';
+import 'package:atmabdulbaridanny/screens/home_screen/widgets/photo_gallery.dart';
+import 'package:atmabdulbaridanny/screens/home_screen/widgets/section_title.dart';
+import 'package:atmabdulbaridanny/screens/home_screen/widgets/video_gallery.dart';
+import 'package:atmabdulbaridanny/screens/life_history_screen/life_history_screen.dart';
+import 'package:atmabdulbaridanny/screens/print_media_screen/print_media_screen.dart';
+import 'package:atmabdulbaridanny/services/providers/api_providers.dart';
+import 'package:atmabdulbaridanny/services/repository/home_repository.dart';
+import 'package:atmabdulbaridanny/utils/languages/language_provider.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -110,14 +109,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               error: (err, stack) => _buildApiBanner(websiteSettingAsync),
             ),
 
-            const SizedBox(height: 12),
-
-            // ─────────────────────────────────────────────────────────────
-            // Official Profile Identity Card
-            // ─────────────────────────────────────────────────────────────
-            const ProfileIdentityCard(),
-
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
 
             // ─────────────────────────────────────────────────────────────
             // 2. Life & Success Records (Live API)
@@ -360,8 +352,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget _buildFallbackBannerCard(WebsiteSettingModel? setting) {
     final isBangla = ref.watch(isBanglaProvider);
     final title = isBangla
-        ? (setting?.titleBn ?? "ব্যারিস্টার কায়সার কামাল")
-        : (setting?.titleEn ?? "Barrister Kayser Kamal");
+        ? (setting?.titleBn ?? "এ টি এম আব্দুল বারী ড্যানী")
+        : (setting?.titleEn ?? "ATM Abdul Bari Danny");
 
     return Container(
       height: 180,

@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:barristerkayserkamal/utils/app_log.dart';
+import 'package:atmabdulbaridanny/utils/app_log.dart';
 
 const String _reachabilityUrl = 'clients3.google.com';
 const String _reachabilityPath = '/generate_204';

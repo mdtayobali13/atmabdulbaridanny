@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:barristerkayserkamal/constant/app_colors.dart';
-import 'package:barristerkayserkamal/utils/app_log.dart';
-import 'package:barristerkayserkamal/utils/app_size.dart';
+import 'package:atmabdulbaridanny/constant/app_colors.dart';
+import 'package:atmabdulbaridanny/utils/app_log.dart';
+import 'package:atmabdulbaridanny/utils/app_size.dart';
 
 class CustomCheckBoxButton extends StatefulWidget {
   const CustomCheckBoxButton({super.key, this.value, required this.onChange, this.color});

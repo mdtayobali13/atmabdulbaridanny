@@ -2,13 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:barristerkayserkamal/screens/appointment_screen/appointment_screen.dart';
-import 'package:barristerkayserkamal/screens/complain_screen/complain_screen.dart';
-import 'package:barristerkayserkamal/screens/profile_screen/widgets/change_password_dialog.dart';
-import 'package:barristerkayserkamal/screens/profile_screen/widgets/edit_profile_dialog.dart';
-import 'package:barristerkayserkamal/services/providers/api_providers.dart';
-import 'package:barristerkayserkamal/services/repository/auth_repository.dart';
-import 'package:barristerkayserkamal/utils/languages/language_provider.dart';
+import 'package:atmabdulbaridanny/screens/appointment_screen/appointment_screen.dart';
+import 'package:atmabdulbaridanny/screens/complain_screen/complain_screen.dart';
+import 'package:atmabdulbaridanny/screens/profile_screen/widgets/change_password_dialog.dart';
+import 'package:atmabdulbaridanny/screens/profile_screen/widgets/edit_profile_dialog.dart';
+import 'package:atmabdulbaridanny/services/providers/api_providers.dart';
+import 'package:atmabdulbaridanny/services/repository/auth_repository.dart';
+import 'package:atmabdulbaridanny/utils/languages/language_provider.dart';
 
 class ProfileMenuActions extends ConsumerWidget {
   final dynamic user;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:barristerkayserkamal/utils/languages/language_provider.dart';
+import 'package:atmabdulbaridanny/utils/languages/language_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ContactInfoCard extends StatelessWidget {

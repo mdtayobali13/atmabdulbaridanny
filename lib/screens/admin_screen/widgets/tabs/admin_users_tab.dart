@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:barristerkayserkamal/constant/app_colors.dart';
-import 'package:barristerkayserkamal/models/auth_user_model.dart';
-import 'package:barristerkayserkamal/screens/admin_screen/providers/admin_providers.dart';
-import 'package:barristerkayserkamal/services/repository/admin_repository.dart';
-import 'package:barristerkayserkamal/utils/app_snack_bar.dart';
+import 'package:atmabdulbaridanny/constant/app_colors.dart';
+import 'package:atmabdulbaridanny/models/auth_user_model.dart';
+import 'package:atmabdulbaridanny/screens/admin_screen/providers/admin_providers.dart';
+import 'package:atmabdulbaridanny/services/repository/admin_repository.dart';
+import 'package:atmabdulbaridanny/utils/app_snack_bar.dart';
 
 class AdminUsersTab extends ConsumerStatefulWidget {
   final bool isBangla;

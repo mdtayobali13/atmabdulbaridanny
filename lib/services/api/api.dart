@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:barristerkayserkamal/constant/app_api_url.dart';
-import 'package:barristerkayserkamal/routes/app_routes.dart';
-import 'package:barristerkayserkamal/services/storage/storage_services.dart';
-import 'package:barristerkayserkamal/utils/app_log.dart';
+import 'package:atmabdulbaridanny/constant/app_api_url.dart';
+import 'package:atmabdulbaridanny/routes/app_routes.dart';
+import 'package:atmabdulbaridanny/services/storage/storage_services.dart';
+import 'package:atmabdulbaridanny/utils/app_log.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 class AppApi {

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:barristerkayserkamal/constant/app_asserts_image_path.dart';
-import 'package:barristerkayserkamal/constant/app_colors.dart';
-import 'package:barristerkayserkamal/screens/app_navigation/widgets/drawer/language_toggle.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:atmabdulbaridanny/constant/app_asserts_image_path.dart';
+import 'package:atmabdulbaridanny/constant/app_colors.dart';
+import 'package:atmabdulbaridanny/screens/app_navigation/widgets/drawer/language_toggle.dart';
+import 'package:atmabdulbaridanny/services/providers/api_providers.dart';
+import 'package:atmabdulbaridanny/utils/languages/language_provider.dart';
 
-class DrawerHeaderCard extends StatelessWidget {
+class DrawerHeaderCard extends ConsumerWidget {
   final bool isBangla;
 
   const DrawerHeaderCard({
@@ -40,7 +44,22 @@ class DrawerHeaderCard extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final tr = AppTranslations.of(isBangla);
+    final setting = ref.watch(websiteSettingProvider).asData?.value;
+
+    final name = isBangla ? tr.profileNameMp : "ATM Abdul Bari Danny";
+    final designation = isBangla
+        ? "চেয়ারম্যান, বিআইডব্লিউটিসি"
+        : "Chairman, BIWTC";
+    final addressText = isBangla
+        ? (setting?.address?.isNotEmpty == true ? "বিআইডব্লিউটিসি, ঢাকা" : tr.profileConstituency)
+        : (tr.profileConstituency);
+
+    final rawPhone = setting?.mobile?.isNotEmpty == true ? setting!.mobile! : tr.profileMobileNumber;
+    final phone = isBangla ? rawPhone.toBanglaDigits(true) : rawPhone;
+    final email = setting?.email?.isNotEmpty == true ? setting!.email! : tr.profileEmailAddress;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.only(top: 50, bottom: 20, left: 16, right: 16),
@@ -73,19 +92,50 @@ class DrawerHeaderCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 24),
-          CircleAvatar(
-            backgroundColor: Colors.white,
-            radius: 32,
-            backgroundImage: AssetImage(AppAssertsImagePath.instance.barristerKayserKamal),
+          Container(
+            width: 64,
+            height: 64,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white,
+              border: Border.all(color: Colors.white, width: 2),
+            ),
+            child: ClipOval(
+              child: setting?.fullFileUrl.isNotEmpty == true
+                  ? CachedNetworkImage(
+                      imageUrl: setting!.fullFileUrl,
+                      fit: BoxFit.cover,
+                      width: 64,
+                      height: 64,
+                      placeholder: (context, url) => Image.asset(
+                        AppAssertsImagePath.instance.atmAdminLogo,
+                        fit: BoxFit.cover,
+                        width: 64,
+                        height: 64,
+                      ),
+                      errorWidget: (context, url, error) => Image.asset(
+                        AppAssertsImagePath.instance.atmAdminLogo,
+                        fit: BoxFit.cover,
+                        width: 64,
+                        height: 64,
+                      ),
+                    )
+                  : Image.asset(
+                      AppAssertsImagePath.instance.atmAdminLogo,
+                      fit: BoxFit.cover,
+                      width: 64,
+                      height: 64,
+                    ),
+            ),
           ),
           const SizedBox(height: 14),
           Text(
-            isBangla ? "ব্যারিস্টার কায়সার কামাল, এমপি" : "Barrister Kayser Kamal, MP",
+            name,
             style: const TextStyle(color: Colors.white, fontSize: 18.5, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 4),
           Text(
-            isBangla ? "নেত্রকোনা-১ (দুর্গাপুর-কলমাকান্দা)" : "Netrokona-1 (Durgapur-Kalmakanda)",
+            addressText,
             style: TextStyle(
               color: AppColors.instance.goldenColor,
               fontSize: 13,
@@ -104,9 +154,7 @@ class DrawerHeaderCard extends StatelessWidget {
               ),
             ),
             child: Text(
-              isBangla
-                  ? "ডেপুটি স্পিকার, বাংলাদেশ জাতীয় সংসদ"
-                  : "Deputy Speaker, Bangladesh Parliament",
+              designation,
               style: TextStyle(
                 color: Colors.white.withValues(alpha: 0.95),
                 fontSize: 11.5,
@@ -121,7 +169,7 @@ class DrawerHeaderCard extends StatelessWidget {
               Icon(Icons.phone, size: 12, color: Colors.white.withValues(alpha: 0.75)),
               const SizedBox(width: 5),
               Text(
-                isBangla ? "০১৭১৩০৪৬৭৮৩" : "01713046783",
+                phone,
                 style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 11.5),
               ),
               const SizedBox(width: 12),
@@ -129,7 +177,7 @@ class DrawerHeaderCard extends StatelessWidget {
               const SizedBox(width: 5),
               Expanded(
                 child: Text(
-                  "netrokona.1@parliament.gov.bd",
+                  email,
                   style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 10.5),
                   overflow: TextOverflow.ellipsis,
                 ),

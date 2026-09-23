@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:barristerkayserkamal/constant/app_colors.dart';
-import 'package:barristerkayserkamal/screens/app_navigation/widgets/app_drawer.dart';
-import 'package:barristerkayserkamal/screens/contact_screen/widgets/contact_form_card.dart';
-import 'package:barristerkayserkamal/screens/contact_screen/widgets/contact_header_banner.dart';
-import 'package:barristerkayserkamal/screens/contact_screen/widgets/contact_info_card.dart';
-import 'package:barristerkayserkamal/screens/home_screen/widgets/custom_footer.dart';
-import 'package:barristerkayserkamal/services/providers/api_providers.dart';
-import 'package:barristerkayserkamal/services/repository/home_repository.dart';
-import 'package:barristerkayserkamal/utils/languages/language_provider.dart';
+import 'package:atmabdulbaridanny/constant/app_colors.dart';
+import 'package:atmabdulbaridanny/screens/app_navigation/widgets/app_drawer.dart';
+import 'package:atmabdulbaridanny/screens/contact_screen/widgets/contact_form_card.dart';
+import 'package:atmabdulbaridanny/screens/contact_screen/widgets/contact_header_banner.dart';
+import 'package:atmabdulbaridanny/screens/contact_screen/widgets/contact_info_card.dart';
+import 'package:atmabdulbaridanny/screens/home_screen/widgets/custom_footer.dart';
+import 'package:atmabdulbaridanny/services/providers/api_providers.dart';
+import 'package:atmabdulbaridanny/services/repository/home_repository.dart';
+import 'package:atmabdulbaridanny/utils/languages/language_provider.dart';
 
 class ContactScreen extends ConsumerStatefulWidget {
   const ContactScreen({super.key});
@@ -47,9 +47,9 @@ class _ContactScreenState extends ConsumerState<ContactScreen> {
         ? setting!.address!
         : tr.parliamentAddress;
 
-    final rawPhone = setting?.mobile ?? "01713046783";
+    final rawPhone = setting?.mobile?.isNotEmpty == true ? setting!.mobile! : tr.profileMobileNumber;
     final phone = isBangla ? rawPhone.toBanglaDigits(true) : rawPhone;
-    final email = setting?.email ?? "netrokona.1@parliament.gov.bd";
+    final email = setting?.email?.isNotEmpty == true ? setting!.email! : tr.profileEmailAddress;
 
     return Scaffold(
       backgroundColor: Colors.white,

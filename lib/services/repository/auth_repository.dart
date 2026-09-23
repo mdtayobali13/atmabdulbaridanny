@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
-import 'package:barristerkayserkamal/constant/app_api_url.dart';
-import 'package:barristerkayserkamal/models/auth_user_model.dart';
-import 'package:barristerkayserkamal/services/api/api_services.dart';
-import 'package:barristerkayserkamal/services/storage/storage_services.dart';
-import 'package:barristerkayserkamal/utils/app_log.dart';
+import 'package:atmabdulbaridanny/constant/app_api_url.dart';
+import 'package:atmabdulbaridanny/models/auth_user_model.dart';
+import 'package:atmabdulbaridanny/services/api/api_services.dart';
+import 'package:atmabdulbaridanny/services/storage/storage_services.dart';
+import 'package:atmabdulbaridanny/utils/app_log.dart';
 
 class AuthRepository {
   AuthRepository._privateConstructor();

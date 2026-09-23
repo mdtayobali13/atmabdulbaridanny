@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:barristerkayserkamal/constant/app_asserts_image_path.dart';
-import 'package:barristerkayserkamal/constant/app_colors.dart';
-import 'package:barristerkayserkamal/screens/app_navigation/widgets/custom_bottom_nav_bar.dart';
-import 'package:barristerkayserkamal/screens/app_navigation/widgets/app_drawer.dart';
-import 'package:barristerkayserkamal/utils/languages/language_provider.dart';
+import 'package:atmabdulbaridanny/constant/app_asserts_image_path.dart';
+import 'package:atmabdulbaridanny/constant/app_colors.dart';
+import 'package:atmabdulbaridanny/screens/app_navigation/widgets/custom_bottom_nav_bar.dart';
+import 'package:atmabdulbaridanny/screens/app_navigation/widgets/app_drawer.dart';
+import 'package:atmabdulbaridanny/utils/languages/language_provider.dart';
 import 'package:go_router/go_router.dart';
 
 class AppNavigationScreen extends ConsumerStatefulWidget {
@@ -53,7 +53,7 @@ class _AppNavigationScreenState extends ConsumerState<AppNavigationScreen> {
               child: CircleAvatar(
                 backgroundColor: Colors.white,
                 radius: 16,
-                backgroundImage: AssetImage(AppAssertsImagePath.instance.barristerKayserKamal),
+                backgroundImage: AssetImage(AppAssertsImagePath.instance.atmAdminLogo),
               ),
             ),
             const SizedBox(width: 10),

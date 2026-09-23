@@ -5,7 +5,7 @@
 <!-- permission end  -->
    
     <application
-        android:label="Barrister Kayser Kamal"
+        android:label="ATM Abdul Bari Danny"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

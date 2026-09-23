@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:barristerkayserkamal/constant/app_asserts_image_path.dart';
-import 'package:barristerkayserkamal/constant/app_colors.dart';
-import 'package:barristerkayserkamal/screens/home_screen/widgets/custom_footer.dart';
-import 'package:barristerkayserkamal/services/providers/api_providers.dart';
-import 'package:barristerkayserkamal/services/repository/home_repository.dart';
-import 'package:barristerkayserkamal/utils/languages/language_provider.dart';
+import 'package:atmabdulbaridanny/constant/app_asserts_image_path.dart';
+import 'package:atmabdulbaridanny/constant/app_colors.dart';
+import 'package:atmabdulbaridanny/screens/home_screen/widgets/custom_footer.dart';
+import 'package:atmabdulbaridanny/services/providers/api_providers.dart';
+import 'package:atmabdulbaridanny/services/repository/home_repository.dart';
+import 'package:atmabdulbaridanny/utils/languages/language_provider.dart';
 
 class AboutUsScreen extends ConsumerStatefulWidget {
   const AboutUsScreen({super.key});
@@ -105,10 +105,10 @@ class _AboutUsScreenState extends ConsumerState<AboutUsScreen> {
                   final imgUrl = aboutMe?.fullImageUrl ?? '';
 
                   const fallbackEn =
-                      "Barrister Kayser Kamal is a distinguished Bangladeshi politician and Senior Advocate of the Supreme Court, currently serving as the Deputy Speaker of the 13th Parliament of Bangladesh. Representing the Netrokona-1 constituency, he brings extensive legal and governmental experience to his leadership, having previously served as the State Minister for the Ministry of Land. Born in Netrokona in 1972, he earned his Bachelor's and Master's degrees from the University of Dhaka before pursuing legal studies in the United Kingdom, where he obtained his LLB (Honours) and was called to the Bar by the Honourable Society of Lincoln’s Inn in 2005. Unanimously elected as Deputy Speaker in March 2026, Barrister Kamal remains dedicated to fostering inclusive participation, ensuring transparent governance, and upholding impartial leadership within the nation's central democratic forum.";
+                      "Mr. A T M Abdul Bari Danny joined as the Chairman of Bangladesh Inland Water Transport Corporation (BIWTC) on 26 July 2026. He completed his Honours in Public Administration in 1992 and Master's in 1994 from the University of Dhaka. Currently, he is serving as the Joint Secretary of Religious Affairs of the BNP Central Executive Committee and Member Secretary of the Dhaka University Alumni Association.";
 
                   const fallbackBn =
-                      "ব্যারিস্টার কায়সার কামাল একজন বিশিষ্ট বাংলাদেশী রাজনীতিবিদ ও সুপ্রিম কোর্টের সিনিয়র এডভোকেট, বর্তমানে বাংলাদেশের ১৩তম সংসদের ডেপুটি স্পীকার হিসেবে দায়িত্ব পালন করছেন। নেত্রকোণা-১ আসনের প্রতিনিধিত্বকারী তিনি তার বিস্তৃত আইনগত ও সরকারি অভিজ্ঞতা নেতৃত্বে নিয়ে আসেন, পূর্বে ভূমি মন্ত্রণালয়ের প্রতিমন্ত্রী হিসেবে কর্মরত ছিলেন। ১৯৭২ সালে নেত্রকোণায় জন্মগ্রহণ করেন। ঢাকা বিশ্ববিদ্যালয় থেকে স্নাতক ও স্নাতকোত্তর ডিগ্রি অর্জনের পর যুক্তরাজ্যে আইন শিক্ষা সম্পন্ন করেন, যেখানে তিনি এলএলবি (অনার্স) লাভ করেন এবং ২০০৫ সালে দ্য অনারেবল সোসাইটি অব লিঙ্কন’স ইন কর্তৃক বারে অন্তর্ভুক্ত হন। ২০২৬ সালের মার্চে সর্বসম্মতিক্রমে ডেপুটি স্পীকার হিসেবে নির্বাচিত, ব্যারিস্টার কামাল অন্তর্ভুক্তিমূলক অংশগ্রহণ বৃদ্ধি, স্বচ্ছ শাসন নিশ্চিত করা এবং দেশের কেন্দ্রীয় গণতান্ত্রিক সংস্থায় নিরপেক্ষ নেতৃত্ব বজায় রাখার ক্ষেত্রে অঙ্গীকারবদ্ধ রয়েছেন।";
+                      "জনাব এ টি এম আব্দুল বারী ড্যানী ২৬ জুলাই ২০২৬ খ্রি. বাংলাদেশ অভ্যন্তরীণ নৌপরিবহন করপোরেশন (বিআইডব্লিউটিসি)-এর চেয়ারম্যান হিসেবে যোগদান করেন। তিনি ১৯৯২ সালে ঢাকা বিশ্ববিদ্যালয় থেকে পাবলিক এডমিনিস্ট্রেশনে অনার্স ও ১৯৯৪ সালে একই বিষয়ে মাস্টার্স ডিগ্রি অর্জন করেন। বর্তমানে তিনি ঢাকা বিশ্ববিদ্যালয় এ্যালামনাই এসোসিয়েশনের সদস্য সচিব এবং বাংলাদেশ জাতীয়তাবাদী দল বিএনপি’র কেন্দ্রীয় নির্বাহী কমিটির সহ-ধর্ম বিষয়ক সম্পাদক।";
 
                   final displayText = cleanText.isNotEmpty ? cleanText : (isBangla ? fallbackBn : fallbackEn);
 
@@ -214,13 +214,13 @@ class _AboutUsScreenState extends ConsumerState<AboutUsScreen> {
                     child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
                   ),
                   errorWidget: (context, url, error) => Image.asset(
-                    AppAssertsImagePath.instance.barristerKayserKamal,
+                    AppAssertsImagePath.instance.atmAdminLogo,
                     height: 300,
                     fit: BoxFit.contain,
                   ),
                 )
               : Image.asset(
-                  AppAssertsImagePath.instance.barristerKayserKamal,
+                  AppAssertsImagePath.instance.atmAdminLogo,
                   height: 300,
                   fit: BoxFit.contain,
                 ),
@@ -237,12 +237,12 @@ class _AboutUsScreenState extends ConsumerState<AboutUsScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          isBangla ? "ব্যারিস্টার কায়সার কামাল, এমপি" : "Barrister Kayser Kamal, MP",
+          isBangla ? "এ টি এম আব্দুল বারী ড্যানী" : "ATM Abdul Bari Danny",
           style: TextStyle(color: primaryGreen, fontSize: 22, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 4),
         Text(
-          isBangla ? "নেত্রকোনা-১ (দুর্গাপুর-কলমাকান্দা)" : "Netrokona-1 (Durgapur-Kalmakanda)",
+          isBangla ? "বিআইডব্লিউটিসি, ঢাকা" : "BIWTC, Dhaka",
           style: TextStyle(
             color: AppColors.instance.primaryGreen.withValues(alpha: 0.85),
             fontSize: 14,
@@ -261,7 +261,7 @@ class _AboutUsScreenState extends ConsumerState<AboutUsScreen> {
             ),
           ),
           child: Text(
-            isBangla ? "ডেপুটি স্পিকার, বাংলাদেশ জাতীয় সংসদ" : "Deputy Speaker, Bangladesh Parliament",
+            isBangla ? "চেয়ারম্যান, বিআইডব্লিউটিসি" : "Chairman, BIWTC",
             style: TextStyle(
               color: AppColors.instance.primaryGreen,
               fontSize: 12,
@@ -275,7 +275,7 @@ class _AboutUsScreenState extends ConsumerState<AboutUsScreen> {
             const Icon(Icons.phone, size: 14, color: Colors.black54),
             const SizedBox(width: 4),
             Text(
-              isBangla ? "০১৭১৩০৪৬৭৮৩" : "01713046783",
+              isBangla ? "+৮৮-০২৪৭৮৮০১০৩০" : "+88-02478801030",
               style: const TextStyle(fontSize: 12.5, color: Colors.black87),
             ),
             const SizedBox(width: 12),
@@ -283,7 +283,7 @@ class _AboutUsScreenState extends ConsumerState<AboutUsScreen> {
             const SizedBox(width: 4),
             const Flexible(
               child: Text(
-                "netrokona.1@parliament.gov.bd",
+                "chairman@biwtc.gov.bd",
                 style: TextStyle(fontSize: 12, color: Colors.black87),
                 overflow: TextOverflow.ellipsis,
               ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:barristerkayserkamal/services/storage/storage_services.dart';
-import 'package:barristerkayserkamal/utils/app_log.dart';
+import 'package:atmabdulbaridanny/services/storage/storage_services.dart';
+import 'package:atmabdulbaridanny/utils/app_log.dart';
 
 class ThemeNotifier extends StateNotifier<ThemeMode> {
   bool isDarkMode = false;

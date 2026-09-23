@@ -3,22 +3,28 @@ import 'package:shared_preferences/shared_preferences.dart';
 export 'app_translations.dart';
 
 class _LanguageNotifier extends Notifier<String> {
+  static const String _storageKey = "user_app_language_v2";
+
   @override
   String build() {
     _loadLanguage();
-    return "en_US";
+    return "bn_BD";
   }
 
   Future<void> _loadLanguage() async {
     final prefs = await SharedPreferences.getInstance();
-    final saved = prefs.getString("app_language") ?? "en_US";
-
-    /// en_U Ses_ES
+    String? saved = prefs.getString(_storageKey);
+    if (saved == null) {
+      saved = "bn_BD";
+      await prefs.setString(_storageKey, "bn_BD");
+      await prefs.setString("app_language", "bn_BD");
+    }
     state = saved;
   }
 
   Future<void> setLanguage(String lang) async {
     final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_storageKey, lang);
     await prefs.setString("app_language", lang);
     state = lang;
   }
@@ -42,19 +48,29 @@ final isBanglaProvider = Provider<bool>((ref) {
 });
 
 class _InitialLanguage extends Notifier<String> {
+  static const String _storageKey = "user_app_language_v2";
+
   @override
   String build() {
     _loadLanguage();
-    return "en_US";
+    return "bn_BD";
   }
 
   Future<void> _loadLanguage() async {
     final prefs = await SharedPreferences.getInstance();
-    final saved = prefs.getString("app_language") ?? "en_US";
+    String? saved = prefs.getString(_storageKey);
+    if (saved == null) {
+      saved = "bn_BD";
+      await prefs.setString(_storageKey, "bn_BD");
+      await prefs.setString("app_language", "bn_BD");
+    }
     state = saved;
   }
 
   Future<void> setLanguage(String lang) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_storageKey, lang);
+    await prefs.setString("app_language", lang);
     state = lang;
   }
 }

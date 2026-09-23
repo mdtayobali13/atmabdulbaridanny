@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:barristerkayserkamal/constant/app_colors.dart';
-import 'package:barristerkayserkamal/utils/gap.dart';
-import 'package:barristerkayserkamal/widgets/texts/app_text.dart';
+import 'package:atmabdulbaridanny/constant/app_colors.dart';
+import 'package:atmabdulbaridanny/utils/gap.dart';
+import 'package:atmabdulbaridanny/widgets/texts/app_text.dart';
 
 class SignInFormCard extends StatefulWidget {
   final TextEditingController emailController;

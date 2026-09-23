@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:barristerkayserkamal/screens/app_navigation/widgets/app_drawer.dart';
-import 'package:barristerkayserkamal/widgets/dialogs/admin_login_dialog.dart';
+import 'package:atmabdulbaridanny/screens/app_navigation/widgets/app_drawer.dart';
+import 'package:atmabdulbaridanny/widgets/dialogs/admin_login_dialog.dart';
 
 class AdminAccessDeniedView extends StatelessWidget {
   final bool isBangla;

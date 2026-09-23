@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:barristerkayserkamal/constant/app_colors.dart';
-import 'package:barristerkayserkamal/models/admin_dashboard_model.dart';
-import 'package:barristerkayserkamal/services/providers/api_providers.dart';
+import 'package:atmabdulbaridanny/constant/app_colors.dart';
+import 'package:atmabdulbaridanny/models/admin_dashboard_model.dart';
+import 'package:atmabdulbaridanny/services/providers/api_providers.dart';
 
 class AdminOverviewTab extends ConsumerWidget {
   final bool isBangla;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:barristerkayserkamal/constant/app_colors.dart';
-import 'package:barristerkayserkamal/screens/home_screen/widgets/custom_footer.dart';
-import 'package:barristerkayserkamal/utils/languages/language_provider.dart';
+import 'package:atmabdulbaridanny/constant/app_colors.dart';
+import 'package:atmabdulbaridanny/screens/home_screen/widgets/custom_footer.dart';
+import 'package:atmabdulbaridanny/utils/languages/language_provider.dart';
 
 class JourneyScreen extends ConsumerWidget {
   const JourneyScreen({super.key});
@@ -16,8 +16,8 @@ class JourneyScreen extends ConsumerWidget {
     final journeys = [
       {
         "title": isBangla
-            ? "ব্যারিস্টার কায়সার কামাল, এমপি, ডেপুটি স্পিকার, নেত্রকোনা-১ (কলমাকান্দা-দুর্গাপুর)"
-            : "Barrister Kayser Kamal, MP, Deputy Speaker, Netrokona-1 (Kalmakanda-Durgapur)",
+            ? "এ টি এম আব্দুল বারী ড্যানী, চেয়ারম্যান (বিআইডব্লিউটিসি)"
+            : "ATM Abdul Bari Danny, Chairman (BIWTC)",
         "date": isBangla ? "০৬-ডিসেম্বর ১৯৯১" : "06-Dec 1991",
         "year": "1991".toBanglaDigits(isBangla),
         "desc": isBangla

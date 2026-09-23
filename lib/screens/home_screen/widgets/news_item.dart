@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:barristerkayserkamal/screens/news_detail_screen/news_detail_screen.dart';
+import 'package:atmabdulbaridanny/screens/news_detail_screen/news_detail_screen.dart';
 
 class NewsItem extends StatelessWidget {
   final String title;

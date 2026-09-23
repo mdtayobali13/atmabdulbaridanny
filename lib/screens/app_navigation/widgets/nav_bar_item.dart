@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:barristerkayserkamal/screens/app_navigation/widgets/selected_icon_widget.dart';
+import 'package:atmabdulbaridanny/screens/app_navigation/widgets/selected_icon_widget.dart';
 
 class NavBarItem extends StatelessWidget {
   final bool isSelected;

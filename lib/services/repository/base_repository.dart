@@ -1,7 +1,7 @@
-import 'package:barristerkayserkamal/constant/app_api_url.dart';
-import 'package:barristerkayserkamal/screens/base_screen/faq_screen/models/f_a_q_screen_data_model.dart';
-import 'package:barristerkayserkamal/services/api/api_services.dart';
-import 'package:barristerkayserkamal/utils/app_log.dart';
+import 'package:atmabdulbaridanny/constant/app_api_url.dart';
+import 'package:atmabdulbaridanny/screens/base_screen/faq_screen/models/f_a_q_screen_data_model.dart';
+import 'package:atmabdulbaridanny/services/api/api_services.dart';
+import 'package:atmabdulbaridanny/utils/app_log.dart';
 
 class BaseRepository {
   /////////////// constructor

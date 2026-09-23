@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:barristerkayserkamal/constant/app_colors.dart';
-import 'package:barristerkayserkamal/routes/app_routes.dart';
-import 'package:barristerkayserkamal/utils/app_log.dart';
-import 'package:barristerkayserkamal/utils/app_size.dart';
-import 'package:barristerkayserkamal/utils/gap.dart';
-import 'package:barristerkayserkamal/widgets/buttons/app_button.dart';
-import 'package:barristerkayserkamal/widgets/texts/app_text.dart';
+import 'package:atmabdulbaridanny/constant/app_colors.dart';
+import 'package:atmabdulbaridanny/routes/app_routes.dart';
+import 'package:atmabdulbaridanny/utils/app_log.dart';
+import 'package:atmabdulbaridanny/utils/app_size.dart';
+import 'package:atmabdulbaridanny/utils/gap.dart';
+import 'package:atmabdulbaridanny/widgets/buttons/app_button.dart';
+import 'package:atmabdulbaridanny/widgets/texts/app_text.dart';
 
 void callLogOutDialog() {
   try {

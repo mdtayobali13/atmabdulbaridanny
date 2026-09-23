@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:barristerkayserkamal/constant/app_asserts_image_path.dart';
-import 'package:barristerkayserkamal/constant/app_colors.dart';
-import 'package:barristerkayserkamal/models/app_language_model.dart';
-import 'package:barristerkayserkamal/routes/app_routes.dart';
-import 'package:barristerkayserkamal/routes/app_routes_key.dart';
-import 'package:barristerkayserkamal/services/storage/storage_services.dart';
-import 'package:barristerkayserkamal/utils/app_log.dart';
-import 'package:barristerkayserkamal/utils/app_size.dart';
-import 'package:barristerkayserkamal/utils/app_snack_bar.dart';
-import 'package:barristerkayserkamal/utils/gap.dart';
-import 'package:barristerkayserkamal/utils/languages/language_provider.dart';
-import 'package:barristerkayserkamal/widgets/app_image/app_image.dart';
-import 'package:barristerkayserkamal/widgets/buttons/app_button.dart';
-import 'package:barristerkayserkamal/widgets/inputs/app_input_widget.dart';
-import 'package:barristerkayserkamal/widgets/texts/app_text.dart';
+import 'package:atmabdulbaridanny/constant/app_asserts_image_path.dart';
+import 'package:atmabdulbaridanny/constant/app_colors.dart';
+import 'package:atmabdulbaridanny/models/app_language_model.dart';
+import 'package:atmabdulbaridanny/routes/app_routes.dart';
+import 'package:atmabdulbaridanny/routes/app_routes_key.dart';
+import 'package:atmabdulbaridanny/services/storage/storage_services.dart';
+import 'package:atmabdulbaridanny/utils/app_log.dart';
+import 'package:atmabdulbaridanny/utils/app_size.dart';
+import 'package:atmabdulbaridanny/utils/app_snack_bar.dart';
+import 'package:atmabdulbaridanny/utils/gap.dart';
+import 'package:atmabdulbaridanny/utils/languages/language_provider.dart';
+import 'package:atmabdulbaridanny/widgets/app_image/app_image.dart';
+import 'package:atmabdulbaridanny/widgets/buttons/app_button.dart';
+import 'package:atmabdulbaridanny/widgets/inputs/app_input_widget.dart';
+import 'package:atmabdulbaridanny/widgets/texts/app_text.dart';
 
 class OnboardLanguageScreen extends StatefulWidget {
   const OnboardLanguageScreen({super.key});

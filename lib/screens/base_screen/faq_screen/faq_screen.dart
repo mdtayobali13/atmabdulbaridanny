@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:barristerkayserkamal/constant/app_colors.dart';
-import 'package:barristerkayserkamal/screens/base_screen/faq_screen/providers/f_a_q_screen_provider.dart';
-import 'package:barristerkayserkamal/screens/base_screen/faq_screen/widgets/faq_card.dart';
-import 'package:barristerkayserkamal/screens/base_screen/faq_screen/widgets/faq_card_loader.dart';
-import 'package:barristerkayserkamal/screens/base_screen/widgets/coming_soon_widget.dart';
-import 'package:barristerkayserkamal/utils/app_size.dart';
-import 'package:barristerkayserkamal/utils/languages/language_provider.dart';
+import 'package:atmabdulbaridanny/constant/app_colors.dart';
+import 'package:atmabdulbaridanny/screens/base_screen/faq_screen/providers/f_a_q_screen_provider.dart';
+import 'package:atmabdulbaridanny/screens/base_screen/faq_screen/widgets/faq_card.dart';
+import 'package:atmabdulbaridanny/screens/base_screen/faq_screen/widgets/faq_card_loader.dart';
+import 'package:atmabdulbaridanny/screens/base_screen/widgets/coming_soon_widget.dart';
+import 'package:atmabdulbaridanny/utils/app_size.dart';
+import 'package:atmabdulbaridanny/utils/languages/language_provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class FaqScreen extends ConsumerWidget {

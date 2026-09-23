@@ -1,3 +1,4 @@
+
 class AppLanguageModel {
   final String flag;
   final String name;
@@ -11,7 +12,9 @@ class AppLanguageModel {
 }
 
 List<AppLanguageModel> publicAppLanguagesList = [
-  AppLanguageModel(flag: "US", name: "English", value: "en_US", isSelected: true),
+  AppLanguageModel(flag: "BD", name: "Bangladesh", value: "bn_BD", isSelected: true),
+
+  AppLanguageModel(flag: "US", name: "English", value: "en_US"),
 
   AppLanguageModel(flag: "CN", name: "Chinese", value: "zh-cn_CN"),
 
@@ -34,8 +37,6 @@ List<AppLanguageModel> publicAppLanguagesList = [
   AppLanguageModel(flag: "JP", name: "Japanese", value: "ja_JP"),
 
   AppLanguageModel(flag: "TH", name: "Thailand", value: "th_TH"),
-
-  AppLanguageModel(flag: "BD", name: "Bangladesh", value: "bn_BD"),
 
   AppLanguageModel(flag: "LK", name: "Sri Lanka", value: "si_LK"),
 

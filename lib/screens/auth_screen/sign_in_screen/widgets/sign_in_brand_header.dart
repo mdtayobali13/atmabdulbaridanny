@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:barristerkayserkamal/constant/app_asserts_image_path.dart';
-import 'package:barristerkayserkamal/constant/app_colors.dart';
-import 'package:barristerkayserkamal/utils/gap.dart';
+import 'package:atmabdulbaridanny/constant/app_asserts_image_path.dart';
+import 'package:atmabdulbaridanny/constant/app_colors.dart';
+import 'package:atmabdulbaridanny/utils/gap.dart';
 
 class SignInBrandHeader extends StatelessWidget {
   const SignInBrandHeader({super.key});
@@ -34,14 +34,14 @@ class SignInBrandHeader extends StatelessWidget {
           ),
           child: ClipOval(
             child: Image.asset(
-              AppAssertsImagePath.instance.barristerKayserKamal,
+              AppAssertsImagePath.instance.atmAdminLogo,
               fit: BoxFit.cover,
             ),
           ),
         ),
         const Gap(height: 16),
         Text(
-          "Barrister Kayser Kamal",
+          "ATM Abdul Bari Danny",
           textAlign: TextAlign.center,
           style: TextStyle(
             color: AppColors.instance.primaryGreen,

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:barristerkayserkamal/constant/app_colors.dart';
-import 'package:barristerkayserkamal/models/content_models.dart';
-import 'package:barristerkayserkamal/services/providers/api_providers.dart';
-import 'package:barristerkayserkamal/utils/languages/language_provider.dart';
+import 'package:atmabdulbaridanny/constant/app_colors.dart';
+import 'package:atmabdulbaridanny/models/content_models.dart';
+import 'package:atmabdulbaridanny/services/providers/api_providers.dart';
+import 'package:atmabdulbaridanny/utils/languages/language_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CustomFooter extends ConsumerWidget {
@@ -77,7 +77,7 @@ class CustomFooter extends ConsumerWidget {
         ? setting!.fullAdminLogoUrl
         : setting?.fullFileUrl.isNotEmpty == true
             ? setting!.fullFileUrl
-            : 'https://ui-avatars.com/api/?name=Kayser+Kamal&background=0C4B33&color=fff&size=100';
+            : 'https://ui-avatars.com/api/?name=ATM+Danny&background=0C4B33&color=fff&size=100';
 
     final title = isBangla
         ? (setting?.titleBn?.isNotEmpty == true ? setting!.titleBn! : tr.appTitle)
@@ -97,7 +97,7 @@ class CustomFooter extends ConsumerWidget {
       if (setting?.address?.isNotEmpty == true && !hasBengaliInAddress) {
         address = setting!.address!;
       } else {
-        address = "Deputy Speaker, Bangladesh Parliament\nNetrokona-1 (Durgapur-Kalmakanda)";
+        address = "Chairman, BIWTC\n24 Kazi Nazrul Islam Avenue, Dhaka-1000";
       }
     }
 

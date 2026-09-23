@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:barristerkayserkamal/constant/app_asserts_icons_path.dart';
-import 'package:barristerkayserkamal/constant/app_colors.dart';
+import 'package:atmabdulbaridanny/constant/app_asserts_icons_path.dart';
+import 'package:atmabdulbaridanny/constant/app_colors.dart';
 
 class CustomerFavoriteButton extends StatefulWidget {
   const CustomerFavoriteButton({super.key, this.isSelected = false, required this.onValueChange});

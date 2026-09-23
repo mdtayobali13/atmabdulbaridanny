@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:barristerkayserkamal/constant/app_colors.dart';
-import 'package:barristerkayserkamal/routes/app_routes_key.dart';
-import 'package:barristerkayserkamal/widgets/dialogs/admin_login_dialog.dart';
+import 'package:atmabdulbaridanny/constant/app_colors.dart';
+import 'package:atmabdulbaridanny/routes/app_routes_key.dart';
+import 'package:atmabdulbaridanny/widgets/dialogs/admin_login_dialog.dart';
 import 'package:go_router/go_router.dart';
 
 class DrawerNavList extends StatelessWidget {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:barristerkayserkamal/constant/app_colors.dart';
-import 'package:barristerkayserkamal/screens/home_screen/widgets/custom_footer.dart';
-import 'package:barristerkayserkamal/utils/languages/language_provider.dart';
+import 'package:atmabdulbaridanny/constant/app_colors.dart';
+import 'package:atmabdulbaridanny/screens/home_screen/widgets/custom_footer.dart';
+import 'package:atmabdulbaridanny/utils/languages/language_provider.dart';
 
 class AchievementScreen extends ConsumerWidget {
   const AchievementScreen({super.key});
@@ -15,19 +15,19 @@ class AchievementScreen extends ConsumerWidget {
 
     final achievements = [
       {
-        "title": isBangla ? "ডেপুটি স্পিকার" : "Deputy Speaker",
+        "title": isBangla ? "চেয়ারম্যান, বিআইডব্লিউটিসি" : "Chairman, BIWTC",
         "year": "2026".toBanglaDigits(isBangla),
         "desc": isBangla
-            ? "ব্যারিস্টার কায়সার কামাল ত্রয়োদশ জাতীয় সংসদের ডেপুটি স্পিকার নির্বাচিত হয়েছেন। সংসদ অধিবেশনে নাটোরের সংসদ সদস্য রুহুল কুদ্দুস তালুকদার দুলু কায়সার কামালের নাম প্রস্তাব করেন।"
-            : "Barrister Kayser Kamal has been elected as the Deputy Speaker of the 13th National Parliament. Natore MP Ruhul Quddus Talukder Dulu proposed Kayser Kamal's name in the parliament session.",
+            ? "জনাব এ টি এম আব্দুল বারী ড্যানী বাংলাদেশ অভ্যন্তরীণ নৌপরিবহন করপোরেশন (বিআইডব্লিউটিসি)-এর চেয়ারম্যান হিসেবে দায়িত্ব গ্রহণ করেন।"
+            : "Mr. ATM Abdul Bari Danny assumed responsibility as the Chairman of Bangladesh Inland Water Transport Corporation (BIWTC).",
         "color": Colors.blueAccent,
       },
       {
-        "title": isBangla ? "ভূমি প্রতিমন্ত্রী" : "State Minister For Land",
+        "title": isBangla ? "নেতৃত্ব ও দেশসেবা" : "Leadership & Public Service",
         "year": "2026".toBanglaDigits(isBangla),
         "desc": isBangla
-            ? "নেত্রকোনা-১ (কলমাকান্দা-দুর্গাপুর) আসনের সংসদ সদস্য ব্যারিস্টার কায়সার কামাল ভূমি প্রতিমন্ত্রী হিসেবে মন্ত্রিসভায় অন্তর্ভুক্ত হয়েছেন।"
-            : "Barrister Kayser Kamal, Member of Parliament for Netrokona-1 (Kalmakanda-Durgapur) constituency, has been inducted into the cabinet as State Minister for Land.",
+            ? "জনাব এ টি এম আব্দুল বারী ড্যানী সততা ও নিষ্ঠার সাথে দেশ ও জনগণের সেবায় নিয়োজিত আছেন।"
+            : "Mr. ATM Abdul Bari Danny remains dedicated to serving the nation and its people with integrity and excellence.",
         "color": Colors.teal,
       },
       {
@@ -39,7 +39,9 @@ class AchievementScreen extends ConsumerWidget {
         "color": Colors.purpleAccent,
       },
       {
-        "title": isBangla ? "জাতীয়তাবাদী আইনজীবী ফোরামের মহাসচিব নির্বাচিত" : "Elected Secretary General of Nationalist Lawyers Forum",
+        "title": isBangla
+            ? "জাতীয়তাবাদী আইনজীবী ফোরামের মহাসচিব নির্বাচিত"
+            : "Elected Secretary General of Nationalist Lawyers Forum",
         "year": "2019".toBanglaDigits(isBangla),
         "desc": isBangla
             ? "২০১৯ সালে এবং পরবর্তী পুনর্গঠিত কমিটিতে তিনি বাংলাদেশ জাতীয়তাবাদী আইনজীবী ফোরামের মহাসচিব নির্বাচিত হন। তিনি হাজার হাজার আইনজীবীকে ঐক্যবদ্ধ করতে কেন্দ্রীয় ভূমিকা পালন করেন।"
@@ -47,7 +49,9 @@ class AchievementScreen extends ConsumerWidget {
         "color": Colors.deepPurpleAccent,
       },
       {
-        "title": isBangla ? "বিএনপি কেন্দ্রীয় আইন বিষয়ক সম্পাদক" : "BNP Legal Affairs Secretary",
+        "title": isBangla
+            ? "বিএনপি কেন্দ্রীয় আইন বিষয়ক সম্পাদক"
+            : "BNP Legal Affairs Secretary",
         "year": "2016".toBanglaDigits(isBangla),
         "desc": isBangla
             ? "তিনি ২০১৬ সাল থেকে কেন্দ্রীয় বিএনপির আইন বিষয়ক সম্পাদক হিসেবে দায়িত্ব পালন করছেন।"
@@ -55,7 +59,9 @@ class AchievementScreen extends ConsumerWidget {
         "color": Colors.lightBlue,
       },
       {
-        "title": isBangla ? "বিএনপি জাতীয় নির্বাহী কমিটি" : "BNP Central Committee",
+        "title": isBangla
+            ? "বিএনপি জাতীয় নির্বাহী কমিটি"
+            : "BNP Central Committee",
         "year": "2009".toBanglaDigits(isBangla),
         "desc": isBangla
             ? "২০০৯ সালে তিনি বিএনপির জাতীয় নির্বাহী কমিটির সদস্য হন।"
@@ -63,7 +69,9 @@ class AchievementScreen extends ConsumerWidget {
         "color": Colors.blue[700]!,
       },
       {
-        "title": isBangla ? "ঢাকা বিশ্ববিদ্যালয়ের সিনেট সদস্য" : "Senate Member of Dhaka University",
+        "title": isBangla
+            ? "ঢাকা বিশ্ববিদ্যালয়ের সিনেট সদস্য"
+            : "Senate Member of Dhaka University",
         "year": "1996".toBanglaDigits(isBangla),
         "desc": isBangla
             ? "১৯৯৬ সালে তিনি ঢাকা বিশ্ববিদ্যালয়ের সিনেট সদস্য নির্বাচিত হন।"
@@ -97,12 +105,21 @@ class AchievementScreen extends ConsumerWidget {
             Container(
               width: double.infinity,
               color: primaryGreen,
-              padding: const EdgeInsets.only(top: 16.0, bottom: 16.0, left: 16.0, right: 16.0),
+              padding: const EdgeInsets.only(
+                top: 16.0,
+                bottom: 16.0,
+                left: 16.0,
+                right: 16.0,
+              ),
               child: Column(
                 children: [
                   Text(
                     tr.achievementTitle,
-                    style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -114,9 +131,15 @@ class AchievementScreen extends ConsumerWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _buildStatBox(tr.todayVisitor, "2".toBanglaDigits(isBangla)),
+                      _buildStatBox(
+                        tr.todayVisitor,
+                        "2".toBanglaDigits(isBangla),
+                      ),
                       const SizedBox(width: 16),
-                      _buildStatBox(tr.totalVisitor, "103".toBanglaDigits(isBangla)),
+                      _buildStatBox(
+                        tr.totalVisitor,
+                        "103".toBanglaDigits(isBangla),
+                      ),
                     ],
                   ),
                 ],
@@ -125,7 +148,10 @@ class AchievementScreen extends ConsumerWidget {
 
             // Timeline Content
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 8.0),
+              padding: const EdgeInsets.symmetric(
+                vertical: 24.0,
+                horizontal: 8.0,
+              ),
               child: ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -153,14 +179,24 @@ class AchievementScreen extends ConsumerWidget {
   Widget _buildStatBox(String title, String count) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-      decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(8)),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(8),
+      ),
       child: Column(
         children: [
-          Text(title, style: const TextStyle(color: Colors.white70, fontSize: 12)),
+          Text(
+            title,
+            style: const TextStyle(color: Colors.white70, fontSize: 12),
+          ),
           const SizedBox(height: 4),
           Text(
             count,
-            style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       ),
@@ -188,7 +224,8 @@ class AnimatedTimelineItem extends StatefulWidget {
   State<AnimatedTimelineItem> createState() => _AnimatedTimelineItemState();
 }
 
-class _AnimatedTimelineItemState extends State<AnimatedTimelineItem> with SingleTickerProviderStateMixin {
+class _AnimatedTimelineItemState extends State<AnimatedTimelineItem>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Offset> _slideAnimation;
   late Animation<double> _fadeAnimation;
@@ -196,7 +233,10 @@ class _AnimatedTimelineItemState extends State<AnimatedTimelineItem> with Single
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 700));
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+    );
 
     // Determine slide direction based on alternating sides
     final isLeft = widget.index % 2 == 0;
@@ -235,7 +275,12 @@ class _AnimatedTimelineItemState extends State<AnimatedTimelineItem> with Single
           children: [
             // Left Card
             Expanded(
-              child: isLeft ? SlideTransition(position: _slideAnimation, child: _buildCard()) : const SizedBox.shrink(),
+              child: isLeft
+                  ? SlideTransition(
+                      position: _slideAnimation,
+                      child: _buildCard(),
+                    )
+                  : const SizedBox.shrink(),
             ),
             // Center Line and Dot
             SizedBox(
@@ -259,7 +304,10 @@ class _AnimatedTimelineItemState extends State<AnimatedTimelineItem> with Single
             // Right Card
             Expanded(
               child: !isLeft
-                  ? SlideTransition(position: _slideAnimation, child: _buildCard())
+                  ? SlideTransition(
+                      position: _slideAnimation,
+                      child: _buildCard(),
+                    )
                   : const SizedBox.shrink(),
             ),
           ],
@@ -275,7 +323,13 @@ class _AnimatedTimelineItemState extends State<AnimatedTimelineItem> with Single
       decoration: BoxDecoration(
         color: widget.color,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [BoxShadow(color: widget.color.withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 4))],
+        boxShadow: [
+          BoxShadow(
+            color: widget.color.withValues(alpha: 0.3),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -286,7 +340,11 @@ class _AnimatedTimelineItemState extends State<AnimatedTimelineItem> with Single
               Expanded(
                 child: Text(
                   widget.title,
-                  style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               Container(
@@ -297,7 +355,11 @@ class _AnimatedTimelineItemState extends State<AnimatedTimelineItem> with Single
                 ),
                 child: Text(
                   widget.year,
-                  style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],
@@ -305,10 +367,21 @@ class _AnimatedTimelineItemState extends State<AnimatedTimelineItem> with Single
           const SizedBox(height: 12),
           Text(
             widget.year,
-            style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 8),
-          Text(widget.desc, style: TextStyle(color: Colors.white.withValues(alpha: 0.9), fontSize: 13, height: 1.4)),
+          Text(
+            widget.desc,
+            style: TextStyle(
+              color: Colors.white.withValues(alpha: 0.9),
+              fontSize: 13,
+              height: 1.4,
+            ),
+          ),
         ],
       ),
     );

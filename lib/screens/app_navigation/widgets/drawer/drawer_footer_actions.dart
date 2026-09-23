@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:barristerkayserkamal/screens/app_navigation/widgets/drawer/drawer_dialogs.dart';
+import 'package:atmabdulbaridanny/screens/app_navigation/widgets/drawer/drawer_dialogs.dart';
 
 class DrawerFooterActions extends ConsumerWidget {
   final bool isLoggedIn;

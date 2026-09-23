@@ -1,16 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:barristerkayserkamal/models/admin_dashboard_model.dart';
-import 'package:barristerkayserkamal/models/auth_user_model.dart';
-import 'package:barristerkayserkamal/models/content_models.dart';
-import 'package:barristerkayserkamal/models/gallery_and_media_models.dart';
-import 'package:barristerkayserkamal/models/home_data_model.dart';
-import 'package:barristerkayserkamal/models/location_models.dart';
-import 'package:barristerkayserkamal/models/service_and_development_models.dart';
-import 'package:barristerkayserkamal/services/repository/admin_repository.dart';
-import 'package:barristerkayserkamal/services/repository/auth_repository.dart';
-import 'package:barristerkayserkamal/services/repository/content_repository.dart';
-import 'package:barristerkayserkamal/services/repository/home_repository.dart';
-import 'package:barristerkayserkamal/services/repository/location_repository.dart';
+import 'package:atmabdulbaridanny/models/admin_dashboard_model.dart';
+import 'package:atmabdulbaridanny/models/auth_user_model.dart';
+import 'package:atmabdulbaridanny/models/content_models.dart';
+import 'package:atmabdulbaridanny/models/gallery_and_media_models.dart';
+import 'package:atmabdulbaridanny/models/home_data_model.dart';
+import 'package:atmabdulbaridanny/models/location_models.dart';
+import 'package:atmabdulbaridanny/models/service_and_development_models.dart';
+import 'package:atmabdulbaridanny/services/repository/admin_repository.dart';
+import 'package:atmabdulbaridanny/services/repository/auth_repository.dart';
+import 'package:atmabdulbaridanny/services/repository/content_repository.dart';
+import 'package:atmabdulbaridanny/services/repository/home_repository.dart';
+import 'package:atmabdulbaridanny/services/repository/location_repository.dart';
 
 // ─────────────────────────────────────────────────────────────
 // Home Provider

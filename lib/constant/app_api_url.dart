@@ -1,13 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:barristerkayserkamal/utils/app_log.dart';
+import 'package:atmabdulbaridanny/utils/app_log.dart';
 
 class AppApiUrl {
   AppApiUrl._privateConstructor();
   static final AppApiUrl _instance = AppApiUrl._privateConstructor();
   static AppApiUrl get instance => _instance;
 
-  static const String _defaultDomain = 'https://api.barristerkayserkamal.info';
+  static const String _defaultDomain = 'https://api.atmabdulbaridanny.info/public';
 
   static String _validateUrl(String url) {
     if (!kDebugMode && url.startsWith('http://')) {
@@ -30,7 +30,7 @@ class AppApiUrl {
     return u;
   }
 
-  /// Base web domain: `https://api.barristerkayserkamal.info`
+  /// Base web domain: `https://api.atmabdulbaridanny.info/public`
   static String get domain {
     const fromDefine = String.fromEnvironment('BASE_DOMAIN');
     if (fromDefine.isNotEmpty) {
@@ -52,7 +52,7 @@ class AppApiUrl {
   /// Socket URL
   static String get socket => domain;
 
-  /// API base URL: `https://api.barristerkayserkamal.info/api`
+  /// API base URL: `https://api.atmabdulbaridanny.info/public/api`
   String get baseUrl => "$domain/api";
 
   /// Helper to convert relative server image paths (e.g. `assets/file/abc.jpg`) to full URLs

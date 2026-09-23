@@ -1,20 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:barristerkayserkamal/constant/app_colors.dart';
-import 'package:barristerkayserkamal/screens/admin_screen/providers/admin_providers.dart';
-import 'package:barristerkayserkamal/screens/admin_screen/widgets/admin_access_denied_view.dart';
-import 'package:barristerkayserkamal/screens/admin_screen/widgets/tabs/admin_about_me_tab.dart';
-import 'package:barristerkayserkamal/screens/admin_screen/widgets/tabs/admin_contact_tab.dart';
-import 'package:barristerkayserkamal/screens/admin_screen/widgets/tabs/admin_overview_tab.dart';
-import 'package:barristerkayserkamal/screens/admin_screen/widgets/tabs/admin_requests_tab.dart';
-import 'package:barristerkayserkamal/screens/admin_screen/widgets/tabs/admin_users_tab.dart';
-import 'package:barristerkayserkamal/screens/app_navigation/widgets/app_drawer.dart';
-import 'package:barristerkayserkamal/services/providers/api_providers.dart';
-import 'package:barristerkayserkamal/utils/languages/language_provider.dart';
+import 'package:atmabdulbaridanny/constant/app_colors.dart';
+import 'package:atmabdulbaridanny/screens/admin_screen/providers/admin_providers.dart';
+import 'package:atmabdulbaridanny/screens/admin_screen/widgets/admin_access_denied_view.dart';
+import 'package:atmabdulbaridanny/screens/admin_screen/widgets/tabs/admin_about_me_tab.dart';
+import 'package:atmabdulbaridanny/screens/admin_screen/widgets/tabs/admin_contact_tab.dart';
+import 'package:atmabdulbaridanny/screens/admin_screen/widgets/tabs/admin_overview_tab.dart';
+import 'package:atmabdulbaridanny/screens/admin_screen/widgets/tabs/admin_requests_tab.dart';
+import 'package:atmabdulbaridanny/screens/admin_screen/widgets/tabs/admin_users_tab.dart';
+import 'package:atmabdulbaridanny/screens/app_navigation/widgets/app_drawer.dart';
+import 'package:atmabdulbaridanny/services/providers/api_providers.dart';
+import 'package:atmabdulbaridanny/utils/languages/language_provider.dart';
 
 // Export shared admin providers for backward compatibility
-export 'package:barristerkayserkamal/screens/admin_screen/providers/admin_providers.dart';
+export 'package:atmabdulbaridanny/screens/admin_screen/providers/admin_providers.dart';
 
 class AdminDashboardScreen extends ConsumerStatefulWidget {
   const AdminDashboardScreen({super.key});

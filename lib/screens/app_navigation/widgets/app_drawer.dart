@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:barristerkayserkamal/screens/app_navigation/widgets/drawer/drawer_footer_actions.dart';
-import 'package:barristerkayserkamal/screens/app_navigation/widgets/drawer/drawer_header_card.dart';
-import 'package:barristerkayserkamal/screens/app_navigation/widgets/drawer/drawer_nav_list.dart';
-import 'package:barristerkayserkamal/services/providers/api_providers.dart';
-import 'package:barristerkayserkamal/utils/languages/language_provider.dart';
+import 'package:atmabdulbaridanny/screens/app_navigation/widgets/drawer/drawer_footer_actions.dart';
+import 'package:atmabdulbaridanny/screens/app_navigation/widgets/drawer/drawer_header_card.dart';
+import 'package:atmabdulbaridanny/screens/app_navigation/widgets/drawer/drawer_nav_list.dart';
+import 'package:atmabdulbaridanny/services/providers/api_providers.dart';
+import 'package:atmabdulbaridanny/utils/languages/language_provider.dart';
 
 class AppDrawer extends ConsumerWidget {
   const AppDrawer({super.key});

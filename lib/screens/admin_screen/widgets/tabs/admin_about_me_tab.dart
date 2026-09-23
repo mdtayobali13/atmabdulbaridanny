@@ -3,10 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:barristerkayserkamal/models/content_models.dart';
-import 'package:barristerkayserkamal/screens/admin_screen/providers/admin_providers.dart';
-import 'package:barristerkayserkamal/services/repository/admin_repository.dart';
-import 'package:barristerkayserkamal/utils/app_snack_bar.dart';
+import 'package:atmabdulbaridanny/models/content_models.dart';
+import 'package:atmabdulbaridanny/screens/admin_screen/providers/admin_providers.dart';
+import 'package:atmabdulbaridanny/services/repository/admin_repository.dart';
+import 'package:atmabdulbaridanny/utils/app_snack_bar.dart';
+import 'package:html/parser.dart' as html_parser;
 
 class AdminAboutMeTab extends ConsumerStatefulWidget {
   final bool isBangla;
@@ -277,7 +278,7 @@ class _AdminAboutMeTabState extends ConsumerState<AdminAboutMeTab> {
                                     children: [
                                       if (item.contentEn != null && item.contentEn!.trim().isNotEmpty) ...[
                                         Text(
-                                          "EN: ${item.contentEn!}",
+                                          "EN: ${_parseHtmlToPlainText(item.contentEn)}",
                                           maxLines: 3,
                                           overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(
@@ -291,7 +292,7 @@ class _AdminAboutMeTabState extends ConsumerState<AdminAboutMeTab> {
                                         if (item.contentEn != null && item.contentEn!.trim().isNotEmpty)
                                           const SizedBox(height: 4),
                                         Text(
-                                          "BN: ${item.contentBn!}",
+                                          "BN: ${_parseHtmlToPlainText(item.contentBn)}",
                                           maxLines: 3,
                                           overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(
@@ -350,10 +351,33 @@ class _AdminAboutMeTabState extends ConsumerState<AdminAboutMeTab> {
     );
   }
 
+  String _parseHtmlToPlainText(String? html) {
+    if (html == null || html.trim().isEmpty) return '';
+    try {
+      final document = html_parser.parse(html);
+      final text = document.body?.text ?? '';
+      return text
+          .replaceAll(RegExp(r'[ \t]+'), ' ')
+          .replaceAll(RegExp(r'\n\s*\n+'), '\n\n')
+          .trim();
+    } catch (_) {
+      return html
+          .replaceAll(RegExp(r'<[^>]*>'), ' ')
+          .replaceAll('&nbsp;', ' ')
+          .replaceAll('&amp;', '&')
+          .replaceAll('&quot;', '"')
+          .replaceAll('&#39;', "'")
+          .replaceAll('&lt;', '<')
+          .replaceAll('&gt;', '>')
+          .replaceAll(RegExp(r'\s+'), ' ')
+          .trim();
+    }
+  }
+
   void _showAddEditAboutMeDialog(AboutMeModel? item, bool isBangla) {
     final isEditing = item != null;
-    final enController = TextEditingController(text: item?.contentEn ?? '');
-    final bnController = TextEditingController(text: item?.contentBn ?? '');
+    final enController = TextEditingController(text: _parseHtmlToPlainText(item?.contentEn));
+    final bnController = TextEditingController(text: _parseHtmlToPlainText(item?.contentBn));
     String? pickedImagePath;
     bool isSaving = false;
 

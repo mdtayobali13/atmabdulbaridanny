@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:barristerkayserkamal/routes/app_routes.dart';
-import 'package:barristerkayserkamal/routes/app_routes_key.dart';
-import 'package:barristerkayserkamal/services/repository/auth_repository.dart';
-import 'package:barristerkayserkamal/services/storage/storage_services.dart';
-import 'package:barristerkayserkamal/utils/app_log.dart';
-import 'package:barristerkayserkamal/utils/app_snack_bar.dart';
+import 'package:atmabdulbaridanny/routes/app_routes.dart';
+import 'package:atmabdulbaridanny/routes/app_routes_key.dart';
+import 'package:atmabdulbaridanny/services/repository/auth_repository.dart';
+import 'package:atmabdulbaridanny/services/storage/storage_services.dart';
+import 'package:atmabdulbaridanny/utils/app_log.dart';
+import 'package:atmabdulbaridanny/utils/app_snack_bar.dart';
 
 final forgotResetPasswordProvider = StateNotifierProvider<ForgotResetPasswordProvider, bool>((ref) {
   return ForgotResetPasswordProvider();

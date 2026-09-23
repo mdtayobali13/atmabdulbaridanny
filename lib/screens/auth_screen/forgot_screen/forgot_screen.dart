@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:barristerkayserkamal/utils/app_log.dart';
-import 'package:barristerkayserkamal/screens/auth_screen/forgot_screen/screens/forgot_screen_email_input_screen.dart';
-import 'package:barristerkayserkamal/screens/auth_screen/forgot_screen/screens/forgot_screen_otp_input_screen.dart';
-import 'package:barristerkayserkamal/screens/auth_screen/forgot_screen/screens/forgot_screen_password_input_screen.dart';
+import 'package:atmabdulbaridanny/utils/app_log.dart';
+import 'package:atmabdulbaridanny/screens/auth_screen/forgot_screen/screens/forgot_screen_email_input_screen.dart';
+import 'package:atmabdulbaridanny/screens/auth_screen/forgot_screen/screens/forgot_screen_otp_input_screen.dart';
+import 'package:atmabdulbaridanny/screens/auth_screen/forgot_screen/screens/forgot_screen_password_input_screen.dart';
 
 class ForgotScreen extends StatefulWidget {
   const ForgotScreen({super.key});

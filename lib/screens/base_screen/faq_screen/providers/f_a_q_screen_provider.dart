@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:barristerkayserkamal/screens/base_screen/faq_screen/models/f_a_q_screen_data_model.dart';
-import 'package:barristerkayserkamal/services/repository/base_repository.dart';
-import 'package:barristerkayserkamal/utils/app_log.dart';
+import 'package:atmabdulbaridanny/screens/base_screen/faq_screen/models/f_a_q_screen_data_model.dart';
+import 'package:atmabdulbaridanny/services/repository/base_repository.dart';
+import 'package:atmabdulbaridanny/utils/app_log.dart';
 
 final fAQScreenProvider = StateNotifierProvider((ref) => _FAQScreenProvider());
 

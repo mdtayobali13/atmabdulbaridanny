@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:barristerkayserkamal/constant/app_colors.dart';
-import 'package:barristerkayserkamal/routes/app_routes.dart';
-import 'package:barristerkayserkamal/routes/app_routes_key.dart';
-import 'package:barristerkayserkamal/screens/auth_screen/sign_up_screen/provider/sign_up_provider.dart';
-import 'package:barristerkayserkamal/utils/gap.dart';
-import 'package:barristerkayserkamal/utils/app_snack_bar.dart';
+import 'package:atmabdulbaridanny/constant/app_colors.dart';
+import 'package:atmabdulbaridanny/routes/app_routes.dart';
+import 'package:atmabdulbaridanny/routes/app_routes_key.dart';
+import 'package:atmabdulbaridanny/screens/auth_screen/sign_up_screen/provider/sign_up_provider.dart';
+import 'package:atmabdulbaridanny/utils/gap.dart';
+import 'package:atmabdulbaridanny/utils/app_snack_bar.dart';
 
 class SignUpScreen extends ConsumerStatefulWidget {
   const SignUpScreen({super.key});
@@ -100,7 +100,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     ),
                     const Gap(height: 6),
                     Text(
-                      "Join the platform to connect with Barrister Kayser Kamal's office",
+                      "Join the platform to connect with ATM Abdul Bari Danny's office",
                       style: TextStyle(fontSize: 13, color: Colors.grey[600]),
                       textAlign: TextAlign.center,
                     ),

@@ -1,7 +1,7 @@
-import 'package:barristerkayserkamal/constant/app_api_url.dart';
-import 'package:barristerkayserkamal/models/citizen_request_models.dart';
-import 'package:barristerkayserkamal/services/api/api_services.dart';
-import 'package:barristerkayserkamal/utils/app_log.dart';
+import 'package:atmabdulbaridanny/constant/app_api_url.dart';
+import 'package:atmabdulbaridanny/models/citizen_request_models.dart';
+import 'package:atmabdulbaridanny/services/api/api_services.dart';
+import 'package:atmabdulbaridanny/utils/app_log.dart';
 
 class CitizenRequestRepository {
   CitizenRequestRepository._privateConstructor();
