@@ -26,11 +26,13 @@ class ProfileIdentityCard extends ConsumerWidget {
     final setting = ref.watch(websiteSettingProvider).asData?.value;
 
     final name = isBangla ? tr.profileNameMp : "ATM Abdul Bari Danny";
-    final constituency = isBangla
+    final designation = isBangla ? tr.profileDeputySpeaker : "Chairman";
+    final organization = isBangla
+        ? "বাংলাদেশ অভ্যন্তরীণ নৌপরিবহন করপোরেশন (বিআইডব্লিউটিসি)"
+        : "Bangladesh Inland Water Transport Corporation (BIWTC)";
+    final address = isBangla
         ? "২৪ কাজী নজরুল ইসলাম এভিনিউ, ঢাকা-১০০০"
         : "24 Kazi Nazrul Islam Avenue, Dhaka-1000";
-    final deputySpeaker = isBangla ? tr.profileDeputySpeaker : "Chairman";
-    final parliament = isBangla ? tr.profileParliament : "BIWTC";
     final mobileNumber = isBangla ? "০২২২৩৩৬০৬৭১ (অফিস)" : "02223360671 (Office)";
     final emailAddress = setting?.email?.isNotEmpty == true ? setting!.email! : tr.profileEmailAddress;
 
@@ -190,7 +192,7 @@ class ProfileIdentityCard extends ConsumerWidget {
             const SizedBox(height: 12),
 
             // ─────────────────────────────────────────────────────────────
-            // 3. Name & Constituency
+            // 1st Line: Name
             // ─────────────────────────────────────────────────────────────
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -205,37 +207,10 @@ class ProfileIdentityCard extends ConsumerWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 6),
-
-            // Constituency Pill Badge
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
-              decoration: BoxDecoration(
-                color: goldenColor.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: goldenColor.withValues(alpha: 0.45), width: 1),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.location_on, size: 14, color: primaryGreen),
-                  const SizedBox(width: 5),
-                  Text(
-                    constituency,
-                    style: TextStyle(
-                      color: primaryGreen,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
 
             // ─────────────────────────────────────────────────────────────
-            // 4. Official Designation Card (Deputy Speaker & Parliament)
+            // 2nd & 3rd Line: Official Designation & Organization Card
             // ─────────────────────────────────────────────────────────────
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -277,7 +252,7 @@ class ProfileIdentityCard extends ConsumerWidget {
                         Row(
                           children: [
                             Text(
-                              deputySpeaker,
+                              designation,
                               style: TextStyle(
                                 color: goldenColor,
                                 fontSize: 15.5,
@@ -291,17 +266,54 @@ class ProfileIdentityCard extends ConsumerWidget {
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          parliament,
+                          organization,
                           style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 12.5,
+                            fontSize: 12,
                             fontWeight: FontWeight.w500,
                           ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
                   ),
                 ],
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            // ─────────────────────────────────────────────────────────────
+            // 4th Line: Address / Location Pill Badge
+            // ─────────────────────────────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                decoration: BoxDecoration(
+                  color: goldenColor.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: goldenColor.withValues(alpha: 0.45), width: 1),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.location_on, size: 14, color: primaryGreen),
+                    const SizedBox(width: 5),
+                    Flexible(
+                      child: Text(
+                        address,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: primaryGreen,
+                          fontSize: 12.5,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
 

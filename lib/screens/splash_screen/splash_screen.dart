@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:atmabdulbaridanny/constant/app_colors.dart';
 import 'package:atmabdulbaridanny/routes/app_routes.dart';
 import 'package:atmabdulbaridanny/routes/app_routes_key.dart';
+import 'package:atmabdulbaridanny/screens/app_navigation/widgets/drawer/language_toggle.dart';
 import 'package:atmabdulbaridanny/screens/splash_screen/widgets/profile_identity_card.dart';
 import 'package:atmabdulbaridanny/utils/languages/language_provider.dart';
 
@@ -62,40 +63,43 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
           child: SafeArea(
             child: Column(
               children: [
-                // Top subtle skip button
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 16.0, top: 10.0),
-                    child: GestureDetector(
-                      onTap: _navigateToHome,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.18),
-                            width: 0.8,
+                // Top bar: Language toggle & Skip button
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const LanguageToggle(),
+                      GestureDetector(
+                        onTap: _navigateToHome,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: Colors.white.withValues(alpha: 0.18),
+                              width: 0.8,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                isBangla ? "এড়িয়ে যান" : "Skip",
+                                style: const TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              const SizedBox(width: 3),
+                              const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white70, size: 9),
+                            ],
                           ),
                         ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              isBangla ? "এড়িয়ে যান" : "Skip",
-                              style: const TextStyle(
-                                color: Colors.white70,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            const SizedBox(width: 3),
-                            const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white70, size: 9),
-                          ],
-                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
 
@@ -142,7 +146,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                           ],
                         ),
                         child: Text(
-                          "সবার আগে বাংলাদেশ",
+                          isBangla ? "সবার আগে বাংলাদেশ" : "Bangladesh First",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: goldenColor,

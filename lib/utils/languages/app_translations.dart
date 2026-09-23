@@ -30,7 +30,10 @@ class AppTranslations {
   String get profileNameMp => isBangla ? "এ টি এম আব্দুল বারী ড্যানী" : "ATM Abdul Bari Danny";
   String get profileConstituency => isBangla ? "২৪ কাজী নজরুল ইসলাম এভিনিউ, ঢাকা-১০০০" : "24 Kazi Nazrul Islam Avenue, Dhaka-1000";
   String get profileDeputySpeaker => isBangla ? "চেয়ারম্যান" : "Chairman";
-  String get profileParliament => isBangla ? "বিআইডব্লিউটিসি" : "BIWTC";
+  String get profileParliament => isBangla
+      ? "বাংলাদেশ অভ্যন্তরীণ নৌপরিবহন করপোরেশন (বিআইডব্লিউটিসি)"
+      : "Bangladesh Inland Water Transport Corporation (BIWTC)";
+  String get profileParliamentShort => isBangla ? "বিআইডব্লিউটিসি" : "BIWTC";
   String get profileMobileLabel => isBangla ? "ফোন/মোবাইলঃ" : "Phone/Mobile:";
   String get profileMobileNumber => isBangla ? "০২২২৩৩৬০৬৭১ (অফিস)" : "02223360671 (Office)";
   String get profileEmailLabel => isBangla ? "ইমেইলঃ" : "Email:";

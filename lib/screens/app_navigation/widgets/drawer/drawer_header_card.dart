@@ -132,16 +132,7 @@ class DrawerHeaderCard extends ConsumerWidget {
             name,
             style: const TextStyle(color: Colors.white, fontSize: 18.5, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 4),
-          Text(
-            addressText,
-            style: TextStyle(
-              color: AppColors.instance.goldenColor,
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
@@ -161,6 +152,23 @@ class DrawerHeaderCard extends ConsumerWidget {
                 letterSpacing: 0.2,
               ),
             ),
+          ),
+          const SizedBox(height: 6),
+          Row(
+            children: [
+              Icon(Icons.location_on, size: 13, color: AppColors.instance.goldenColor),
+              const SizedBox(width: 4),
+              Expanded(
+                child: Text(
+                  addressText,
+                  style: TextStyle(
+                    color: AppColors.instance.goldenColor,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 10),
           Row(
