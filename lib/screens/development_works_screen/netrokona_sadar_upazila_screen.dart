@@ -7,14 +7,14 @@ import 'package:atmabdulbaridanny/services/providers/api_providers.dart';
 import 'package:atmabdulbaridanny/services/repository/home_repository.dart';
 import 'package:atmabdulbaridanny/utils/languages/language_provider.dart';
 
-class OthersScreen extends ConsumerStatefulWidget {
-  const OthersScreen({super.key});
+class NetrokonaSadarUpazilaScreen extends ConsumerStatefulWidget {
+  const NetrokonaSadarUpazilaScreen({super.key});
 
   @override
-  ConsumerState<OthersScreen> createState() => _OthersScreenState();
+  ConsumerState<NetrokonaSadarUpazilaScreen> createState() => _NetrokonaSadarUpazilaScreenState();
 }
 
-class _OthersScreenState extends ConsumerState<OthersScreen> {
+class _NetrokonaSadarUpazilaScreenState extends ConsumerState<NetrokonaSadarUpazilaScreen> {
   Map<String, dynamic>? _visitStats;
 
   @override
@@ -24,7 +24,7 @@ class _OthersScreenState extends ConsumerState<OthersScreen> {
   }
 
   Future<void> _loadStats() async {
-    final stats = await HomeRepository.instance.recordVisit('/development-work-others');
+    final stats = await HomeRepository.instance.recordVisit('/development-work-netrokona-sadar');
     if (mounted && stats != null) {
       setState(() => _visitStats = stats);
     }
@@ -37,8 +37,8 @@ class _OthersScreenState extends ConsumerState<OthersScreen> {
     final isBangla = ref.watch(isBanglaProvider);
     final tr = AppTranslations.of(isBangla);
 
-    final todayVisits = (_visitStats?['today_visits']?.toString() ?? '1').toBanglaDigits(isBangla);
-    final totalVisits = (_visitStats?['total_visits']?.toString() ?? '16').toBanglaDigits(isBangla);
+    final todayVisits = (_visitStats?['today_visits']?.toString() ?? '3').toBanglaDigits(isBangla);
+    final totalVisits = (_visitStats?['total_visits']?.toString() ?? '27').toBanglaDigits(isBangla);
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -53,17 +53,16 @@ class _OthersScreenState extends ConsumerState<OthersScreen> {
               child: Column(
                 children: [
                   Text(
-                    tr.othersDevTitle,
+                    tr.netrokonaSadarTitle,
                     style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    tr.othersDevSubtitle,
+                    tr.netrokonaSadarSubtitle,
                     textAlign: TextAlign.center,
                     style: const TextStyle(color: Colors.white70, fontSize: 13),
                   ),
                   const SizedBox(height: 16),
-                  // Stats Row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -79,30 +78,19 @@ class _OthersScreenState extends ConsumerState<OthersScreen> {
             // 2. Main Content List
             devWorkAsync.when(
               data: (items) {
-                // Filter out items belonging to Netrokona Sadar or Barhatta (or match category 8)
-                final list = items.where((e) {
-                  if (e.developmentWorkCategoryId == 8) return true;
-                  if (e.developmentWorkCategoryId == 2 || e.developmentWorkCategoryId == 3) return false;
-                  final t = e.localizedTitle(false).toLowerCase();
-                  final c = e.localizedContent(false).toLowerCase();
-                  final tb = e.localizedTitle(true);
-                  final cb = e.localizedContent(true);
-                  return !t.contains('netrokona') && !t.contains('barhatta') &&
-                         !c.contains('netrokona') && !c.contains('barhatta') &&
-                         !tb.contains('নেত্রকোনা') && !tb.contains('বারহাট্টা') &&
-                         !cb.contains('নেত্রকোনা') && !cb.contains('বারহাট্টা') &&
-                         !t.contains('durgapur') && !t.contains('kalmakanda') &&
-                         !c.contains('durgapur') && !c.contains('kalmakanda');
-                }).toList();
+                final list = items.where((e) =>
+                    e.developmentWorkCategoryId == 2 ||
+                    e.localizedTitle(false).toLowerCase().contains('netrokona') ||
+                    e.localizedContent(false).toLowerCase().contains('netrokona') ||
+                    e.localizedTitle(true).contains('নেত্রকোনা') ||
+                    e.localizedContent(true).contains('নেত্রকোনা')).toList();
 
                 final displayList = list.isNotEmpty ? list : items;
 
                 if (displayList.isEmpty) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 48),
-                    child: Center(
-                      child: Text(tr.othersDevEmpty),
-                    ),
+                    child: Center(child: Text(tr.netrokonaSadarEmpty)),
                   );
                 }
 
@@ -129,7 +117,6 @@ class _OthersScreenState extends ConsumerState<OthersScreen> {
               ),
             ),
 
-            // 3. Custom Footer
             const CustomFooter(),
           ],
         ),

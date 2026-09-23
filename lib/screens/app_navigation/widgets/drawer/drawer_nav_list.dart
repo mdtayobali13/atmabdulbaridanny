@@ -4,6 +4,7 @@ import 'package:atmabdulbaridanny/constant/app_colors.dart';
 import 'package:atmabdulbaridanny/routes/app_routes_key.dart';
 import 'package:atmabdulbaridanny/widgets/dialogs/admin_login_dialog.dart';
 import 'package:go_router/go_router.dart';
+import 'package:atmabdulbaridanny/utils/languages/language_provider.dart';
 
 class DrawerNavList extends StatelessWidget {
   final bool isLoggedIn;
@@ -34,6 +35,7 @@ class DrawerNavList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tr = AppTranslations.of(isBangla);
     return ListView(
       padding: EdgeInsets.zero,
       children: [
@@ -44,125 +46,141 @@ class DrawerNavList extends StatelessWidget {
             title: isBangla ? "অ্যাডমিন প্রোফাইল" : "Admin Profile",
             onTap: () => _navigateTo(context, '/${AppRoutesKey.instance.profileScreen}', isPush: true),
           ),
+        // 1. প্রথম পাতা / Home
         _buildItem(
           context: context,
           icon: CupertinoIcons.house_fill,
-          title: isBangla ? "হোম" : "Home",
+          title: tr.navHome,
           onTap: () => _navigateTo(context, '/${AppRoutesKey.instance.homeScreen}'),
         ),
+        // 2. আমাদের সম্পর্কে / About Us
         _buildDropdown(
           context: context,
           icon: CupertinoIcons.person_2_fill,
-          title: isBangla ? "আমাদের সম্পর্কে" : "About Us",
+          title: tr.menuAboutUs,
           children: [
             _buildSubItem(
               context: context,
-              title: isBangla ? "আমার সম্পর্কে" : "About Me",
+              title: tr.menuAboutMe,
               onTap: () => _navigateTo(context, '/${AppRoutesKey.instance.aboutScreen}'),
             ),
             _buildSubItem(
               context: context,
-              title: isBangla ? "জীবনবৃত্তান্ত" : "Biography",
+              title: tr.menuBiography,
               onTap: () => _navigateTo(context, '/biography_screen'),
             ),
             _buildSubItem(
               context: context,
-              title: isBangla ? "জীবন ও সংগ্রামের ইতিহাস" : "History of Life and Struggle",
+              title: tr.menuHistoryOfLifeAndStruggle,
               onTap: () => _navigateTo(context, '/history_of_life_screen'),
             ),
             _buildSubItem(
               context: context,
-              title: isBangla ? "অর্জন" : "Achievement",
+              title: tr.menuAchievement,
               onTap: () => _navigateTo(context, '/achievement_screen'),
             ),
             _buildSubItem(
               context: context,
-              title: isBangla ? "যাত্রা ও পথচলা" : "Journey",
+              title: tr.menuJourney,
               onTap: () => _navigateTo(context, '/journey_screen'),
             ),
           ],
         ),
-        _buildItem(
-          context: context,
-          icon: CupertinoIcons.news_solid,
-          title: isBangla ? "সংবাদ" : "News",
-          onTap: () => _navigateTo(context, '/news_screen'),
-        ),
-        _buildItem(
-          context: context,
-          icon: CupertinoIcons.book_fill,
-          title: isBangla ? "ব্লগ" : "Blog",
-          onTap: () => _navigateTo(context, '/blog_screen'),
-        ),
-        _buildItem(
-          context: context,
-          icon: CupertinoIcons.photo_fill_on_rectangle_fill,
-          title: isBangla ? "ফটো গ্যালারি" : "Photo Gallery",
-          onTap: () => _navigateTo(context, '/photo_gallery_screen'),
-        ),
-        _buildItem(
-          context: context,
-          icon: CupertinoIcons.play_rectangle_fill,
-          title: isBangla ? "ভিডিও গ্যালারি" : "Video Gallery",
-          onTap: () => _navigateTo(context, '/video_gallery_screen'),
-        ),
+        // 3. উন্নয়নমূলক কাজ / Development Works
         _buildDropdown(
           context: context,
           icon: CupertinoIcons.building_2_fill,
-          title: isBangla ? "উন্নয়নমূলক কাজ" : "Development Works",
+          title: tr.menuDevelopmentWorks,
           children: [
             _buildSubItem(
               context: context,
-              title: isBangla ? "কলমাকান্দা উপজেলা" : "Kalmakanda Upazila",
-              onTap: () => _navigateTo(context, '/kalmakanda_upazila_screen'),
+              title: tr.menuNetrokonaSadar,
+              onTap: () => _navigateTo(context, '/netrokona_sadar_upazila_screen'),
             ),
             _buildSubItem(
               context: context,
-              title: isBangla ? "দুর্গাপুর উপজেলা" : "Durgapur Upazila",
-              onTap: () => _navigateTo(context, '/durgapur_upazila_screen'),
+              title: tr.menuBarhatta,
+              onTap: () => _navigateTo(context, '/barhatta_upazila_screen'),
             ),
             _buildSubItem(
               context: context,
-              title: isBangla ? "অন্যান্য" : "Others",
+              title: tr.menuOthers,
               onTap: () => _navigateTo(context, '/others_screen'),
             ),
           ],
         ),
+        // 4. মিডিয়া / Media
         _buildDropdown(
           context: context,
           icon: CupertinoIcons.tv_fill,
-          title: isBangla ? "মিডিয়া" : "Media",
+          title: tr.menuMedia,
           children: [
             _buildSubItem(
               context: context,
-              title: isBangla ? "প্রিন্ট মিডিয়া" : "Print Media",
+              title: tr.menuPrintMedia,
               onTap: () => _navigateTo(context, '/print_media_screen'),
             ),
             _buildSubItem(
               context: context,
-              title: isBangla ? "ইলেকট্রনিক মিডিয়া" : "Electronic Media",
+              title: tr.menuElectronicMedia,
               onTap: () => _navigateTo(context, '/electronic_media_screen'),
             ),
           ],
         ),
+        // 5. গ্যালারি / Gallery
+        _buildDropdown(
+          context: context,
+          icon: CupertinoIcons.photo_fill_on_rectangle_fill,
+          title: tr.menuGallery,
+          children: [
+            _buildSubItem(
+              context: context,
+              title: tr.menuPhotoGallery,
+              onTap: () => _navigateTo(context, '/photo_gallery_screen'),
+            ),
+            _buildSubItem(
+              context: context,
+              title: tr.menuVideoGallery,
+              onTap: () => _navigateTo(context, '/video_gallery_screen'),
+            ),
+          ],
+        ),
+        // 6. সংবাদ / News
         _buildItem(
           context: context,
-          icon: CupertinoIcons.calendar,
-          title: isBangla ? "সাক্ষাৎকার" : "Appointment",
-          onTap: () => _navigateTo(context, '/appointment_screen', isPush: true),
+          icon: CupertinoIcons.news_solid,
+          title: tr.menuNews,
+          onTap: () => _navigateTo(context, '/news_screen'),
         ),
+        // 7. ব্লগ / Blog
         _buildItem(
           context: context,
-          icon: CupertinoIcons.exclamationmark_bubble,
-          title: isBangla ? "অভিযোগ" : "Complaint",
-          onTap: () => _navigateTo(context, '/complain_screen', isPush: true),
+          icon: CupertinoIcons.book_fill,
+          title: tr.menuBlog,
+          onTap: () => _navigateTo(context, '/blog_screen'),
         ),
+        // 8. যোগাযোগ / Contact
         _buildItem(
           context: context,
           icon: CupertinoIcons.phone_fill,
-          title: isBangla ? "যোগাযোগ" : "Contact",
+          title: tr.menuContact,
           onTap: () => _navigateTo(context, '/contact_screen'),
         ),
+        // 9. অ্যাপয়েন্টমেন্ট / Appointment
+        _buildItem(
+          context: context,
+          icon: CupertinoIcons.calendar,
+          title: tr.menuAppointment,
+          onTap: () => _navigateTo(context, '/appointment_screen', isPush: true),
+        ),
+        // 10. অভিযোগ / Complaint
+        _buildItem(
+          context: context,
+          icon: CupertinoIcons.exclamationmark_bubble,
+          title: tr.menuComplaint,
+          onTap: () => _navigateTo(context, '/complain_screen', isPush: true),
+        ),
+        // 11. অ্যাডমিন / Admin
         _buildItem(
           context: context,
           icon: CupertinoIcons.shield_fill,

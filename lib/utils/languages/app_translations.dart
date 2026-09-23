@@ -42,28 +42,39 @@ class AppTranslations {
   // -------------------------------------------------------------
   // Navigation & Drawer
   // -------------------------------------------------------------
-  String get navHome => isBangla ? "হোম" : "Home";
-  String get navAppointment => isBangla ? "সাক্ষাৎকার" : "Appointment";
+  String get navHome => isBangla ? "প্রথম পাতা" : "Home";
+  String get navAppointment => isBangla ? "অ্যাপয়েন্টমেন্ট" : "Appointment";
   String get navComplaint => isBangla ? "অভিযোগ" : "Complaint";
   String get navContact => isBangla ? "যোগাযোগ" : "Contact";
   String get navProfile => isBangla ? "প্রোফাইল" : "Profile";
 
   String get menuAboutUs => isBangla ? "আমাদের সম্পর্কে" : "About Us";
   String get menuAboutMe => isBangla ? "আমার সম্পর্কে" : "About Me";
-  String get menuBiography => isBangla ? "জীবনবৃত্তান্ত" : "Biography";
+  String get menuBiography => isBangla ? "বায়োগ্রাফি" : "Biography";
   String get menuHistory => isBangla ? "জীবন ও সংগ্রাম" : "History";
-  String get menuHistoryOfLifeAndStruggle => isBangla ? "জীবন ও সংগ্রামের ইতিহাস" : "History of Life and Struggle";
-  String get menuAchievement => isBangla ? "অর্জন" : "Achievement";
-  String get menuJourney => isBangla ? "যাত্রা ও পথচলা" : "Journey";
+  String get menuHistoryOfLifeAndStruggle => isBangla ? "জীবন ও সংগ্রামের ইতিহাস" : "History of Life & Struggle";
+  String get menuAchievement => isBangla ? "কৃতিত্ব" : "Achievement";
+  String get menuJourney => isBangla ? "ট্রাভেল" : "Travel";
+  String get menuDevelopmentWorks => isBangla ? "উন্নয়নমূলক কাজ" : "Development Works";
+  String get menuNetrokonaSadar => isBangla ? "নেত্রকোনা সদর উপজেলা" : "Netrokona Sadar Upazila";
+  String get menuBarhatta => isBangla ? "বারহাট্টা উপজেলা" : "Barhatta Upazila";
+  String get menuOthers => isBangla ? "অন্যান্য" : "Others";
+  String get menuMedia => isBangla ? "মিডিয়া" : "Media";
+  String get menuPrintMedia => isBangla ? "প্রিন্ট মিডিয়া" : "Print Media";
+  String get menuElectronicMedia => isBangla ? "ইলেকট্রনিক মিডিয়া" : "Electronic Media";
+  String get menuGallery => isBangla ? "গ্যালারি" : "Gallery";
   String get menuPhotoGallery => isBangla ? "ফটো গ্যালারি" : "Photo Gallery";
   String get menuVideoGallery => isBangla ? "ভিডিও গ্যালারি" : "Video Gallery";
   String get menuNews => isBangla ? "সংবাদ" : "News";
   String get menuBlog => isBangla ? "ব্লগ" : "Blog";
-  String get menuPrintMedia => isBangla ? "প্রিন্ট মিডিয়া" : "Print Media";
-  String get menuElectronicMedia => isBangla ? "ইলেকট্রনিক মিডিয়া" : "Electronic Media";
+  String get menuContact => isBangla ? "যোগাযোগ" : "Contact";
+  String get menuAppointment => isBangla ? "অ্যাপয়েন্টমেন্ট" : "Appointment";
+  String get menuComplaint => isBangla ? "অভিযোগ" : "Complaint";
+  String get menuServices => isBangla ? "যোগাযোগ ও সেবা" : "Contact & Services";
+  String get menuMediaAndGallery => isBangla ? "মিডিয়া ও গ্যালারি" : "Media & Gallery";
   String get menuDurgapur => isBangla ? "দুর্গাপুর উপজেলা" : "Durgapur Upazila";
   String get menuKalmakanda => isBangla ? "কলমাকান্দা উপজেলা" : "Kalmakanda Upazila";
-  String get menuOtherDevWorks => isBangla ? "অন্যান্য উদ্যোগ" : "Other Initiatives";
+  String get menuOtherDevWorks => isBangla ? "অন্যান্য" : "Others";
 
   // -------------------------------------------------------------
   // Home Screen Widgets
@@ -172,6 +183,18 @@ class AppTranslations {
   // -------------------------------------------------------------
   // Development Works
   // -------------------------------------------------------------
+  String get netrokonaSadarTitle => isBangla ? "নেত্রকোনা সদর উপজেলা" : "Netrokona Sadar Upazila";
+  String get netrokonaSadarSubtitle => isBangla
+      ? "নেত্রকোনা সদর উপজেলার অবকাঠামো উন্নয়ন, প্রকল্প এবং জনকল্যাণমূলক কার্যক্রম।"
+      : "Development works, infrastructure projects, and public welfare initiatives in Netrokona Sadar.";
+  String get netrokonaSadarEmpty => isBangla ? "কোন উন্নয়নমূলক কাজের তথ্য পাওয়া যায়নি" : "No development works listed yet";
+
+  String get barhattaTitle => isBangla ? "বারহাট্টা উপজেলা" : "Barhatta Upazila";
+  String get barhattaSubtitle => isBangla
+      ? "বারহাট্টা উপজেলার অবকাঠামো উন্নয়ন, প্রকল্প এবং জনকল্যাণমূলক কার্যক্রম।"
+      : "Development works, infrastructure projects, and public welfare initiatives in Barhatta.";
+  String get barhattaEmpty => isBangla ? "কোন উন্নয়নমূলক কাজের তথ্য পাওয়া যায়নি" : "No development works listed yet";
+
   String get durgapurTitle => isBangla ? "দুর্গাপুর উপজেলা" : "Durgapur Upazila";
   String get durgapurSubtitle => isBangla
       ? "দুর্গাপুর উপজেলার অবকাঠামো উন্নয়ন, প্রকল্প এবং জনকল্যাণমূলক কার্যক্রম।"

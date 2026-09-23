@@ -18,6 +18,8 @@ import 'package:atmabdulbaridanny/screens/biography_screen/biography_screen.dart
 import 'package:atmabdulbaridanny/screens/electronic_media_screen/electronic_media_screen.dart';
 import 'package:atmabdulbaridanny/screens/history_of_life_screen/history_of_life_screen.dart';
 import 'package:atmabdulbaridanny/screens/journey_screen/journey_screen.dart';
+import 'package:atmabdulbaridanny/screens/development_works_screen/netrokona_sadar_upazila_screen.dart';
+import 'package:atmabdulbaridanny/screens/development_works_screen/barhatta_upazila_screen.dart';
 import 'package:atmabdulbaridanny/screens/development_works_screen/kalmakanda_upazila_screen.dart';
 import 'package:atmabdulbaridanny/screens/development_works_screen/durgapur_upazila_screen.dart';
 import 'package:atmabdulbaridanny/screens/development_works_screen/others_screen.dart';
@@ -188,6 +190,16 @@ class AppRoutes {
                 path: "/journey_screen",
                 name: "journeyScreen",
                 builder: (context, state) => const JourneyScreen(),
+              ),
+              GoRoute(
+                path: "/netrokona_sadar_upazila_screen",
+                name: "netrokonaSadarUpazilaScreen",
+                builder: (context, state) => const NetrokonaSadarUpazilaScreen(),
+              ),
+              GoRoute(
+                path: "/barhatta_upazila_screen",
+                name: "barhattaUpazilaScreen",
+                builder: (context, state) => const BarhattaUpazilaScreen(),
               ),
               GoRoute(
                 path: "/kalmakanda_upazila_screen",
