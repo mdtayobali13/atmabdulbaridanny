@@ -36,9 +36,11 @@ class DrawerNavList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tr = AppTranslations.of(isBangla);
-    return ListView(
-      padding: EdgeInsets.zero,
-      children: [
+    return Material(
+      color: Colors.transparent,
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
         if (isLoggedIn)
           _buildItem(
             context: context,
@@ -213,8 +215,9 @@ class DrawerNavList extends StatelessWidget {
           onTap: () => _navigateTo(context, '/${AppRoutesKey.instance.faqsScreen}', isPush: true),
         ),
       ],
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildItem({
     required BuildContext context,

@@ -62,37 +62,40 @@ class ContactInfoCard extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.green[50],
-                    child: Icon(Icons.location_on, color: primaryGreen),
+            child: Material(
+              color: Colors.transparent,
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.green[50],
+                      child: Icon(Icons.location_on, color: primaryGreen),
+                    ),
+                    title: Text(tr.addressLabel, style: const TextStyle(fontSize: 12, color: Colors.black54, fontWeight: FontWeight.w500)),
+                    subtitle: Text(address, style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.black)),
                   ),
-                  title: Text(tr.addressLabel, style: const TextStyle(fontSize: 12, color: Colors.black54, fontWeight: FontWeight.w500)),
-                  subtitle: Text(address, style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.black)),
-                ),
-                const Divider(),
-                ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.green[50],
-                    child: Icon(Icons.phone, color: primaryGreen),
+                  const Divider(),
+                  ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.green[50],
+                      child: Icon(Icons.phone, color: primaryGreen),
+                    ),
+                    title: Text(tr.phone, style: const TextStyle(fontSize: 12, color: Colors.black54, fontWeight: FontWeight.w500)),
+                    subtitle: Text(phone, style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.black)),
+                    onTap: () => _launchUrl("tel:$phone"),
                   ),
-                  title: Text(tr.phone, style: const TextStyle(fontSize: 12, color: Colors.black54, fontWeight: FontWeight.w500)),
-                  subtitle: Text(phone, style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.black)),
-                  onTap: () => _launchUrl("tel:$phone"),
-                ),
-                const Divider(),
-                ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.green[50],
-                    child: Icon(Icons.email, color: primaryGreen),
+                  const Divider(),
+                  ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.green[50],
+                      child: Icon(Icons.email, color: primaryGreen),
+                    ),
+                    title: Text(tr.email, style: const TextStyle(fontSize: 12, color: Colors.black54, fontWeight: FontWeight.w500)),
+                    subtitle: Text(email, style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.black)),
+                    onTap: () => _launchUrl("mailto:$email"),
                   ),
-                  title: Text(tr.email, style: const TextStyle(fontSize: 12, color: Colors.black54, fontWeight: FontWeight.w500)),
-                  subtitle: Text(email, style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.black)),
-                  onTap: () => _launchUrl("mailto:$email"),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],

@@ -137,37 +137,40 @@ class ProfileMenuActions extends ConsumerWidget {
     Color? arrowBgColor,
     required VoidCallback onTap,
   }) {
-    return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      leading: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: bgColor,
-          borderRadius: BorderRadius.circular(12),
+    return Material(
+      color: Colors.transparent,
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        leading: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: bgColor,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(icon, color: iconColor, size: 22),
         ),
-        child: Icon(icon, color: iconColor, size: 22),
-      ),
-      title: Text(
-        title,
-        style: TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.bold,
-          color: titleColor ?? const Color(0xFF1E293B),
+        title: Text(
+          title,
+          style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+            color: titleColor ?? const Color(0xFF1E293B),
+          ),
         ),
-      ),
-      subtitle: Text(
-        subtitle,
-        style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
-      ),
-      trailing: Container(
-        padding: const EdgeInsets.all(6),
-        decoration: BoxDecoration(
-          color: arrowBgColor ?? Colors.grey.shade100,
-          shape: BoxShape.circle,
+        subtitle: Text(
+          subtitle,
+          style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
         ),
-        child: Icon(Icons.arrow_forward_ios_rounded, size: 12, color: arrowColor ?? Colors.grey.shade600),
+        trailing: Container(
+          padding: const EdgeInsets.all(6),
+          decoration: BoxDecoration(
+            color: arrowBgColor ?? Colors.grey.shade100,
+            shape: BoxShape.circle,
+          ),
+          child: Icon(Icons.arrow_forward_ios_rounded, size: 12, color: arrowColor ?? Colors.grey.shade600),
+        ),
+        onTap: onTap,
       ),
-      onTap: onTap,
     );
   }
 
