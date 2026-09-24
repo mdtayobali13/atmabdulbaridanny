@@ -1,4 +1,4 @@
-package com.atmabdulbaridanny.app
+package com.bd.atmabdanny
 
 import io.flutter.embedding.android.FlutterActivity
 

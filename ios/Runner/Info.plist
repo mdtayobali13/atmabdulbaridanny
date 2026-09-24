@@ -78,7 +78,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>com.atmabdulbaridanny.app</string>
+			<string>com.bd.atmabdanny</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>paymentSuccess</string>
